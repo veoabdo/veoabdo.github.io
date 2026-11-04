@@ -322,7 +322,7 @@ pay:"Pay {x} Pi",edit:"Edit",del:"Delete",delC:"Delete this product?",saved:"Sav
 st_unpaid:"Awaiting payment",st_live:"Live",st_removed:"Removed",st_refunded:"Refunded",note2:"Note",
 addr:"Address",tel:"Phone",hrs:"Hours",call:"Call shop",viewShop:"View shop",prods:"Perfumes",empty:"Nothing here yet.",
 note:"This app is a directory only. Buying is arranged directly with the shop.",netErr:"Cannot reach the server. Please wait a minute and try again.",refNote:"If a payment is refunded, a network fee of {x} Pi is deducted from the refund.",
-admShops:"Shops",admProds:"Perfumes",admPays:"Payments",remove:"Remove",restore:"Restore",refund:"Refund",reason:"Reason (shown to the owner)",refC:"Refund this payment?",refunded:"Refund sent",dup:"duplicate",resC:"Restore this item?"},
+admShops:"Shops",admProds:"Perfumes",admPays:"Payments",remove:"Remove",restore:"Restore",refund:"Refund",reason:"Reason (shown to the owner)",refC:"Refund this payment?",refunded:"Refund sent",dup:"duplicate",resC:"Restore this item?",rmC:"Remove this item and refund its fee to the owner?",refFail:"Removed, but the refund failed. Retry it from Payments.",removedOk:"Removed"},
 ar:{ltitle:"مرحباً بك في Parfum",lsub:"سجّل الدخول بحساب Pi لاستكشاف العطور من محلات حول العالم.",login:"المتابعة عبر Pi",loginBusy:"جاري الدخول...",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser وأعد المحاولة.",lhint:"يعمل بأفضل شكل داخل Pi Browser",tagline:"عطور فاخرة · Pi",
 title:"عطور فاخرة من محلات قريبة وبعيدة",sub:"تصفّح العطور ثم تواصل مع المحل مباشرة.",
 logout:"خروج",navHome:"العطور",navShops:"المحلات",my:"محلي",openTab:"افتح محلاً",adm:"الإدارة",
@@ -336,7 +336,7 @@ pay:"ادفع {x} باي",edit:"تعديل",del:"حذف",delC:"حذف هذا ا�
 st_unpaid:"بانتظار الدفع",st_live:"منشور",st_removed:"محذوف",st_refunded:"تم الاسترجاع",note2:"ملاحظة",
 addr:"العنوان",tel:"الهاتف",hrs:"ساعات العمل",call:"اتصل بالمحل",viewShop:"عرض المحل",prods:"العطور",empty:"لا يوجد شيء بعد.",
 note:"هذا التطبيق دليل فقط. يتم الشراء مباشرة مع المحل.",netErr:"تعذّر الاتصال بالسيرفر. انتظر دقيقة ثم أعد المحاولة.",refNote:"عند استرجاع أي دفعة، يُخصم {x} باي من المبلغ المسترجع لتغطية رسوم الشبكة.",
-admShops:"المحلات",admProds:"العطور",admPays:"المدفوعات",remove:"حذف",restore:"استعادة",refund:"استرجاع",reason:"السبب (يظهر لصاحب المحل)",refC:"استرجاع هذه الدفعة؟",refunded:"تم إرسال الاسترجاع",dup:"مكررة",resC:"استعادة هذا العنصر؟"},
+admShops:"المحلات",admProds:"العطور",admPays:"المدفوعات",remove:"حذف",restore:"استعادة",refund:"استرجاع",reason:"السبب (يظهر لصاحب المحل)",refC:"استرجاع هذه الدفعة؟",refunded:"تم إرسال الاسترجاع",dup:"مكررة",resC:"استعادة هذا العنصر؟",rmC:"حذف هذا العنصر واسترجاع رسومه لصاحبه؟",refFail:"تم الحذف لكن فشل الاسترجاع. أعد المحاولة من المدفوعات.",removedOk:"تم الحذف"},
 zh:{ltitle:"欢迎来到 Parfum",lsub:"使用 Pi 账号登录，探索全球香水店的香水。",login:"使用 Pi 继续",loginBusy:"登录中...",loginErr:"登录失败，请在 Pi Browser 中打开应用后重试。",lhint:"建议在 Pi Browser 中使用",tagline:"精品香水 · Pi",
 title:"来自四面八方的精品香水",sub:"浏览香水，然后直接联系店铺。",
 logout:"退出",navHome:"香水",navShops:"店铺",my:"我的店铺",openTab:"开店",adm:"管理",
@@ -350,7 +350,7 @@ pay:"支付 {x} Pi",edit:"编辑",del:"删除",delC:"删除此商品？",saved:"
 st_unpaid:"待支付",st_live:"已上线",st_removed:"已下架",st_refunded:"已退款",note2:"备注",
 addr:"地址",tel:"电话",hrs:"营业时间",call:"致电店铺",viewShop:"查看店铺",prods:"香水",empty:"暂无内容。",
 note:"本应用仅为目录。购买请直接与店铺联系。",netErr:"无法连接服务器，请稍等一分钟后重试。",refNote:"若付款被退款，将从退款金额中扣除 {x} Pi 网络手续费。",
-admShops:"店铺",admProds:"香水",admPays:"付款记录",remove:"下架",restore:"恢复",refund:"退款",reason:"原因（将显示给店主）",refC:"确认退款？",refunded:"退款已发送",dup:"重复",resC:"恢复此项？"}
+admShops:"店铺",admProds:"香水",admPays:"付款记录",remove:"下架",restore:"恢复",refund:"退款",reason:"原因（将显示给店主）",refC:"确认退款？",refunded:"退款已发送",dup:"重复",resC:"恢复此项？",rmC:"下架此项并向店主退还费用？",refFail:"已下架，但退款失败。请在付款记录中重试。",removedOk:"已下架"}
 };
 
 let L=localStorage.getItem("lang");
@@ -655,13 +655,19 @@ function renderAdmin(){
   const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></div>`;
   $("aShops").innerHTML=adm.shops.map(x=>row("shop",x)).join("")||none;
   $("aProds").innerHTML=adm.products.map(x=>row("product",x)).join("")||none;
-  $("aPays").innerHTML=adm.payments.map(x=>`<div class="line"><span>${esc(x.targetName)} <span class="mut" dir="ltr">${esc(x.amount)} Pi · ${esc(x.type)}</span> <span class="badge">${esc(x.refundStatus)}</span>${x.duplicate?` <span class="badge unpaid">${esc(t("dup"))}</span>`:""}</span>${x.refundStatus==="none"||x.refundStatus==="failed"?`<button class="btn alt sm" data-rf="${esc(x.id)}">${esc(t("refund"))}</button>`:""}</div>`).join("")||none;
+  $("aPays").innerHTML=adm.payments.map(x=>`<div class="line"><span>${esc(x.targetName)} <span class="mut" dir="ltr">${esc(x.amount)} Pi · ${esc(x.type)}</span> <span class="badge">${esc(x.refundStatus)}</span>${x.duplicate?` <span class="badge unpaid">${esc(t("dup"))}</span>`:""}</span>${x.targetStatus==="removed"&&(x.refundStatus==="none"||x.refundStatus==="failed")?`<button class="btn alt sm" data-rf="${esc(x.id)}">${esc(t("refund"))}</button>`:""}</div>`).join("")||none;
 }
 async function moderate(type,id,action){
   let message="";
-  if(action==="remove"){message=prompt(t("reason"))||"";if(!message)return}
-  else if(!confirm(t("resC")))return;
-  try{await api("/api/admin/moderate",{type,id,action,message});await loadAdmin();loadShops()}catch(e){toast(e.message)}
+  if(action==="remove"){
+    if(!confirm(t("rmC")))return;
+    message=prompt(t("reason"))||"";if(!message)return;
+  }else if(!confirm(t("resC")))return;
+  try{
+    const j=await api("/api/admin/moderate",{type,id,action,message});
+    if(action==="remove")toast(j.failed?t("refFail"):(j.refunded?t("refunded")+": "+j.amount+" Pi":t("removedOk")));
+    await loadAdmin();loadShops();
+  }catch(e){toast(e.message)}
 }
 async function refund(id){
   if(!confirm(t("refC")))return;
