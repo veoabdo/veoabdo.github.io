@@ -49,7 +49,7 @@ label{display:block;margin:10px 0 2px;font-size:14px;color:var(--mut)}
 .line{padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
 .pv{max-width:140px;border-radius:8px;margin-top:6px;display:block}
 .hide{display:none}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:10px;z-index:30}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:10px;z-index:30;max-width:90vw}
 @media(max-width:640px){.f{grid-template-columns:1fr}}
 </style>
 </head>
@@ -131,25 +131,33 @@ label{display:block;margin:10px 0 2px;font-size:14px;color:var(--mut)}
 <div id="toast" class="hide"></div>
 
 <script>
+/* ===== عنوان السيرفر على Render (لا تغيّره إلا إذا تغيّر رابط السيرفر) ===== */
+const API="https://sahraoui15.onrender.com";
+
 const CODES="DZ,MA,TN,EG,LY,SA,AE,QA,KW,BH,OM,JO,LB,SY,IQ,PS,YE,SD,TR,IR,PK,IN,ID,MY,SG,PH,VN,TH,CN,JP,KR,FR,ES,IT,DE,GB,NL,BE,CH,SE,US,CA,BR,MX,AU,NG,ZA,RU".split(",");
 const T={
-en:{title:"Find perfume shops around the world",sub:"Browse perfume boutiques by country and region, then contact the shop directly.",search:"Search shop, perfume or brand",allC:"All countries",allR:"All regions",shops:"shops",none:"No shops match your search.",prods:"Products",hrs:"Hours",tel:"Phone",addr:"Address",close:"Close",login:"Login with Pi",logout:"Logout",dir:"Directory",my:"My shop",adm:"Admin",loginFirst:"Log in using Pi Browser to manage your shop.",shopTitle:"Shop details",fname:"Shop name",fcountry:"Country",fregion:"City / region",faddr:"Address",fphone:"Phone",fhours:"Opening hours",fdesc:"Description",fimg:"Shop photo",save:"Save and submit for review",st_pending:"Under review",st_live:"Live",st_rejected:"Rejected",st_approved_unpaid:"Approved - payment required",st_refunded:"Refunded",pay:"Pay",prodTitle:"Products",pname:"Perfume name",pbrand:"Brand",psize:"Size (e.g. 50 ml)",pprice:"Price",pcur:"Currency (e.g. USD)",pdesc:"Description",pimg:"Product photo",edit:"Edit",del:"Delete",saved:"Saved. Your submission is under review.",paid:"Payment completed",cancelled:"Payment cancelled",approve:"Approve",reject:"Reject",refund:"Refund",pending:"Pending review",payments:"Payments",reason:"Reason (shown to the owner)",founder:"Founding shop",prodNeed:"You can add products after your shop is live.",note:"This app is a directory only. Buying is arranged directly with the shop.",free:"Free",delC:"Delete this product?",upl:"Uploading...",note2:"Reviewer note",freeLeft:"free founding spots left",empty:"Nothing here yet.",loginErr:"Login failed. Open the app in Pi Browser.",refunded:"Refund sent",refC:"Refund this payment?",refNote:"If a payment is refunded, a network fee of {x} Pi is deducted from the refund."},
-ar:{title:"اعثر على محلات العطور حول العالم",sub:"تصفّح محلات العطور حسب الدولة والمنطقة، ثم تواصل مع المحل مباشرة.",search:"ابحث عن محل أو عطر أو ماركة",allC:"كل الدول",allR:"كل المناطق",shops:"محل",none:"لا توجد محلات مطابقة.",prods:"المنتجات",hrs:"ساعات العمل",tel:"الهاتف",addr:"العنوان",close:"إغلاق",login:"الدخول عبر Pi",logout:"خروج",dir:"الدليل",my:"محلي",adm:"الإدارة",loginFirst:"سجّل الدخول عبر Pi Browser لإدارة محلك.",shopTitle:"بيانات المحل",fname:"اسم المحل",fcountry:"الدولة",fregion:"المدينة / المنطقة",faddr:"العنوان",fphone:"الهاتف",fhours:"ساعات العمل",fdesc:"وصف المحل",fimg:"صورة المحل",save:"حفظ وإرسال للمراجعة",st_pending:"قيد المراجعة",st_live:"منشور",st_rejected:"مرفوض",st_approved_unpaid:"مقبول - الدفع مطلوب",st_refunded:"تم الاسترجاع",pay:"ادفع",prodTitle:"المنتجات",pname:"اسم العطر",pbrand:"الماركة",psize:"الحجم (مثال: 50 مل)",pprice:"السعر",pcur:"العملة (مثال: USD)",pdesc:"الوصف",pimg:"صورة المنتج",edit:"تعديل",del:"حذف",saved:"تم الحفظ. طلبك قيد المراجعة.",paid:"تمت عملية الدفع",cancelled:"تم إلغاء الدفع",approve:"قبول",reject:"رفض",refund:"استرجاع",pending:"بانتظار المراجعة",payments:"المدفوعات",reason:"السبب (يظهر لصاحب المحل)",founder:"متجر مؤسس",prodNeed:"يمكنك إضافة المنتجات بعد نشر محلك.",note:"هذا التطبيق دليل فقط. يتم الشراء مباشرة مع المحل.",free:"مجاني",delC:"حذف هذا المنتج؟",upl:"جاري الرفع...",note2:"ملاحظة المراجع",freeLeft:"مقاعد مجانية متبقية للمؤسسين",empty:"لا يوجد شيء بعد.",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser.",refunded:"تم إرسال الاسترجاع",refC:"استرجاع هذه الدفعة؟",refNote:"عند استرجاع أي دفعة، يُخصم {x} باي من المبلغ المسترجع لتغطية رسوم الشبكة."},
-zh:{title:"发现全球香水店",sub:"按国家和地区浏览香水店，然后直接联系店铺。",search:"搜索店铺、香水或品牌",allC:"所有国家",allR:"所有地区",shops:"家店铺",none:"没有匹配的店铺。",prods:"商品",hrs:"营业时间",tel:"电话",addr:"地址",close:"关闭",login:"使用 Pi 登录",logout:"退出",dir:"目录",my:"我的店铺",adm:"管理",loginFirst:"请在 Pi Browser 中登录以管理店铺。",shopTitle:"店铺信息",fname:"店铺名称",fcountry:"国家",fregion:"城市 / 地区",faddr:"地址",fphone:"电话",fhours:"营业时间",fdesc:"店铺简介",fimg:"店铺照片",save:"保存并提交审核",st_pending:"审核中",st_live:"已上线",st_rejected:"已拒绝",st_approved_unpaid:"已通过 - 需付款",st_refunded:"已退款",pay:"支付",prodTitle:"商品",pname:"香水名称",pbrand:"品牌",psize:"规格（如 50 ml）",pprice:"价格",pcur:"货币（如 USD）",pdesc:"描述",pimg:"商品图片",edit:"编辑",del:"删除",saved:"已保存，正在审核。",paid:"支付完成",cancelled:"支付已取消",approve:"通过",reject:"拒绝",refund:"退款",pending:"待审核",payments:"付款记录",reason:"原因（将显示给店主）",founder:"创始店铺",prodNeed:"店铺上线后即可添加商品。",note:"本应用仅为目录。购买请直接与店铺联系。",free:"免费",delC:"删除此商品？",upl:"上传中...",note2:"审核备注",freeLeft:"个免费创始名额剩余",empty:"暂无内容。",loginErr:"登录失败，请在 Pi Browser 中打开。",refunded:"退款已发送",refC:"确认退款？",refNote:"若付款被退款，将从退款金额中扣除 {x} Pi 网络手续费。"}
+en:{title:"Find perfume shops around the world",sub:"Browse perfume boutiques by country and region, then contact the shop directly.",search:"Search shop, perfume or brand",allC:"All countries",allR:"All regions",shops:"shops",none:"No shops match your search.",prods:"Products",hrs:"Hours",tel:"Phone",addr:"Address",close:"Close",login:"Login with Pi",logout:"Logout",dir:"Directory",my:"My shop",adm:"Admin",loginFirst:"Log in using Pi Browser to manage your shop.",shopTitle:"Shop details",fname:"Shop name",fcountry:"Country",fregion:"City / region",faddr:"Address",fphone:"Phone",fhours:"Opening hours",fdesc:"Description",fimg:"Shop photo",save:"Save and submit for review",st_pending:"Under review",st_live:"Live",st_rejected:"Rejected",st_approved_unpaid:"Approved - payment required",st_refunded:"Refunded",pay:"Pay",prodTitle:"Products",pname:"Perfume name",pbrand:"Brand",psize:"Size (e.g. 50 ml)",pprice:"Price",pcur:"Currency (e.g. USD)",pdesc:"Description",pimg:"Product photo",edit:"Edit",del:"Delete",saved:"Saved. Your submission is under review.",paid:"Payment completed",cancelled:"Payment cancelled",approve:"Approve",reject:"Reject",refund:"Refund",pending:"Pending review",payments:"Payments",reason:"Reason (shown to the owner)",founder:"Founding shop",prodNeed:"You can add products after your shop is live.",note:"This app is a directory only. Buying is arranged directly with the shop.",free:"Free",delC:"Delete this product?",upl:"Uploading...",note2:"Reviewer note",freeLeft:"free founding spots left",empty:"Nothing here yet.",loginErr:"Login failed. Open the app in Pi Browser.",refunded:"Refund sent",refC:"Refund this payment?",refNote:"If a payment is refunded, a network fee of {x} Pi is deducted from the refund.",netErr:"Cannot reach the server. Please wait a minute and try again.",imgFirst:"Please upload a photo first."},
+ar:{title:"اعثر على محلات العطور حول العالم",sub:"تصفّح محلات العطور حسب الدولة والمنطقة، ثم تواصل مع المحل مباشرة.",search:"ابحث عن محل أو عطر أو ماركة",allC:"كل الدول",allR:"كل المناطق",shops:"محل",none:"لا توجد محلات مطابقة.",prods:"المنتجات",hrs:"ساعات العمل",tel:"الهاتف",addr:"العنوان",close:"إغلاق",login:"الدخول عبر Pi",logout:"خروج",dir:"الدليل",my:"محلي",adm:"الإدارة",loginFirst:"سجّل الدخول عبر Pi Browser لإدارة محلك.",shopTitle:"بيانات المحل",fname:"اسم المحل",fcountry:"الدولة",fregion:"المدينة / المنطقة",faddr:"العنوان",fphone:"الهاتف",fhours:"ساعات العمل",fdesc:"وصف المحل",fimg:"صورة المحل",save:"حفظ وإرسال للمراجعة",st_pending:"قيد المراجعة",st_live:"منشور",st_rejected:"مرفوض",st_approved_unpaid:"مقبول - الدفع مطلوب",st_refunded:"تم الاسترجاع",pay:"ادفع",prodTitle:"المنتجات",pname:"اسم العطر",pbrand:"الماركة",psize:"الحجم (مثال: 50 مل)",pprice:"السعر",pcur:"العملة (مثال: USD)",pdesc:"الوصف",pimg:"صورة المنتج",edit:"تعديل",del:"حذف",saved:"تم الحفظ. طلبك قيد المراجعة.",paid:"تمت عملية الدفع",cancelled:"تم إلغاء الدفع",approve:"قبول",reject:"رفض",refund:"استرجاع",pending:"بانتظار المراجعة",payments:"المدفوعات",reason:"السبب (يظهر لصاحب المحل)",founder:"متجر مؤسس",prodNeed:"يمكنك إضافة المنتجات بعد نشر محلك.",note:"هذا التطبيق دليل فقط. يتم الشراء مباشرة مع المحل.",free:"مجاني",delC:"حذف هذا المنتج؟",upl:"جاري الرفع...",note2:"ملاحظة المراجع",freeLeft:"مقاعد مجانية متبقية للمؤسسين",empty:"لا يوجد شيء بعد.",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser.",refunded:"تم إرسال الاسترجاع",refC:"استرجاع هذه الدفعة؟",refNote:"عند استرجاع أي دفعة، يُخصم {x} باي من المبلغ المسترجع لتغطية رسوم الشبكة.",netErr:"تعذّر الاتصال بالسيرفر. انتظر دقيقة ثم أعد المحاولة.",imgFirst:"ارفع صورة أولاً."},
+zh:{title:"发现全球香水店",sub:"按国家和地区浏览香水店，然后直接联系店铺。",search:"搜索店铺、香水或品牌",allC:"所有国家",allR:"所有地区",shops:"家店铺",none:"没有匹配的店铺。",prods:"商品",hrs:"营业时间",tel:"电话",addr:"地址",close:"关闭",login:"使用 Pi 登录",logout:"退出",dir:"目录",my:"我的店铺",adm:"管理",loginFirst:"请在 Pi Browser 中登录以管理店铺。",shopTitle:"店铺信息",fname:"店铺名称",fcountry:"国家",fregion:"城市 / 地区",faddr:"地址",fphone:"电话",fhours:"营业时间",fdesc:"店铺简介",fimg:"店铺照片",save:"保存并提交审核",st_pending:"审核中",st_live:"已上线",st_rejected:"已拒绝",st_approved_unpaid:"已通过 - 需付款",st_refunded:"已退款",pay:"支付",prodTitle:"商品",pname:"香水名称",pbrand:"品牌",psize:"规格（如 50 ml）",pprice:"价格",pcur:"货币（如 USD）",pdesc:"描述",pimg:"商品图片",edit:"编辑",del:"删除",saved:"已保存，正在审核。",paid:"支付完成",cancelled:"支付已取消",approve:"通过",reject:"拒绝",refund:"退款",pending:"待审核",payments:"付款记录",reason:"原因（将显示给店主）",founder:"创始店铺",prodNeed:"店铺上线后即可添加商品。",note:"本应用仅为目录。购买请直接与店铺联系。",free:"免费",delC:"删除此商品？",upl:"上传中...",note2:"审核备注",freeLeft:"个免费创始名额剩余",empty:"暂无内容。",loginErr:"登录失败，请在 Pi Browser 中打开。",refunded:"退款已发送",refC:"确认退款？",refNote:"若付款被退款，将从退款金额中扣除 {x} Pi 网络手续费。",netErr:"无法连接服务器，请稍等一分钟后重试。",imgFirst:"请先上传图片。"}
 };
 let L=localStorage.getItem("lang")||"en",cfg={shopFee:5,productFee:.25,freeLeft:0,freeProducts:3,refundDeduct:0.01,sandbox:false};
+if(!T[L])L="en";
 let shops=[],me=null,tok=null,mine=null,isAdmin=false,img={shop:"",prod:""},editId=null;
 const $=id=>document.getElementById(id);
 const t=k=>(T[L]&&T[L][k])||T.en[k]||k;
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cn=c=>{try{return new Intl.DisplayNames([L],{type:"region"}).of(c)}catch(e){return c}};
-function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),3200)}
+function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),3500)}
 
 async function api(p,d={},a=true){
   const body=a&&me?{...d,userUid:me.uid,accessToken:tok}:d;
-  const r=await fetch(p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  let r;
+  try{
+    r=await fetch(API+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  }catch(e){throw new Error(t("netErr"))}
   const j=await r.json().catch(()=>({}));
-  if(!r.ok)throw new Error(j.error||"Error");return j;
+  if(!r.ok)throw new Error(j.error||"Error");
+  return j;
 }
 
 /* ===== اللغة ===== */
@@ -166,7 +174,11 @@ function setLang(l){
 
 /* ===== الدليل العام ===== */
 async function loadShops(){
-  const r=await fetch("/api/shops");shops=(await r.json()).shops||[];buildFilters();renderGrid();
+  try{
+    const r=await fetch(API+"/api/shops");
+    shops=(await r.json()).shops||[];
+  }catch(e){toast(t("netErr"))}
+  buildFilters();renderGrid();
 }
 function buildFilters(){
   const fc=$("fc"),fr=$("fr"),cv=fc.value,rv=fr.value;
@@ -205,12 +217,15 @@ async function onIncomplete(p){
   if(tx)api("/api/pay/complete",{paymentId:p.identifier,txid:tx},false).then(refreshMe).catch(()=>{});
 }
 async function login(){
+  if(typeof Pi==="undefined"){toast(t("loginErr"));return}
+  let a;
   try{
-    const a=await Pi.authenticate(["username","payments"],onIncomplete);
-    me=a.user;tok=a.accessToken;await refreshMe();
-    $("loginBtn").classList.add("hide");
-    $("who").classList.remove("hide");$("who").textContent="@"+me.username;
-  }catch(e){toast(t("loginErr"))}
+    a=await Pi.authenticate(["username","payments"],onIncomplete);
+  }catch(e){toast(t("loginErr"));return}
+  me=a.user;tok=a.accessToken;
+  $("loginBtn").classList.add("hide");
+  $("who").classList.remove("hide");$("who").textContent="@"+me.username;
+  try{await refreshMe()}catch(e){toast(e.message)}
 }
 async function refreshMe(){
   const j=await api("/api/me");
@@ -242,15 +257,17 @@ async function upload(inp,key,pv){
   if(f.size>3*1024*1024)return toast("3MB max");
   toast(t("upl"));
   const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});
-  try{const j=await api("/api/upload",{file:d});img[key]=j.url;pv.src=j.url;pv.classList.remove("hide")}catch(e){toast(e.message)}
+  try{const j=await api("/api/upload",{file:d});img[key]=j.url;pv.src=j.url;pv.classList.remove("hide");toast("OK")}catch(e){toast(e.message)}
 }
 async function saveShop(){
+  if(!img.shop)return toast(t("imgFirst"));
   try{await api("/api/shop/save",{name:$("sn").value,country:$("sc").value,region:$("sr").value,address:$("sa").value,phone:$("sp").value,hours:$("sh").value,description:$("sd").value,image:img.shop});
     toast(t("saved"));renderMine.filled=false;await refreshMe()}catch(e){toast(e.message)}
 }
 async function saveProd(){
+  if(!img.prod)return toast(t("imgFirst"));
   try{await api("/api/product/save",{id:editId,name:$("pn").value,brand:$("pb").value,size:$("ps").value,price:$("pp").value,currency:$("pc").value,description:$("pd").value,image:img.prod});
-    toast(t("saved"));editId=null;["pn","pb","ps","pp","pc","pd"].forEach(i=>$(i).value="");img.prod="";$("ppv").classList.add("hide");await refreshMe()}catch(e){toast(e.message)}
+    toast(t("saved"));editId=null;["pn","pb","ps","pp","pc","pd"].forEach(i=>$(i).value="");$("pf").value="";img.prod="";$("ppv").classList.add("hide");await refreshMe()}catch(e){toast(e.message)}
 }
 function editProd(id){
   const p=mine.products.find(x=>x.id===id);if(!p)return;editId=id;
@@ -263,7 +280,7 @@ async function delProd(id){if(!confirm(t("delC")))return;try{await api("/api/pro
 function pay(type,id){
   const amount=type==="shop_fee"?cfg.shopFee:cfg.productFee;
   Pi.createPayment({amount,memo:"Parfum "+type,metadata:{type,targetId:id}},{
-    onReadyForServerApproval:pid=>api("/api/pay/approve",{paymentId:pid},false),
+    onReadyForServerApproval:pid=>api("/api/pay/approve",{paymentId:pid},false).catch(e=>toast(e.message)),
     onReadyForServerCompletion:(pid,tx)=>api("/api/pay/complete",{paymentId:pid,txid:tx},false).then(()=>{toast(t("paid"));refreshMe();loadShops()}).catch(e=>toast(e.message)),
     onCancel:()=>toast(t("cancelled")),
     onError:e=>toast((e&&e.message)||"Error")
@@ -310,9 +327,10 @@ document.addEventListener("click",e=>{
 });
 
 (async function init(){
-  try{const r=await fetch("/api/config");cfg=await r.json()}catch(e){}
+  setLang(L);
+  try{const r=await fetch(API+"/api/config");cfg=await r.json()}catch(e){}
   try{Pi.init({version:"2.0",sandbox:cfg.sandbox})}catch(e){}
-  setLang(L);await loadShops();
+  await loadShops();
 })();
 </script>
 </body>
