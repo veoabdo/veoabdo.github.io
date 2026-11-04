@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parfum</title>
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Noto+Naskh+Arabic:wght@600;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1f7;--fg:#241733;--card:#fff;--mut:#6b5f78;--acc:#b36a12;--hero:#241733;--line:#ddd5e6;--chip:#ece6f3}
+@media(prefers-color-scheme:dark){:root{--bg:#150e1e;--fg:#f1e9f7;--card:#21172d;--mut:#a99bb8;--acc:#e0a04a;--hero:#0f0a16;--line:#372a47;--chip:#2c2039}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.disp{font-family:"Cormorant Garamond","Noto Naskh Arabic","Noto Serif SC",Georgia,serif}
+[lang=ar] .disp{font-family:"Noto Naskh Arabic",serif}[lang=zh] .disp{font-family:"Noto Serif SC",serif}
+header{background:var(--hero);color:#f4ecdf;padding:16px 20px 44px}
+.w{max-width:1000px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.brand{font-size:28px;font-weight:700}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+button,select,input,textarea{font:inherit;color:inherit}
+.b{background:var(--acc);color:#fff;border:0;padding:9px 16px;border-radius:8px;cursor:pointer}
+.g{background:none;border:1px solid #ffffff55;color:inherit;padding:6px 12px;border-radius:20px;cursor:pointer;font-size:14px}
+.g[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+.s{background:var(--chip);border:1px solid var(--line);padding:6px 12px;border-radius:8px;cursor:pointer;color:var(--fg)}
+.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.15;margin:28px 0 8px;max-width:14em}
+.hero p{margin:0;opacity:.8;max-width:34em}
+nav{display:flex;gap:6px;margin:-20px 0 14px}
+nav button{background:var(--card);border:1px solid var(--line);padding:9px 18px;border-radius:20px;cursor:pointer;color:var(--fg)}
+nav button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+main{padding:0 20px 50px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.f{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+label{display:block;margin:10px 0 2px;font-size:14px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:12px}
+.shop{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0;text-align:start;cursor:pointer;overflow:hidden;display:block;width:100%}
+.shop:hover{border-color:var(--acc)}
+.shop img{width:100%;height:150px;object-fit:cover;display:block;background:var(--chip)}
+.shop .in{padding:14px}.shop h3{margin:0;font-size:24px}
+.loc{color:var(--acc);font-size:14px;font-weight:600}.mut{color:var(--mut);font-size:14px}
+.tag{display:inline-block;background:var(--chip);border-radius:20px;padding:1px 10px;font-size:13px;margin:6px 4px 0 0}
+.badge{display:inline-block;font-size:12px;padding:1px 9px;border-radius:20px;background:var(--chip)}
+.live{background:#d8f3e0;color:#14532d}.rejected,.refunded{background:#fde2e2;color:#7f1d1d}.approved_unpaid{background:#fff0c9;color:#7a4d00}
+.ov{position:fixed;inset:0;background:#0009;display:flex;align-items:center;justify-content:center;padding:14px;z-index:20}
+.ov[hidden]{display:none}
+.md{background:var(--card);border-radius:12px;max-width:520px;width:100%;max-height:88vh;overflow:auto;padding:22px}
+.md img{width:100%;max-height:220px;object-fit:cover;border-radius:8px}
+.line{padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+.pv{max-width:140px;border-radius:8px;margin-top:6px;display:block}
+.hide{display:none}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:10px;z-index:30}
+@media(max-width:640px){.f{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="w">
+  <div class="top">
+    <div class="brand disp">Parfum</div>
+    <div class="row">
+      <button class="g" data-l="en">EN</button><button class="g" data-l="ar">العربية</button><button class="g" data-l="zh">中文</button>
+      <button class="b" id="loginBtn" data-i="login"></button>
+      <span id="who" class="hide"></span>
+    </div>
+  </div>
+  <div class="hero"><h1 class="disp" data-i="title"></h1><p data-i="sub"></p></div>
+</div></header>
+
+<main><div class="w">
+  <nav>
+    <button class="on" data-tab="dir" data-i="dir"></button>
+    <button data-tab="my" data-i="my"></button>
+    <button data-tab="adm" id="admTab" class="hide" data-i="adm"></button>
+  </nav>
+
+  <section id="dir">
+    <div class="card f">
+      <input id="q" type="search" data-p="search">
+      <select id="fc"></select>
+      <select id="fr"></select>
+    </div>
+    <div class="mut" id="count"></div>
+    <div class="grid" id="grid"></div>
+    <p class="mut" data-i="note" style="margin-top:28px"></p>
+  </section>
+
+  <section id="my" class="hide">
+    <div id="needLogin" class="card" data-i="loginFirst"></div>
+    <div id="mine" class="hide">
+      <div class="card">
+        <h2 class="disp" data-i="shopTitle" style="margin:0"></h2>
+        <div id="shopStatus" style="margin:8px 0"></div>
+        <p class="mut" id="refNote"></p>
+        <label data-i="fname"></label><input id="sn" maxlength="80">
+        <label data-i="fcountry"></label><select id="sc"></select>
+        <label data-i="fregion"></label><input id="sr" maxlength="60">
+        <label data-i="faddr"></label><input id="sa" maxlength="160">
+        <label data-i="fphone"></label><input id="sp" maxlength="30" dir="ltr">
+        <label data-i="fhours"></label><input id="sh" maxlength="60" dir="ltr">
+        <label data-i="fdesc"></label><textarea id="sd" rows="3" maxlength="500"></textarea>
+        <label data-i="fimg"></label><input type="file" id="sf" accept="image/jpeg,image/png,image/webp">
+        <img id="spv" class="pv hide"><br>
+        <button class="b" id="saveShop" data-i="save"></button>
+      </div>
+      <div class="card" id="prodCard">
+        <h2 class="disp" data-i="prodTitle" style="margin:0"></h2>
+        <p class="mut" id="prodNote"></p>
+        <div id="prodForm">
+          <label data-i="pname"></label><input id="pn" maxlength="80">
+          <label data-i="pbrand"></label><input id="pb" maxlength="60">
+          <label data-i="psize"></label><input id="ps" maxlength="30" dir="ltr">
+          <label data-i="pprice"></label><input id="pp" type="number" min="0" step="any" dir="ltr">
+          <label data-i="pcur"></label><input id="pc" maxlength="6" dir="ltr">
+          <label data-i="pdesc"></label><textarea id="pd" rows="2" maxlength="400"></textarea>
+          <label data-i="pimg"></label><input type="file" id="pf" accept="image/jpeg,image/png,image/webp">
+          <img id="ppv" class="pv hide"><br>
+          <button class="b" id="saveProd" data-i="save"></button>
+        </div>
+        <div id="prodList" style="margin-top:14px"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="adm" class="hide">
+    <div class="card"><h2 class="disp" data-i="pending" style="margin:0"></h2><div id="pendList"></div></div>
+    <div class="card"><h2 class="disp" data-i="payments" style="margin:0"></h2><div id="payList"></div></div>
+  </section>
+</div></main>
+
+<div class="ov" id="ov" hidden><div class="md" id="md"></div></div>
+<div id="toast" class="hide"></div>
+
+<script>
+const CODES="DZ,MA,TN,EG,LY,SA,AE,QA,KW,BH,OM,JO,LB,SY,IQ,PS,YE,SD,TR,IR,PK,IN,ID,MY,SG,PH,VN,TH,CN,JP,KR,FR,ES,IT,DE,GB,NL,BE,CH,SE,US,CA,BR,MX,AU,NG,ZA,RU".split(",");
+const T={
+en:{title:"Find perfume shops around the world",sub:"Browse perfume boutiques by country and region, then contact the shop directly.",search:"Search shop, perfume or brand",allC:"All countries",allR:"All regions",shops:"shops",none:"No shops match your search.",prods:"Products",hrs:"Hours",tel:"Phone",addr:"Address",close:"Close",login:"Login with Pi",logout:"Logout",dir:"Directory",my:"My shop",adm:"Admin",loginFirst:"Log in using Pi Browser to manage your shop.",shopTitle:"Shop details",fname:"Shop name",fcountry:"Country",fregion:"City / region",faddr:"Address",fphone:"Phone",fhours:"Opening hours",fdesc:"Description",fimg:"Shop photo",save:"Save and submit for review",st_pending:"Under review",st_live:"Live",st_rejected:"Rejected",st_approved_unpaid:"Approved - payment required",st_refunded:"Refunded",pay:"Pay",prodTitle:"Products",pname:"Perfume name",pbrand:"Brand",psize:"Size (e.g. 50 ml)",pprice:"Price",pcur:"Currency (e.g. USD)",pdesc:"Description",pimg:"Product photo",edit:"Edit",del:"Delete",saved:"Saved. Your submission is under review.",paid:"Payment completed",cancelled:"Payment cancelled",approve:"Approve",reject:"Reject",refund:"Refund",pending:"Pending review",payments:"Payments",reason:"Reason (shown to the owner)",founder:"Founding shop",prodNeed:"You can add products after your shop is live.",note:"This app is a directory only. Buying is arranged directly with the shop.",free:"Free",delC:"Delete this product?",upl:"Uploading...",note2:"Reviewer note",freeLeft:"free founding spots left",empty:"Nothing here yet.",loginErr:"Login failed. Open the app in Pi Browser.",refunded:"Refund sent",refC:"Refund this payment?",refNote:"If a payment is refunded, a network fee of {x} Pi is deducted from the refund."},
+ar:{title:"اعثر على محلات العطور حول العالم",sub:"تصفّح محلات العطور حسب الدولة والمنطقة، ثم تواصل مع المحل مباشرة.",search:"ابحث عن محل أو عطر أو ماركة",allC:"كل الدول",allR:"كل المناطق",shops:"محل",none:"لا توجد محلات مطابقة.",prods:"المنتجات",hrs:"ساعات العمل",tel:"الهاتف",addr:"العنوان",close:"إغلاق",login:"الدخول عبر Pi",logout:"خروج",dir:"الدليل",my:"محلي",adm:"الإدارة",loginFirst:"سجّل الدخول عبر Pi Browser لإدارة محلك.",shopTitle:"بيانات المحل",fname:"اسم المحل",fcountry:"الدولة",fregion:"المدينة / المنطقة",faddr:"العنوان",fphone:"الهاتف",fhours:"ساعات العمل",fdesc:"وصف المحل",fimg:"صورة المحل",save:"حفظ وإرسال للمراجعة",st_pending:"قيد المراجعة",st_live:"منشور",st_rejected:"مرفوض",st_approved_unpaid:"مقبول - الدفع مطلوب",st_refunded:"تم الاسترجاع",pay:"ادفع",prodTitle:"المنتجات",pname:"اسم العطر",pbrand:"الماركة",psize:"الحجم (مثال: 50 مل)",pprice:"السعر",pcur:"العملة (مثال: USD)",pdesc:"الوصف",pimg:"صورة المنتج",edit:"تعديل",del:"حذف",saved:"تم الحفظ. طلبك قيد المراجعة.",paid:"تمت عملية الدفع",cancelled:"تم إلغاء الدفع",approve:"قبول",reject:"رفض",refund:"استرجاع",pending:"بانتظار المراجعة",payments:"المدفوعات",reason:"السبب (يظهر لصاحب المحل)",founder:"متجر مؤسس",prodNeed:"يمكنك إضافة المنتجات بعد نشر محلك.",note:"هذا التطبيق دليل فقط. يتم الشراء مباشرة مع المحل.",free:"مجاني",delC:"حذف هذا المنتج؟",upl:"جاري الرفع...",note2:"ملاحظة المراجع",freeLeft:"مقاعد مجانية متبقية للمؤسسين",empty:"لا يوجد شيء بعد.",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser.",refunded:"تم إرسال الاسترجاع",refC:"استرجاع هذه الدفعة؟",refNote:"عند استرجاع أي دفعة، يُخصم {x} باي من المبلغ المسترجع لتغطية رسوم الشبكة."},
+zh:{title:"发现全球香水店",sub:"按国家和地区浏览香水店，然后直接联系店铺。",search:"搜索店铺、香水或品牌",allC:"所有国家",allR:"所有地区",shops:"家店铺",none:"没有匹配的店铺。",prods:"商品",hrs:"营业时间",tel:"电话",addr:"地址",close:"关闭",login:"使用 Pi 登录",logout:"退出",dir:"目录",my:"我的店铺",adm:"管理",loginFirst:"请在 Pi Browser 中登录以管理店铺。",shopTitle:"店铺信息",fname:"店铺名称",fcountry:"国家",fregion:"城市 / 地区",faddr:"地址",fphone:"电话",fhours:"营业时间",fdesc:"店铺简介",fimg:"店铺照片",save:"保存并提交审核",st_pending:"审核中",st_live:"已上线",st_rejected:"已拒绝",st_approved_unpaid:"已通过 - 需付款",st_refunded:"已退款",pay:"支付",prodTitle:"商品",pname:"香水名称",pbrand:"品牌",psize:"规格（如 50 ml）",pprice:"价格",pcur:"货币（如 USD）",pdesc:"描述",pimg:"商品图片",edit:"编辑",del:"删除",saved:"已保存，正在审核。",paid:"支付完成",cancelled:"支付已取消",approve:"通过",reject:"拒绝",refund:"退款",pending:"待审核",payments:"付款记录",reason:"原因（将显示给店主）",founder:"创始店铺",prodNeed:"店铺上线后即可添加商品。",note:"本应用仅为目录。购买请直接与店铺联系。",free:"免费",delC:"删除此商品？",upl:"上传中...",note2:"审核备注",freeLeft:"个免费创始名额剩余",empty:"暂无内容。",loginErr:"登录失败，请在 Pi Browser 中打开。",refunded:"退款已发送",refC:"确认退款？",refNote:"若付款被退款，将从退款金额中扣除 {x} Pi 网络手续费。"}
+};
+let L=localStorage.getItem("lang")||"en",cfg={shopFee:5,productFee:.25,freeLeft:0,freeProducts:3,refundDeduct:0.01,sandbox:false};
+let shops=[],me=null,tok=null,mine=null,isAdmin=false,img={shop:"",prod:""},editId=null;
+const $=id=>document.getElementById(id);
+const t=k=>(T[L]&&T[L][k])||T.en[k]||k;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cn=c=>{try{return new Intl.DisplayNames([L],{type:"region"}).of(c)}catch(e){return c}};
+function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),3200)}
+
+async function api(p,d={},a=true){
+  const body=a&&me?{...d,userUid:me.uid,accessToken:tok}:d;
+  const r=await fetch(p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||"Error");return j;
+}
+
+/* ===== اللغة ===== */
+function setLang(l){
+  L=l;localStorage.setItem("lang",l);
+  document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";
+  document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));
+  document.querySelectorAll("[data-p]").forEach(e=>e.placeholder=t(e.dataset.p));
+  document.querySelectorAll("[data-l]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l));
+  const sc=$("sc"),v=sc.value;sc.innerHTML=CODES.map(c=>`<option value="${c}">${esc(cn(c))}</option>`).join("");sc.value=v||"DZ";
+  buildFilters();renderGrid();renderMine();if(isAdmin&&!$("adm").classList.contains("hide"))loadAdmin();
+  if(me){$("loginBtn").classList.add("hide")}
+}
+
+/* ===== الدليل العام ===== */
+async function loadShops(){
+  const r=await fetch("/api/shops");shops=(await r.json()).shops||[];buildFilters();renderGrid();
+}
+function buildFilters(){
+  const fc=$("fc"),fr=$("fr"),cv=fc.value,rv=fr.value;
+  const cs=[...new Set(shops.map(s=>s.country))].sort((a,b)=>cn(a).localeCompare(cn(b),L));
+  fc.innerHTML=`<option value="">${esc(t("allC"))}</option>`+cs.map(c=>`<option value="${c}">${esc(cn(c))}</option>`).join("");
+  fc.value=cs.includes(cv)?cv:"";buildRegions(rv);
+}
+function buildRegions(keep){
+  const fr=$("fr"),c=$("fc").value;
+  const rs=[...new Set(shops.filter(s=>!c||s.country===c).map(s=>s.region))].sort((a,b)=>a.localeCompare(b,L));
+  fr.innerHTML=`<option value="">${esc(t("allR"))}</option>`+rs.map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join("");
+  fr.value=rs.includes(keep)?keep:"";
+}
+function renderGrid(){
+  const q=$("q").value.trim().toLowerCase(),c=$("fc").value,r=$("fr").value;
+  const list=shops.filter(s=>(!c||s.country===c)&&(!r||s.region===r)&&(!q||(s.name+" "+s.products.map(p=>p.name+" "+p.brand).join(" ")).toLowerCase().includes(q)))
+    .sort((a,b)=>cn(a.country).localeCompare(cn(b.country),L)||a.region.localeCompare(b.region,L)||a.name.localeCompare(b.name,L));
+  $("count").textContent=list.length+" "+t("shops")+(cfg.freeLeft>0?" · "+cfg.freeLeft+" "+t("freeLeft"):"");
+  $("grid").innerHTML=list.length?list.map(s=>`<button class="shop" data-id="${s.id}"><img src="${esc(s.image)}" alt="" loading="lazy"><div class="in"><h3 class="disp">${esc(s.name)}</h3><div class="loc">${esc(s.region)}، ${esc(cn(s.country))}</div><div class="mut">${esc(s.address)}</div>${s.founder?`<span class="badge">${esc(t("founder"))}</span>`:""}<div>${s.products.slice(0,2).map(p=>`<span class="tag">${esc(p.name)}</span>`).join("")}${s.products.length>2?`<span class="tag">+${s.products.length-2}</span>`:""}</div></div></button>`).join(""):`<p class="mut">${esc(t("none"))}</p>`;
+}
+function openShop(id){
+  const s=shops.find(x=>x.id===id);if(!s)return;
+  $("md").innerHTML=`<img src="${esc(s.image)}" alt=""><h2 class="disp" style="margin:10px 0 0;font-size:32px">${esc(s.name)}</h2><div class="loc">${esc(s.region)}، ${esc(cn(s.country))}</div><p>${esc(s.description)}</p>
+  <div class="line"><span>${esc(t("addr"))}</span><span>${esc(s.address)}</span></div>
+  <div class="line"><span>${esc(t("tel"))}</span><a dir="ltr" href="tel:${esc(s.phone)}">${esc(s.phone)}</a></div>
+  ${s.hours?`<div class="line"><span>${esc(t("hrs"))}</span><span dir="ltr">${esc(s.hours)}</span></div>`:""}
+  <h3 class="disp" style="font-size:24px;margin:16px 0 0">${esc(t("prods"))}</h3>
+  ${s.products.map(p=>`<div class="line"><span style="display:flex;gap:10px;align-items:center">${p.image?`<img src="${esc(p.image)}" style="width:54px;height:54px;object-fit:cover;border-radius:8px" alt="">`:""}<span>${esc(p.name)}<br><span class="mut">${esc([p.brand,p.size].filter(Boolean).join(" · "))}</span></span></span><b dir="ltr">${esc(p.price)} ${esc(p.currency)}</b></div>`).join("")||`<p class="mut">${esc(t("empty"))}</p>`}
+  <br><button class="b" id="cl">${esc(t("close"))}</button>`;
+  $("ov").hidden=false;$("cl").onclick=()=>$("ov").hidden=true;
+}
+
+/* ===== الدخول ===== */
+async function onIncomplete(p){
+  const tx=p.transaction&&p.transaction.txid;
+  if(tx)api("/api/pay/complete",{paymentId:p.identifier,txid:tx},false).then(refreshMe).catch(()=>{});
+}
+async function login(){
+  try{
+    const a=await Pi.authenticate(["username","payments"],onIncomplete);
+    me=a.user;tok=a.accessToken;await refreshMe();
+    $("loginBtn").classList.add("hide");
+    $("who").classList.remove("hide");$("who").textContent="@"+me.username;
+  }catch(e){toast(t("loginErr"))}
+}
+async function refreshMe(){
+  const j=await api("/api/me");
+  mine={shop:j.shop,products:j.products};isAdmin=j.isAdmin;
+  $("admTab").classList.toggle("hide",!isAdmin);renderMine();
+}
+
+/* ===== محلي ===== */
+function stBadge(s){return `<span class="badge ${s}">${esc(t("st_"+s))}</span>`}
+function renderMine(){
+  $("needLogin").classList.toggle("hide",!!me);$("mine").classList.toggle("hide",!me);
+  if(!me||!mine)return;
+  $("refNote").textContent=t("refNote").replace("{x}",cfg.refundDeduct);
+  const s=mine.shop;
+  if(s&&!renderMine.filled){
+    $("sn").value=s.name;$("sc").value=s.country;$("sr").value=s.region;$("sa").value=s.address;$("sp").value=s.phone;$("sh").value=s.hours||"";$("sd").value=s.description||"";
+    img.shop=s.image;$("spv").src=s.image;$("spv").classList.remove("hide");renderMine.filled=true;
+  }
+  let h=s?stBadge(s.status):"";
+  if(s&&s.reviewMessage)h+=`<p class="mut">${esc(t("note2"))}: ${esc(s.reviewMessage)}</p>`;
+  if(s&&s.status==="approved_unpaid")h+=` <button class="b" data-pay="shop_fee" data-id="${s.id}">${esc(t("pay"))} ${cfg.shopFee} Pi</button>`;
+  $("shopStatus").innerHTML=h;
+  const live=s&&s.status==="live";
+  $("prodForm").classList.toggle("hide",!live);$("prodNote").textContent=live?"":t("prodNeed");
+  $("prodList").innerHTML=mine.products.map(p=>`<div class="line"><span>${esc(p.name)} <span class="mut" dir="ltr">${esc(p.price)} ${esc(p.currency)}</span> ${stBadge(p.status)}${p.reviewMessage?`<br><span class="mut">${esc(t("note2"))}: ${esc(p.reviewMessage)}</span>`:""}</span><span class="row">${p.status==="approved_unpaid"?`<button class="b" data-pay="product_fee" data-id="${p.id}">${esc(t("pay"))} ${cfg.productFee} Pi</button>`:""}<button class="s" data-edit="${p.id}">${esc(t("edit"))}</button><button class="s" data-del="${p.id}">${esc(t("del"))}</button></span></div>`).join("")||`<p class="mut">${esc(t("empty"))}</p>`;
+}
+async function upload(inp,key,pv){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>3*1024*1024)return toast("3MB max");
+  toast(t("upl"));
+  const d=await new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result);x.readAsDataURL(f)});
+  try{const j=await api("/api/upload",{file:d});img[key]=j.url;pv.src=j.url;pv.classList.remove("hide")}catch(e){toast(e.message)}
+}
+async function saveShop(){
+  try{await api("/api/shop/save",{name:$("sn").value,country:$("sc").value,region:$("sr").value,address:$("sa").value,phone:$("sp").value,hours:$("sh").value,description:$("sd").value,image:img.shop});
+    toast(t("saved"));renderMine.filled=false;await refreshMe()}catch(e){toast(e.message)}
+}
+async function saveProd(){
+  try{await api("/api/product/save",{id:editId,name:$("pn").value,brand:$("pb").value,size:$("ps").value,price:$("pp").value,currency:$("pc").value,description:$("pd").value,image:img.prod});
+    toast(t("saved"));editId=null;["pn","pb","ps","pp","pc","pd"].forEach(i=>$(i).value="");img.prod="";$("ppv").classList.add("hide");await refreshMe()}catch(e){toast(e.message)}
+}
+function editProd(id){
+  const p=mine.products.find(x=>x.id===id);if(!p)return;editId=id;
+  $("pn").value=p.name;$("pb").value=p.brand||"";$("ps").value=p.size||"";$("pp").value=p.price;$("pc").value=p.currency;$("pd").value=p.description||"";
+  img.prod=p.image;$("ppv").src=p.image;$("ppv").classList.remove("hide");$("pn").scrollIntoView({behavior:"smooth"});
+}
+async function delProd(id){if(!confirm(t("delC")))return;try{await api("/api/product/delete",{id});await refreshMe()}catch(e){toast(e.message)}}
+
+/* ===== الدفع ===== */
+function pay(type,id){
+  const amount=type==="shop_fee"?cfg.shopFee:cfg.productFee;
+  Pi.createPayment({amount,memo:"Parfum "+type,metadata:{type,targetId:id}},{
+    onReadyForServerApproval:pid=>api("/api/pay/approve",{paymentId:pid},false),
+    onReadyForServerCompletion:(pid,tx)=>api("/api/pay/complete",{paymentId:pid,txid:tx},false).then(()=>{toast(t("paid"));refreshMe();loadShops()}).catch(e=>toast(e.message)),
+    onCancel:()=>toast(t("cancelled")),
+    onError:e=>toast((e&&e.message)||"Error")
+  });
+}
+
+/* ===== الإدارة ===== */
+async function loadAdmin(){
+  try{
+    const [p,y]=await Promise.all([api("/api/admin/pending"),api("/api/admin/payments")]);
+    const it=(type,x)=>`<div class="line"><span><b>${esc(x.name)}</b> ${type==="shop"?`<span class="mut">${esc(x.region)}, ${esc(x.country)} · @${esc(x.ownerUsername)}</span>`:`<span class="mut">${esc(x.shopName)} · ${esc(x.price)} ${esc(x.currency)}</span>`}${x.image?`<br><img src="${esc(x.image)}" class="pv" alt="">`:""}${type==="shop"?`<br><span class="mut">${esc(x.address)} · ${esc(x.phone)}</span>`:""}</span><span class="row"><button class="b" data-rv="approve" data-type="${type}" data-id="${x.id}">${esc(t("approve"))}</button><button class="s" data-rv="reject" data-type="${type}" data-id="${x.id}">${esc(t("reject"))}</button></span></div>`;
+    $("pendList").innerHTML=(p.shops.map(x=>it("shop",x)).join("")+p.products.map(x=>it("product",x)).join(""))||`<p class="mut">${esc(t("empty"))}</p>`;
+    $("payList").innerHTML=y.payments.map(x=>`<div class="line"><span>${esc(x.targetName)} <span class="mut" dir="ltr">${esc(x.amount)} Pi · ${esc(x.type)}</span> <span class="badge">${esc(x.refundStatus)}</span></span>${x.refundStatus==="none"||x.refundStatus==="failed"?`<button class="s" data-rf="${x.id}">${esc(t("refund"))}</button>`:""}</div>`).join("")||`<p class="mut">${esc(t("empty"))}</p>`;
+  }catch(e){toast(e.message)}
+}
+async function review(type,id,action){
+  let message="";if(action==="reject"){message=prompt(t("reason"))||"";if(!message)return}
+  try{await api("/api/admin/review",{type,id,action,message});loadAdmin();loadShops()}catch(e){toast(e.message)}
+}
+async function refund(id){
+  if(!confirm(t("refC")))return;const reason=prompt(t("reason"))||"";
+  try{const j=await api("/api/admin/refund",{paymentId:id,reason});toast(t("refunded")+": "+j.amount+" Pi");loadAdmin();loadShops()}catch(e){toast(e.message)}
+}
+
+/* ===== ربط الأحداث ===== */
+document.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>setLang(b.dataset.l));
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("on",x===b));
+  ["dir","my","adm"].forEach(s=>$(s).classList.toggle("hide",s!==b.dataset.tab));
+  if(b.dataset.tab==="adm")loadAdmin();
+});
+$("loginBtn").onclick=login;
+$("q").oninput=renderGrid;$("fc").onchange=()=>{buildRegions("");renderGrid()};$("fr").onchange=renderGrid;
+$("grid").onclick=e=>{const b=e.target.closest(".shop");if(b)openShop(b.dataset.id)};
+$("ov").onclick=e=>{if(e.target===$("ov"))$("ov").hidden=true};
+$("sf").onchange=e=>upload(e.target,"shop",$("spv"));$("pf").onchange=e=>upload(e.target,"prod",$("ppv"));
+$("saveShop").onclick=saveShop;$("saveProd").onclick=saveProd;
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-pay]");if(g)pay(g.dataset.pay,g.dataset.id);
+  const ed=e.target.closest("[data-edit]");if(ed)editProd(ed.dataset.edit);
+  const dl=e.target.closest("[data-del]");if(dl)delProd(dl.dataset.del);
+  const rv=e.target.closest("[data-rv]");if(rv)review(rv.dataset.type,rv.dataset.id,rv.dataset.rv);
+  const rf=e.target.closest("[data-rf]");if(rf)refund(rf.dataset.rf);
+});
+
+(async function init(){
+  try{const r=await fetch("/api/config");cfg=await r.json()}catch(e){}
+  try{Pi.init({version:"2.0",sandbox:cfg.sandbox})}catch(e){}
+  setLang(L);await loadShops();
+})();
+</script>
+</body>
+</html>
