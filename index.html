@@ -92,6 +92,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 .badge{display:inline-block;font-size:12px;padding:1px 10px;border-radius:20px;background:var(--chip)}
 .live{background:#d8f3e0;color:#14532d}
 .unpaid{background:#fff0c9;color:#7a4d00}
+.pending{background:#e0e7ff;color:#1e3a8a}
 .removed,.refunded{background:#fde2e2;color:#7f1d1d}
 .ic{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;vertical-align:-2px;margin-inline-end:4px;flex:none}
 
@@ -223,6 +224,13 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 .al.okk{background:#d8f3e0;color:#14532d}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
 .sttl{margin:0 0 6px;font-size:26px}
+
+/* ---------- مراجعة المحلات (الأدمن) ---------- */
+.rv{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.rv:last-child{border-bottom:0}
+.rvi{width:110px;height:110px;object-fit:cover;border-radius:12px;flex:none;background:var(--chip)}
+.rvb{flex:1;min-width:200px}
+.rvb .row{margin-top:8px}
 </style>
 </head>
 <body>
@@ -296,7 +304,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
     <!-- محلي / افتح محلاً -->
     <section id="vMy" class="hide">
       <div id="openView">
-        <div class="card open">
+        <div class="card open" id="openCard">
           <h2 class="disp" data-i="openTitle"></h2>
           <p id="openText" style="margin:4px 0 0;opacity:.85"></p>
           <ul><li data-i="perk1"></li><li data-i="perk2"></li><li id="perk3"></li></ul>
@@ -354,6 +362,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
       </div>
       <div id="aStats"></div>
       <div id="aManage" class="hide">
+        <div class="card"><h2 class="disp" data-i="admReview"></h2><div id="aReview"></div></div>
         <div class="card"><h2 class="disp" data-i="admShops"></h2><div id="aShops"></div></div>
         <div class="card"><h2 class="disp" data-i="admProds"></h2><div id="aProds"></div></div>
         <div class="card"><h2 class="disp" data-i="admPays"></h2><div id="aPays"></div></div>
@@ -403,21 +412,24 @@ title:"Fine perfumes from shops near and far",sub:"Browse perfumes, then contact
 logout:"Logout",navHome:"Perfumes",navShops:"Shops",my:"My shop",openTab:"Open shop",adm:"Admin",
 search:"Search perfume, brand or shop",allC:"All countries",allR:"All regions",perfumes:"perfumes",shops:"shops",noneP:"No perfumes match your search.",noneS:"No shops match your search.",
 ctaTitle:"Own a perfume shop?",ctaText:"Open your shop for {x} Pi and show your perfumes to customers worldwide.",ctaBtn:"Open a shop",
-openTitle:"Open your shop",openText:"Fill in your shop details, then pay a one-time fee of {x} Pi to publish it.",perk1:"Reach perfume lovers worldwide",perk2:"Customers contact you directly",perk3:"Add each perfume for just {x} Pi",
-openBtn:"Open shop — {x} Pi",payBtn:"Complete payment — {x} Pi",unpaidNote:"Your details are saved. Complete the payment to publish your shop.",refundedNote:"Your payment was refunded. Pay again to republish your shop.",removedNote:"This shop was removed by the administrator.",
+openTitle:"Open your shop",openText:"Fill in your shop details, then pay a one-time fee of {x} Pi to submit it for review. It goes live once approved.",perk1:"Reach perfume lovers worldwide",perk2:"Customers contact you directly",perk3:"Add each perfume for just {x} Pi",
+openBtn:"Open shop — {x} Pi",payBtn:"Complete payment — {x} Pi",unpaidNote:"Your details are saved. Complete the payment to submit your shop for review.",refundedNote:"Your shop was not approved and your payment was refunded. Update your details and pay again to resubmit.",removedNote:"This shop was removed by the administrator.",
+pendingNote:"Your payment was received. Your shop is under review and will be published once the administrator approves it. You can still edit your details below.",paidReview:"Payment completed. Your shop is now under review.",
 shopTitle:"Shop details",fname:"Shop name",fcountry:"Country",fregion:"City / region",faddr:"Address",fphone:"Phone",fhours:"Opening hours",fdesc:"Description",fimg:"Shop photo",saveShop:"Save changes",editShop:"Edit shop",
 addProd:"Add product — {x} Pi",prodTitle:"Add a perfume",editTitle:"Edit perfume",myProducts:"My perfumes",pname:"Perfume name",pbrand:"Brand",psize:"Size (e.g. 50 ml)",pprice:"Price",pcur:"Currency (e.g. USD)",pdesc:"Description",pimg:"Product photo",cancel:"Cancel",
 pay:"Pay {x} Pi",edit:"Edit",del:"Delete",delC:"Delete this product?",saved:"Saved",paid:"Payment completed. Published!",cancelled:"Payment cancelled",upl:"Uploading...",imgFirst:"Please upload a photo first.",fillAll:"Please fill in all required fields.",
-st_unpaid:"Awaiting payment",st_live:"Live",st_removed:"Removed",st_refunded:"Refunded",note2:"Note",
+st_unpaid:"Awaiting payment",st_pending:"Under review",st_live:"Live",st_removed:"Removed",st_refunded:"Refunded",note2:"Note",
 addr:"Address",tel:"Phone",hrs:"Hours",call:"Call shop",viewShop:"View shop",prods:"Perfumes",empty:"Nothing here yet.",
 note:"This app is a directory only. Buying is arranged directly with the shop.",netErr:"Cannot reach the server. Please wait a minute and try again.",
-refNote:"Only the shop fee can be refunded, minus a network fee of {x} Pi. Perfume fees are non-refundable.",noRefProd:"Perfume fees are non-refundable.",
-admShops:"Shops",admProds:"Perfumes",admPays:"Payments",remove:"Remove",restore:"Restore",refund:"Refund",reason:"Write the reason shown to the owner...",refunded:"Refund sent",dup:"duplicate",refFail:"Removed, but the refund failed. Retry it from Payments.",removedOk:"Removed",
+refNote:"Your shop goes live after admin review. If rejected, the shop fee is refunded minus a network fee of {x} Pi. Perfume fees are non-refundable.",noRefProd:"Perfume fees are non-refundable.",
+admShops:"Shops",admProds:"Perfumes",admPays:"Payments",admReview:"Pending review",noPending:"No shops are waiting for review.",remove:"Remove",restore:"Restore",refund:"Refund",reason:"Write the reason shown to the owner...",refunded:"Refund sent",dup:"duplicate",refFail:"Removed, but the refund failed. Retry it from Payments.",removedOk:"Removed",
+approve:"Approve",reject:"Reject",apvT:"Approve this shop?",apvP:"The shop will be published and visible to everyone.",apvOk:"Shop approved and published",
+rejT:"Reject this shop?",rejP:"The owner will be notified with your reason and the shop fee will be refunded to their wallet.",rejNote:"The owner can fix the details and pay again to resubmit.",okReject:"Reject & refund",rejOk:"Shop rejected",refFail2:"The refund failed, so the shop is still under review. Press Reject again to retry.",
 admStats:"Statistics",admManage:"Management",stRefresh:"Refresh",stUpdated:"Updated {x}",
-stNet:"Net revenue",stCollected:"Collected",stRefundedL:"Refunded",stLiveShops:"Live shops",stLiveProds:"Live perfumes",stOwners:"Shop owners",stAvg:"Perfumes per shop",stPays:"Payments",stShopFees:"Shop fees",stProdFees:"Perfume fees",stRefundedTo:"Refunded to owners",stKept:"Network fees kept",stOf:"of {x} total",
+stNet:"Net revenue",stCollected:"Collected",stRefundedL:"Refunded",stLiveShops:"Live shops",stPending:"Pending review",stLiveProds:"Live perfumes",stOwners:"Shop owners",stAvg:"Perfumes per shop",stPays:"Payments",stShopFees:"Shop fees",stProdFees:"Perfume fees",stRefundedTo:"Refunded to owners",stKept:"Network fees paid",stOf:"of {x} total",
 stActivity:"Activity",pToday:"Today",p7:"Last 7 days",p30:"Last 30 days",pAll:"All time",stColl:"Collected",stNewShops:"New shops",stNewProds:"New perfumes",
 stRev14:"Collected — last 14 days",stShops14:"New shops — last 14 days",stTotal:"Total",stStatus:"Status overview",stCountries:"By country (shops · perfumes)",stTop:"Top shops by perfumes",stAttn:"Needs attention",stRecent:"Latest payments",
-alFail:"{x} failed refund(s). Retry from Management › Payments.",alStuck:"{x} refund(s) stuck. Retry to complete them.",alProc:"{x} refund(s) in progress.",alDup:"{x} duplicate payment(s) recorded.",alUnpaidS:"{x} shop(s) awaiting payment.",alUnpaidP:"{x} perfume(s) awaiting payment.",alOk:"All good. Nothing needs your attention.",
+alPending:"{x} shop(s) waiting for your review. Open Management › Pending review.",alFail:"{x} failed refund(s). Retry from Management › Payments.",alStuck:"{x} refund(s) stuck. Retry to complete them.",alProc:"{x} refund(s) in progress.",alDup:"{x} duplicate payment(s) recorded.",alUnpaidS:"{x} shop(s) awaiting payment.",alUnpaidP:"{x} perfume(s) awaiting payment.",alOk:"All good. Nothing needs your attention.",
 tShopFee:"Shop fee",tProdFee:"Perfume fee",nonref:"Non-refundable",rs_none:"Not refunded",rs_processing:"Processing",rs_refunded:"Refunded",rs_failed:"Failed",rs_stuck:"Stuck",
 rmShopT:"Remove this shop?",rmShopP:"The shop and all its perfumes will be permanently deleted.",rmProdT:"Remove this perfume?",rmProdP:"It will be permanently deleted from the shop.",
 rShop:"Shop",rOwner:"Owner",rProds:"Perfumes",rItem:"Item",rPaid:"Amount paid",rShopFee:"Shop fee paid",rNet:"Network fee",rRef:"Refund to owner",
@@ -429,21 +441,24 @@ title:"عطور فاخرة من محلات قريبة وبعيدة",sub:"تصف�
 logout:"خروج",navHome:"العطور",navShops:"المحلات",my:"محلي",openTab:"افتح محلاً",adm:"الإدارة",
 search:"ابحث عن عطر أو ماركة أو محل",allC:"كل الدول",allR:"كل المناطق",perfumes:"عطر",shops:"محل",noneP:"لا توجد عطور مطابقة.",noneS:"لا توجد محلات مطابقة.",
 ctaTitle:"هل تملك محل عطور؟",ctaText:"افتح محلك مقابل {x} باي واعرض عطورك لعملاء من كل العالم.",ctaBtn:"افتح محلاً",
-openTitle:"افتح محلك",openText:"املأ بيانات محلك ثم ادفع رسماً لمرة واحدة قدره {x} باي لنشره.",perk1:"اصل إلى محبي العطور حول العالم",perk2:"يتواصل معك العملاء مباشرة",perk3:"أضف كل عطر مقابل {x} باي فقط",
-openBtn:"افتح المحل — {x} باي",payBtn:"إتمام الدفع — {x} باي",unpaidNote:"تم حفظ بياناتك. أكمل الدفع لنشر محلك.",refundedNote:"تم استرجاع دفعتك. ادفع مجدداً لإعادة نشر محلك.",removedNote:"تم حذف هذا المحل من طرف الإدارة.",
+openTitle:"افتح محلك",openText:"املأ بيانات محلك ثم ادفع رسماً لمرة واحدة قدره {x} باي لإرساله للمراجعة. يُنشر المحل بعد موافقة الإدارة.",perk1:"اصل إلى محبي العطور حول العالم",perk2:"يتواصل معك العملاء مباشرة",perk3:"أضف كل عطر مقابل {x} باي فقط",
+openBtn:"افتح المحل — {x} باي",payBtn:"إتمام الدفع — {x} باي",unpaidNote:"تم حفظ بياناتك. أكمل الدفع لإرسال محلك للمراجعة.",refundedNote:"لم تتم الموافقة على محلك وتم استرجاع دفعتك. عدّل بياناتك وادفع مجدداً لإعادة الإرسال.",removedNote:"تم حذف هذا المحل من طرف الإدارة.",
+pendingNote:"تم استلام دفعتك. محلك قيد المراجعة وسيُنشر بعد موافقة الإدارة. يمكنك تعديل بياناتك أدناه.",paidReview:"تمت عملية الدفع. محلك الآن قيد المراجعة.",
 shopTitle:"بيانات المحل",fname:"اسم المحل",fcountry:"الدولة",fregion:"المدينة / المنطقة",faddr:"العنوان",fphone:"الهاتف",fhours:"ساعات العمل",fdesc:"وصف المحل",fimg:"صورة المحل",saveShop:"حفظ التعديلات",editShop:"تعديل المحل",
 addProd:"إضافة منتج — {x} باي",prodTitle:"إضافة عطر",editTitle:"تعديل العطر",myProducts:"عطوري",pname:"اسم العطر",pbrand:"الماركة",psize:"الحجم (مثال: 50 مل)",pprice:"السعر",pcur:"العملة (مثال: USD)",pdesc:"الوصف",pimg:"صورة المنتج",cancel:"إلغاء",
 pay:"ادفع {x} باي",edit:"تعديل",del:"حذف",delC:"حذف هذا المنتج؟",saved:"تم الحفظ",paid:"تمت عملية الدفع. تم النشر!",cancelled:"تم إلغاء الدفع",upl:"جاري الرفع...",imgFirst:"ارفع صورة أولاً.",fillAll:"يرجى ملء كل الحقول المطلوبة.",
-st_unpaid:"بانتظار الدفع",st_live:"منشور",st_removed:"محذوف",st_refunded:"تم الاسترجاع",note2:"ملاحظة",
+st_unpaid:"بانتظار الدفع",st_pending:"قيد المراجعة",st_live:"منشور",st_removed:"محذوف",st_refunded:"تم الاسترجاع",note2:"ملاحظة",
 addr:"العنوان",tel:"الهاتف",hrs:"ساعات العمل",call:"اتصل بالمحل",viewShop:"عرض المحل",prods:"العطور",empty:"لا يوجد شيء بعد.",
 note:"هذا التطبيق دليل فقط. يتم الشراء مباشرة مع المحل.",netErr:"تعذّر الاتصال بالسيرفر. انتظر دقيقة ثم أعد المحاولة.",
-refNote:"يمكن استرجاع رسوم فتح المحل فقط، مع خصم {x} باي رسوم الشبكة. رسوم العطور غير قابلة للاسترجاع.",noRefProd:"رسوم العطور غير قابلة للاسترجاع.",
-admShops:"المحلات",admProds:"العطور",admPays:"المدفوعات",remove:"حذف",restore:"استعادة",refund:"استرجاع",reason:"اكتب السبب الذي سيظهر لصاحب المحل...",refunded:"تم إرسال الاسترجاع",dup:"مكررة",refFail:"تم الحذف لكن فشل الاسترجاع. أعد المحاولة من المدفوعات.",removedOk:"تم الحذف",
+refNote:"يُنشر محلك بعد مراجعة الإدارة. في حال الرفض تُسترجع رسوم فتح المحل مع خصم {x} باي رسوم الشبكة. رسوم العطور غير قابلة للاسترجاع.",noRefProd:"رسوم العطور غير قابلة للاسترجاع.",
+admShops:"المحلات",admProds:"العطور",admPays:"المدفوعات",admReview:"بانتظار المراجعة",noPending:"لا توجد محلات بانتظار المراجعة.",remove:"حذف",restore:"استعادة",refund:"استرجاع",reason:"اكتب السبب الذي سيظهر لصاحب المحل...",refunded:"تم إرسال الاسترجاع",dup:"مكررة",refFail:"تم الحذف لكن فشل الاسترجاع. أعد المحاولة من المدفوعات.",removedOk:"تم الحذف",
+approve:"قبول",reject:"رفض",apvT:"قبول هذا المحل؟",apvP:"سيتم نشر المحل وسيظهر للجميع.",apvOk:"تم قبول المحل ونشره",
+rejT:"رفض هذا المحل؟",rejP:"سيصل صاحب المحل السبب الذي تكتبه وستُسترجع رسوم فتح المحل إلى محفظته.",rejNote:"يمكن لصاحب المحل تعديل بياناته والدفع من جديد لإعادة الإرسال.",okReject:"رفض واسترجاع",rejOk:"تم رفض المحل",refFail2:"فشل الاسترجاع لذلك بقي المحل قيد المراجعة. اضغط رفض مجدداً لإعادة المحاولة.",
 admStats:"الإحصائيات",admManage:"الإدارة",stRefresh:"تحديث",stUpdated:"آخر تحديث {x}",
-stNet:"صافي الإيرادات",stCollected:"المحصّل",stRefundedL:"المسترجع",stLiveShops:"محلات منشورة",stLiveProds:"عطور منشورة",stOwners:"أصحاب المحلات",stAvg:"عطور لكل محل",stPays:"عدد الدفعات",stShopFees:"رسوم المحلات",stProdFees:"رسوم العطور",stRefundedTo:"المسترجع لأصحاب المحلات",stKept:"رسوم الشبكة المخصومة",stOf:"من أصل {x}",
+stNet:"صافي الإيرادات",stCollected:"المحصّل",stRefundedL:"المسترجع",stLiveShops:"محلات منشورة",stPending:"بانتظار المراجعة",stLiveProds:"عطور منشورة",stOwners:"أصحاب المحلات",stAvg:"عطور لكل محل",stPays:"عدد الدفعات",stShopFees:"رسوم المحلات",stProdFees:"رسوم العطور",stRefundedTo:"المسترجع لأصحاب المحلات",stKept:"رسوم الشبكة المدفوعة",stOf:"من أصل {x}",
 stActivity:"النشاط",pToday:"اليوم",p7:"آخر 7 أيام",p30:"آخر 30 يوماً",pAll:"الإجمالي",stColl:"المحصّل",stNewShops:"محلات جديدة",stNewProds:"عطور جديدة",
 stRev14:"المحصّل — آخر 14 يوماً",stShops14:"محلات جديدة — آخر 14 يوماً",stTotal:"المجموع",stStatus:"نظرة على الحالات",stCountries:"حسب الدولة (محلات · عطور)",stTop:"أكثر المحلات عطوراً",stAttn:"يحتاج انتباهك",stRecent:"آخر المدفوعات",
-alFail:"{x} عملية استرجاع فاشلة. أعد المحاولة من الإدارة › المدفوعات.",alStuck:"{x} عملية استرجاع عالقة. أعد المحاولة لإكمالها.",alProc:"{x} عملية استرجاع قيد المعالجة.",alDup:"{x} دفعة مكررة مسجّلة.",alUnpaidS:"{x} محل بانتظار الدفع.",alUnpaidP:"{x} عطر بانتظار الدفع.",alOk:"كل شيء سليم. لا شيء يحتاج انتباهك.",
+alPending:"{x} محل بانتظار مراجعتك. افتح الإدارة › بانتظار المراجعة.",alFail:"{x} عملية استرجاع فاشلة. أعد المحاولة من الإدارة › المدفوعات.",alStuck:"{x} عملية استرجاع عالقة. أعد المحاولة لإكمالها.",alProc:"{x} عملية استرجاع قيد المعالجة.",alDup:"{x} دفعة مكررة مسجّلة.",alUnpaidS:"{x} محل بانتظار الدفع.",alUnpaidP:"{x} عطر بانتظار الدفع.",alOk:"كل شيء سليم. لا شيء يحتاج انتباهك.",
 tShopFee:"رسوم محل",tProdFee:"رسوم عطر",nonref:"غير قابلة للاسترجاع",rs_none:"لم تُسترجع",rs_processing:"قيد المعالجة",rs_refunded:"تم الاسترجاع",rs_failed:"فشلت",rs_stuck:"عالقة",
 rmShopT:"حذف هذا المحل؟",rmShopP:"سيتم حذف المحل وكل عطوره نهائياً.",rmProdT:"حذف هذا العطر؟",rmProdP:"سيتم حذفه نهائياً من المحل.",
 rShop:"المحل",rOwner:"المالك",rProds:"العطور",rItem:"العنصر",rPaid:"المبلغ المدفوع",rShopFee:"رسوم فتح المحل",rNet:"رسوم الشبكة",rRef:"المبلغ المسترجع للمالك",
@@ -455,21 +470,24 @@ title:"来自四面八方的精品香水",sub:"浏览香水，然后直接联系
 logout:"退出",navHome:"香水",navShops:"店铺",my:"我的店铺",openTab:"开店",adm:"管理",
 search:"搜索香水、品牌或店铺",allC:"所有国家",allR:"所有地区",perfumes:"款香水",shops:"家店铺",noneP:"没有匹配的香水。",noneS:"没有匹配的店铺。",
 ctaTitle:"您有香水店吗？",ctaText:"支付 {x} Pi 开店，向全球顾客展示您的香水。",ctaBtn:"开店",
-openTitle:"开设您的店铺",openText:"填写店铺信息，支付一次性 {x} Pi 即可上线。",perk1:"触达全球香水爱好者",perk2:"顾客直接联系您",perk3:"每款香水仅需 {x} Pi",
-openBtn:"开店 — {x} Pi",payBtn:"完成支付 — {x} Pi",unpaidNote:"信息已保存，完成支付即可上线。",refundedNote:"您的付款已退还，重新支付即可再次上线。",removedNote:"此店铺已被管理员下架。",
+openTitle:"开设您的店铺",openText:"填写店铺信息，支付一次性 {x} Pi 提交审核，审核通过后即可上线。",perk1:"触达全球香水爱好者",perk2:"顾客直接联系您",perk3:"每款香水仅需 {x} Pi",
+openBtn:"开店 — {x} Pi",payBtn:"完成支付 — {x} Pi",unpaidNote:"信息已保存，完成支付即可提交审核。",refundedNote:"您的店铺未通过审核，付款已退还。请修改信息后重新支付以再次提交。",removedNote:"此店铺已被管理员下架。",
+pendingNote:"已收到您的付款。店铺正在审核中，管理员通过后将上线。您仍可在下方修改信息。",paidReview:"支付完成，店铺已进入审核。",
 shopTitle:"店铺信息",fname:"店铺名称",fcountry:"国家",fregion:"城市 / 地区",faddr:"地址",fphone:"电话",fhours:"营业时间",fdesc:"店铺简介",fimg:"店铺照片",saveShop:"保存修改",editShop:"编辑店铺",
 addProd:"添加商品 — {x} Pi",prodTitle:"添加香水",editTitle:"编辑香水",myProducts:"我的香水",pname:"香水名称",pbrand:"品牌",psize:"规格（如 50 ml）",pprice:"价格",pcur:"货币（如 USD）",pdesc:"描述",pimg:"商品图片",cancel:"取消",
 pay:"支付 {x} Pi",edit:"编辑",del:"删除",delC:"删除此商品？",saved:"已保存",paid:"支付完成，已发布！",cancelled:"支付已取消",upl:"上传中...",imgFirst:"请先上传图片。",fillAll:"请填写所有必填项。",
-st_unpaid:"待支付",st_live:"已上线",st_removed:"已下架",st_refunded:"已退款",note2:"备注",
+st_unpaid:"待支付",st_pending:"审核中",st_live:"已上线",st_removed:"已下架",st_refunded:"已退款",note2:"备注",
 addr:"地址",tel:"电话",hrs:"营业时间",call:"致电店铺",viewShop:"查看店铺",prods:"香水",empty:"暂无内容。",
 note:"本应用仅为目录。购买请直接与店铺联系。",netErr:"无法连接服务器，请稍等一分钟后重试。",
-refNote:"仅开店费可退款，并扣除 {x} Pi 网络手续费。香水上架费不可退款。",noRefProd:"香水上架费不可退款。",
-admShops:"店铺",admProds:"香水",admPays:"付款记录",remove:"下架",restore:"恢复",refund:"退款",reason:"请填写将显示给店主的原因...",refunded:"退款已发送",dup:"重复",refFail:"已下架，但退款失败。请在付款记录中重试。",removedOk:"已下架",
+refNote:"店铺经管理员审核后上线。若被拒绝，开店费将退还并扣除 {x} Pi 网络手续费。香水上架费不可退款。",noRefProd:"香水上架费不可退款。",
+admShops:"店铺",admProds:"香水",admPays:"付款记录",admReview:"待审核",noPending:"没有待审核的店铺。",remove:"下架",restore:"恢复",refund:"退款",reason:"请填写将显示给店主的原因...",refunded:"退款已发送",dup:"重复",refFail:"已下架，但退款失败。请在付款记录中重试。",removedOk:"已下架",
+approve:"通过",reject:"拒绝",apvT:"通过此店铺？",apvP:"店铺将上线并对所有人可见。",apvOk:"店铺已通过并上线",
+rejT:"拒绝此店铺？",rejP:"店主将看到您填写的原因，开店费将退还到其钱包。",rejNote:"店主可修改信息后重新支付再次提交。",okReject:"拒绝并退款",rejOk:"店铺已被拒绝",refFail2:"退款失败，店铺仍在审核中。请再次点击拒绝重试。",
 admStats:"统计",admManage:"管理",stRefresh:"刷新",stUpdated:"更新于 {x}",
-stNet:"净收入",stCollected:"已收取",stRefundedL:"已退款",stLiveShops:"在线店铺",stLiveProds:"在线香水",stOwners:"店主数",stAvg:"每店香水数",stPays:"付款笔数",stShopFees:"开店费",stProdFees:"香水上架费",stRefundedTo:"已退还店主",stKept:"已扣网络手续费",stOf:"共 {x}",
+stNet:"净收入",stCollected:"已收取",stRefundedL:"已退款",stLiveShops:"在线店铺",stPending:"待审核",stLiveProds:"在线香水",stOwners:"店主数",stAvg:"每店香水数",stPays:"付款笔数",stShopFees:"开店费",stProdFees:"香水上架费",stRefundedTo:"已退还店主",stKept:"已付网络手续费",stOf:"共 {x}",
 stActivity:"动态",pToday:"今天",p7:"近 7 天",p30:"近 30 天",pAll:"全部",stColl:"已收取",stNewShops:"新店铺",stNewProds:"新香水",
 stRev14:"已收取 — 近 14 天",stShops14:"新店铺 — 近 14 天",stTotal:"合计",stStatus:"状态概览",stCountries:"按国家（店铺 · 香水）",stTop:"香水最多的店铺",stAttn:"需要关注",stRecent:"最近付款",
-alFail:"{x} 笔退款失败。请在 管理 › 付款记录 中重试。",alStuck:"{x} 笔退款卡住。请重试以完成。",alProc:"{x} 笔退款处理中。",alDup:"记录了 {x} 笔重复付款。",alUnpaidS:"{x} 家店铺待支付。",alUnpaidP:"{x} 款香水待支付。",alOk:"一切正常，暂无需要关注的事项。",
+alPending:"{x} 家店铺等待您审核。请打开 管理 › 待审核。",alFail:"{x} 笔退款失败。请在 管理 › 付款记录 中重试。",alStuck:"{x} 笔退款卡住。请重试以完成。",alProc:"{x} 笔退款处理中。",alDup:"记录了 {x} 笔重复付款。",alUnpaidS:"{x} 家店铺待支付。",alUnpaidP:"{x} 款香水待支付。",alOk:"一切正常，暂无需要关注的事项。",
 tShopFee:"开店费",tProdFee:"上架费",nonref:"不可退款",rs_none:"未退款",rs_processing:"处理中",rs_refunded:"已退款",rs_failed:"失败",rs_stuck:"卡住",
 rmShopT:"删除此店铺？",rmShopP:"店铺及其所有香水将被永久删除。",rmProdT:"删除此香水？",rmProdP:"它将从店铺中永久删除。",
 rShop:"店铺",rOwner:"店主",rProds:"香水数",rItem:"项目",rPaid:"已付金额",rShopFee:"已付开店费",rNet:"网络手续费",rRef:"退还店主",
@@ -496,6 +514,7 @@ const PIN='<svg class="ic" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 
 const INFO='<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
 const skel=n=>Array.from({length:n},()=>'<div class="sk"></div>').join("");
 const liveShop=()=>!!(mine&&mine.shop&&mine.shop.status==="live");
+const pendingShop=()=>!!(mine&&mine.shop&&mine.shop.status==="pending");
 function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),5000)}
 
 async function api(p,d={},a=true){
@@ -614,8 +633,8 @@ function go(v){
   if(v==="adm")loadAdmin();
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function renderNav(){$("navMyL").textContent=liveShop()?t("my"):t("openTab")}
-function renderCta(){$("cta").classList.toggle("hide",!(me&&mine&&view==="home"&&!liveShop()))}
+function renderNav(){$("navMyL").textContent=(liveShop()||pendingShop())?t("my"):t("openTab")}
+function renderCta(){$("cta").classList.toggle("hide",!(me&&mine&&view==="home"&&!liveShop()&&!pendingShop()))}
 
 /* ================= الدخول ================= */
 function onIncomplete(p){
@@ -674,8 +693,10 @@ function ownCard(p){
 }
 function renderMy(){
   if(!me||!mine)return;
-  const s=mine.shop,live=liveShop();
+  const s=mine.shop,live=liveShop(),pend=pendingShop();
   $("openView").classList.toggle("hide",live);$("dashView").classList.toggle("hide",!live);
+  /* أثناء المراجعة نخفي بطاقة العرض ونُبقي النموذج للتعديل */
+  $("openCard").classList.toggle("hide",pend);
   if(s&&!renderMy.filled){fillShop();renderMy.filled=true}
   /* إذا حُذف المحل نهائياً: يبدأ النموذج فارغاً من جديد */
   if(!s&&renderMy.filled){resetShopForm();renderMy.filled=false}
@@ -685,11 +706,12 @@ function renderMy(){
   const st=s&&s.status;
   let m="";
   if(st==="unpaid")m=`<div class="warn">${esc(t("unpaidNote"))}</div>`;
-  if(st==="refunded")m=`<div class="warn">${esc(t("refundedNote"))}</div>`;
+  if(st==="pending")m=`<div class="warn">${esc(t("pendingNote"))}</div>`;
+  if(st==="refunded")m=`<div class="warn">${esc(t("refundedNote"))}${s.reviewMessage?" "+esc(t("reasonL"))+": "+esc(s.reviewMessage):""}</div>`;
   if(st==="removed")m=`<div class="warn">${esc(t("removedNote"))} ${esc(s.reviewMessage||"")}</div>`;
   $("shopMsg").innerHTML=m;
   $("saveShop").classList.toggle("hide",st==="removed");
-  $("saveShop").textContent=live?t("saveShop"):(st==="unpaid"?f("payBtn",cfg.shopFee):f("openBtn",cfg.shopFee));
+  $("saveShop").textContent=(live||pend)?t("saveShop"):(st==="unpaid"?f("payBtn",cfg.shopFee):f("openBtn",cfg.shopFee));
   if(live){
     $("banner").innerHTML=`<img src="${esc(s.image)}" alt=""><button class="btn alt sm ed" data-act="editShop">${esc(t("editShop"))}</button><div class="bi"><span class="badge live">${esc(t("st_live"))}</span><h2 class="disp">${esc(s.name)}</h2><div>${PIN}${esc(place(s))}</div><div style="opacity:.8;font-size:14px">${mine.products.length} ${esc(t("perfumes"))}</div></div>`;
     $("mgrid").innerHTML=mine.products.length?mine.products.map(ownCard).join(""):`<p class="mut empty">${esc(t("empty"))}</p>`;
@@ -718,17 +740,18 @@ async function upload(inp,key,pv){
   }catch(e){toast(e.message||"Error")}
 }
 
-/* ---------- المحل: حفظ ثم دفع 5 Pi ---------- */
+/* ---------- المحل: حفظ ثم دفع 5 Pi (بعدها يذهب للمراجعة) ---------- */
 async function submitShop(){
   const d={name:$("sn").value,country:$("sc").value,region:$("sr").value,address:$("sa").value,phone:$("sp").value,hours:$("sh").value,description:$("sd").value,image:img.shop};
   if(!d.name.trim()||!d.region.trim()||!d.address.trim()||!d.phone.trim())return toast(t("fillAll"));
   if(!d.image)return toast(t("imgFirst"));
-  const live=liveShop(),b=$("saveShop");b.disabled=true;
+  const live=liveShop(),pend=pendingShop(),b=$("saveShop");b.disabled=true;
   try{
     await api("/api/shop/save",d);
     renderMy.filled=false;
     await refreshMe();
     if(live){toast(t("saved"));$("shopForm").classList.add("hide")}
+    else if(pend)toast(t("saved"));
     else pay("shop_fee",me.uid);
   }catch(e){toast(e.message)}finally{b.disabled=false}
 }
@@ -762,7 +785,7 @@ async function submitProd(){
 }
 
 /* ================= نافذة تأكيد مخصصة (بديل confirm و prompt) =================
-   خيارات: kind (danger | gold | ok) · icon (trash | refund | restore) · title · text
+   خيارات: kind (danger | gold | ok) · icon (trash | refund | restore | check) · title · text
            rows: [[التسمية, القيمة, مميّز؟], ...] · note · input (نص بديل لخانة السبب)
            optional (السبب اختياري) · chips (اقتراحات سريعة للسبب) · ok (نص زر التأكيد)
    بدون input: ترجع true/false.  مع input: ترجع النص أو null عند الإلغاء */
@@ -770,7 +793,8 @@ const OKL={en:"Confirm",ar:"تأكيد",zh:"确认"};
 const ICONS={
   trash:'<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
   refund:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.5-.8-1.4-1.2-2.5-1.2-1.5 0-2.5.7-2.5 1.8s1 1.5 2.5 1.8 2.5.8 2.5 1.8-1 1.8-2.5 1.8c-1.1 0-2-.4-2.5-1.2M12 6.5V8M12 16v1.5"/></svg>',
-  restore:'<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>'
+  restore:'<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>'
 };
 function dlg(o){
   return new Promise(res=>{
@@ -835,7 +859,7 @@ function pay(type,id){
     Pi.createPayment({amount,memo:"Parfum "+(type==="shop_fee"?"shop":"product"),metadata:{type,targetId:id}},{
       onReadyForServerApproval:pid=>api("/api/pay/approve",{paymentId:pid},false).catch(e=>{done();toast(e.message)}),
       onReadyForServerCompletion:(pid,tx)=>api("/api/pay/complete",{paymentId:pid,txid:tx},false)
-        .then(async()=>{done();toast(t("paid"));await refreshMe();await loadShops()})
+        .then(async()=>{done();toast(t(type==="shop_fee"?"paidReview":"paid"));await refreshMe();await loadShops()})
         .catch(e=>{done();toast(e.message)}),
       onCancel:()=>{done();toast(t("cancelled"))},
       onError:e=>{done();toast((e&&e.message)||"Error")}
@@ -871,9 +895,11 @@ function renderStats(){
   const kpi=(l,v,sub,cls)=>`<div class="kpi${cls?" "+cls:""}"><span>${esc(l)}</span><b>${v}</b>${sub?`<small>${sub}</small>`:""}</div>`;
   const avg=s.shops.live?s.products.live/s.shops.live:0;
 
+  /* الصافي = المحصّل − المسترجع − رسوم الشبكة المدفوعة */
   const kpis=
-    kpi(t("stNet"),P(m.net),`${esc(t("stCollected"))} ${P(m.collected)} · ${esc(t("stRefundedL"))} ${P(m.refunded)}`,"main")+
+    kpi(t("stNet"),P(m.net),`${esc(t("stCollected"))} ${P(m.collected)} · ${esc(t("stRefundedL"))} ${P(m.refunded)} · ${esc(t("stKept"))} ${P(m.kept)}`,"main")+
     kpi(t("stLiveShops"),N(s.shops.live),esc(f("stOf",s.shops.total)))+
+    kpi(t("stPending"),N(s.shops.pending||0))+
     kpi(t("stLiveProds"),N(s.products.live),esc(f("stOf",s.products.total)))+
     kpi(t("stOwners"),N(s.owners))+
     kpi(t("stAvg"),N(avg.toFixed(1)))+
@@ -897,8 +923,8 @@ function renderStats(){
     <div class="card"><h2 class="disp sttl">${esc(t("stRev14"))}</h2><div class="mut">${esc(t("stTotal"))}: ${P(sum(s.revDay))}</div>${bars(s.revDay,true)}</div>
     <div class="card"><h2 class="disp sttl">${esc(t("stShops14"))}</h2><div class="mut">${esc(t("stTotal"))}: ${N(sum(s.shopsDay))}</div>${bars(s.shopsDay,false)}</div></div>`;
 
-  const bd=o=>["live","unpaid","removed","refunded"].filter(k=>k==="live"||k==="unpaid"||k==="removed"||o[k]>0)
-    .map(k=>`<span class="badge ${k}">${esc(t("st_"+k))} · ${o[k]}</span>`).join("");
+  const bd=o=>["live","pending","unpaid","removed","refunded"].filter(k=>k==="live"||k==="unpaid"||k==="removed"||o[k]>0)
+    .map(k=>`<span class="badge ${k}">${esc(t("st_"+k))} · ${o[k]||0}</span>`).join("");
   const status=`<div class="card"><h2 class="disp sttl">${esc(t("stStatus"))}</h2>
     <div class="mut">${esc(t("admShops"))}</div><div class="badges">${bd(s.shops)}</div>
     <div class="mut">${esc(t("admProds"))}</div><div class="badges">${bd(s.products)}</div></div>`;
@@ -909,6 +935,7 @@ function renderStats(){
   const geo=`<div class="two"><div class="card"><h2 class="disp sttl">${esc(t("stCountries"))}</h2>${ctry}</div><div class="card"><h2 class="disp sttl">${esc(t("stTop"))}</h2>${top}</div></div>`;
 
   const al=[];
+  if(a.pendingShops)al.push(f("alPending",a.pendingShops));
   if(a.failedRefunds)al.push(f("alFail",a.failedRefunds));
   if(a.stuckRefunds)al.push(f("alStuck",a.stuckRefunds));
   if(a.processing)al.push(f("alProc",a.processing));
@@ -930,6 +957,9 @@ function renderAdmin(){
   if(!adm)return;
   const none=`<p class="mut">${esc(t("empty"))}</p>`;
   const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></div>`;
+  /* المحلات التي دفعت وتنتظر قرار الأدمن (قبول / رفض مع استرجاع) */
+  const rv=x=>`<div class="rv"><img class="rvi" src="${esc(x.image)}" alt=""><div class="rvb"><b class="disp" style="font-size:22px">${esc(x.name)}</b> ${stBadge(x.status)}<div class="loc">${PIN}${esc(place(x))}</div><div class="mut">@${esc(x.ownerUsername)}</div><div class="mut">${esc(x.address||"")}</div><div class="mut" dir="ltr">${esc([x.phone,x.hours].filter(Boolean).join(" · "))}</div>${x.description?`<div class="desc mut">${esc(x.description)}</div>`:""}<div class="row"><button class="btn sm" data-rev="approve" data-id="${esc(x.id)}">${esc(t("approve"))}</button><button class="btn alt sm" data-rev="reject" data-id="${esc(x.id)}">${esc(t("reject"))}</button></div></div></div>`;
+  $("aReview").innerHTML=adm.shops.filter(x=>x.status==="pending").map(rv).join("")||`<p class="mut">${esc(t("noPending"))}</p>`;
   $("aShops").innerHTML=adm.shops.map(x=>row("shop",x)).join("")||none;
   $("aProds").innerHTML=adm.products.map(x=>row("product",x)).join("")||none;
   /* الاسترجاع متاح فقط لرسوم فتح المحل بعد حذفه. رسوم المنتجات غير قابلة للاسترجاع */
@@ -967,6 +997,33 @@ async function moderate(type,id,action){
     await loadAdmin(true);loadShops();
   }catch(e){toast(e.message)}
 }
+
+/* خيارات نافذة الرفض (محل قيد المراجعة: يسترجع رسوم فتحه ناقص رسوم الشبكة) */
+function rejectOpts(id){
+  const x=adm.shops.find(z=>z.id===id)||{};
+  const pay=adm.payments.find(p=>p.type==="shop_fee"&&p.targetId===id&&["none","failed","stuck"].includes(p.refundStatus));
+  const paid=pay?Number(pay.amount):cfg.shopFee;
+  const rows=[[t("rShop"),x.name||""],[t("rOwner"),"@"+(x.ownerUsername||"")],[t("rShopFee"),pf(paid)],[t("rNet"),"− "+pf(cfg.refundDeduct)],[t("rRef"),pf(Math.max(0,paid-cfg.refundDeduct)),true]];
+  return {kind:"danger",icon:"refund",title:t("rejT"),text:t("rejP"),rows,note:t("rejNote"),input:t("reason"),chips:[t("rc1"),t("rc2"),t("rc3"),t("rc4")],ok:t("okReject")};
+}
+/* مراجعة محل: قبول (نشر) أو رفض (استرجاع الرسوم + إظهار السبب لصاحب المحل) */
+async function review(id,action){
+  const x=adm.shops.find(z=>z.id===id)||{};
+  let message="";
+  if(action==="approve"){
+    if(!await dlg({kind:"ok",icon:"check",title:t("apvT"),text:t("apvP"),rows:[[t("rShop"),x.name||""],[t("rOwner"),"@"+(x.ownerUsername||"")]],ok:t("approve")}))return;
+  }else{
+    const v=await dlg(rejectOpts(id));
+    if(!v)return;message=v;
+  }
+  try{
+    const j=await api("/api/admin/moderate",{type:"shop",id,action,message});
+    if(action==="approve")toast(t("apvOk"));
+    else toast(j.failed?(j.error||t("refFail2")):(j.refunded?t("refunded")+": "+j.amount+" Pi":t("rejOk")));
+    await loadAdmin(true);loadShops();
+  }catch(e){toast(e.message)}
+}
+
 async function refund(id){
   const x=adm.payments.find(z=>z.id===id)||{};
   const paid=Number(x.amount)||0;
@@ -1008,6 +1065,7 @@ document.addEventListener("click",e=>{
   if(el=q("[data-payp]"))return pay("product_fee",el.dataset.payp);
   if(el=q("[data-edit]"))return showProd(el.dataset.edit);
   if(el=q("[data-del]"))return delProd(el.dataset.del);
+  if(el=q("[data-rev]"))return review(el.dataset.id,el.dataset.rev);
   if(el=q("[data-mod]"))return moderate(el.dataset.type,el.dataset.id,el.dataset.mod);
   if(el=q("[data-rf]"))return refund(el.dataset.rf);
 });
