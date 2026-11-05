@@ -145,23 +145,84 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 .th{width:44px;height:44px;object-fit:cover;border-radius:8px}
 .sbox{background:var(--chip);border-radius:14px;padding:12px 14px;margin:14px 0}
 
-/* ---------- نافذة التأكيد المخصصة ---------- */
-.dov{position:fixed;inset:0;z-index:80;background:#120b1acc;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px}
+/* ---------- نافذة التأكيد المخصصة (الاسترجاع / الحذف / السبب) ---------- */
+.dov{position:fixed;inset:0;z-index:80;background:#120b1ab8;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
 .dov[hidden]{display:none}
-.dbox{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px 20px 18px;box-shadow:0 24px 70px #0007;position:relative;overflow:hidden;animation:pop .22s ease-out both}
+.dbox{width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:26px 22px 20px;box-shadow:0 30px 80px #0008;position:relative;overflow:hidden;animation:pop .24s ease-out both;margin:auto}
 .dbox::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--gold)}
-.dbox.dng::before{background:linear-gradient(90deg,#e5646b,#b3262e)}
-.dt{font-size:28px;line-height:1.15;margin:4px 0 6px;font-weight:700}
-.dp{margin:0 0 14px;color:var(--mut);font-size:15px}
-.dbox textarea{resize:none;margin-top:2px}
+.dbox.dng::before{background:linear-gradient(90deg,#ec6a70,#b3262e)}
+.dic{width:58px;height:58px;border-radius:19px;display:grid;place-items:center;margin-bottom:14px}
+.dic svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dic.danger{background:#e5484d22;color:#ec6a70}
+.dic.gold{background:#e3b25c26;color:var(--acc)}
+.dic.ok{background:#3fb95026;color:#2f9e44}
+.dt{font-size:30px;line-height:1.12;margin:0 0 6px;font-weight:700}
+.dp{margin:0 0 14px;color:var(--mut);font-size:15px;line-height:1.55}
+.dsum{background:var(--chip);border:1px solid var(--line);border-radius:16px;padding:2px 14px;margin:0 0 12px}
+.dr{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.dr:last-child{border-bottom:0}
+.dr span{color:var(--mut);flex:none}
+.dr b{text-align:end;word-break:break-word}
+.dr.hl b{color:var(--acc);font-size:18px}
+.dnote{display:flex;gap:9px;align-items:flex-start;background:#e3b25c1f;border:1px solid #e3b25c55;border-radius:14px;padding:10px 12px;font-size:13px;line-height:1.5;margin:0 0 12px}
+.dnote .ic{width:16px;height:16px;margin:2px 0 0;color:var(--acc)}
+.dl{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;color:var(--mut);margin:4px 0 8px}
+.dl em{font-style:normal;opacity:.75}
+.dcnt{font-size:12px;opacity:.7}
+.dchips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.dchip{border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer;transition:background .15s}
+.dchip:hover{border-color:var(--acc)}
+.dchip.on{background:var(--gold);color:#2a1240;border-color:transparent;font-weight:700}
+.dbox textarea{resize:none;min-height:84px;border-radius:14px}
 .dbox textarea.bad{outline:2px solid #e5484d;outline-offset:1px}
-.dbtn{display:flex;gap:10px;margin-top:16px}
-.dbtn .btn{flex:1}
+.derr{min-height:20px;color:#ec6a70;font-size:13px;margin-top:4px}
+.dbtn{display:flex;gap:10px;margin-top:10px}
+.dbtn .btn{flex:1;padding:13px 14px}
 .btn.danger{background:linear-gradient(135deg,#ec6a70,#b3262e);color:#fff}
-@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.96)}}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}}
+@keyframes sheet{from{opacity:.4;transform:translateY(40px)}}
+@media(max-width:560px){
+  .dov{align-items:flex-end;padding:0}
+  .dbox{max-width:none;margin:0;border-radius:28px 28px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));animation:sheet .26s ease-out both}
+}
 
-#toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:12px;z-index:60;max-width:90vw;text-align:center}
+#toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:12px;z-index:90;max-width:90vw;text-align:center}
 .note{text-align:center;margin-top:30px}
+
+/* ---------- الإدارة: تبويبات + إحصائيات ---------- */
+.seg{display:flex;gap:4px;background:var(--chip);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
+.seg button{flex:1;border:0;background:none;padding:10px;border-radius:10px;font-weight:700;cursor:pointer;color:var(--mut)}
+.seg button.on{background:var(--grad);color:#fff}
+.sthead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 2px 12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:2px}
+.kpi span{color:var(--mut);font-size:13px}
+.kpi b{font-size:22px;line-height:1.25}
+.kpi small{color:var(--mut);font-size:12px}
+.kpi.main{grid-column:1/-1;background:var(--grad);color:#fbf3e4;border:0;padding:16px 18px}
+.kpi.main span,.kpi.main small{color:#fbf3e4;opacity:.8}
+.kpi.main b{font-size:36px;color:#f3d48f}
+.two{display:grid;grid-template-columns:1fr;gap:0 14px}
+@media(min-width:700px){.two{grid-template-columns:1fr 1fr}}
+.tw{overflow-x:auto}
+.tb{width:100%;border-collapse:collapse;font-size:14px}
+.tb th{color:var(--mut);font-weight:600;text-align:start;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tb td{padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tb tr:last-child td{border-bottom:0}
+.bars{display:flex;gap:4px;height:130px;margin-top:10px}
+.bc{flex:1;height:100%;display:flex;flex-direction:column;align-items:center;min-width:0}
+.bt{width:100%;height:calc(100% - 16px);display:flex;align-items:flex-end;justify-content:center}
+.bt i{display:block;width:100%;max-width:22px;border-radius:6px 6px 2px 2px;background:var(--gold)}
+.bc em{font-style:normal;font-size:10px;color:var(--mut);margin-top:4px;height:12px;line-height:12px}
+.hb{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:14px}
+.hb>span{width:34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .tr{flex:1;height:10px;border-radius:99px;background:var(--chip);overflow:hidden}
+.hb .tr i{display:block;height:100%;border-radius:99px;background:var(--gold)}
+.hb>b{font-size:13px;min-width:44px;text-align:end}
+.al{border-radius:12px;padding:9px 12px;margin-bottom:8px;font-size:14px}
+.al.okk{background:#d8f3e0;color:#14532d}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.sttl{margin:0 0 6px;font-size:26px}
 </style>
 </head>
 <body>
@@ -274,6 +335,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
           <label data-i="pdesc"></label><textarea id="pd" rows="2" maxlength="400"></textarea>
           <label data-i="pimg"></label><input type="file" id="pf" accept="image/jpeg,image/png,image/webp">
           <img id="ppv" class="pv hide" alt="">
+          <p class="mut" data-i="noRefProd" style="margin:12px 0 0"></p>
           <div class="row" style="margin-top:14px">
             <button class="btn" id="saveProd" style="flex:1"></button>
             <button class="btn alt" id="cancelProd" data-i="cancel"></button>
@@ -286,9 +348,16 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 
     <!-- الإدارة -->
     <section id="vAdm" class="hide">
-      <div class="card"><h2 class="disp" data-i="admShops"></h2><div id="aShops"></div></div>
-      <div class="card"><h2 class="disp" data-i="admProds"></h2><div id="aProds"></div></div>
-      <div class="card"><h2 class="disp" data-i="admPays"></h2><div id="aPays"></div></div>
+      <div class="seg">
+        <button class="on" data-atab="stats" data-i="admStats"></button>
+        <button data-atab="manage" data-i="admManage"></button>
+      </div>
+      <div id="aStats"></div>
+      <div id="aManage" class="hide">
+        <div class="card"><h2 class="disp" data-i="admShops"></h2><div id="aShops"></div></div>
+        <div class="card"><h2 class="disp" data-i="admProds"></h2><div id="aProds"></div></div>
+        <div class="card"><h2 class="disp" data-i="admPays"></h2><div id="aPays"></div></div>
+      </div>
     </section>
 
     <p class="mut note" data-i="note"></p>
@@ -341,8 +410,20 @@ addProd:"Add product — {x} Pi",prodTitle:"Add a perfume",editTitle:"Edit perfu
 pay:"Pay {x} Pi",edit:"Edit",del:"Delete",delC:"Delete this product?",saved:"Saved",paid:"Payment completed. Published!",cancelled:"Payment cancelled",upl:"Uploading...",imgFirst:"Please upload a photo first.",fillAll:"Please fill in all required fields.",
 st_unpaid:"Awaiting payment",st_live:"Live",st_removed:"Removed",st_refunded:"Refunded",note2:"Note",
 addr:"Address",tel:"Phone",hrs:"Hours",call:"Call shop",viewShop:"View shop",prods:"Perfumes",empty:"Nothing here yet.",
-note:"This app is a directory only. Buying is arranged directly with the shop.",netErr:"Cannot reach the server. Please wait a minute and try again.",refNote:"If a payment is refunded, a network fee of {x} Pi is deducted from the refund.",
-admShops:"Shops",admProds:"Perfumes",admPays:"Payments",remove:"Remove",restore:"Restore",refund:"Refund",reason:"Reason (shown to the owner)",refC:"Refund this payment?",refunded:"Refund sent",dup:"duplicate",resC:"Restore this item?",rmC:"Remove this item and refund its fee to the owner?",refFail:"Removed, but the refund failed. Retry it from Payments.",removedOk:"Removed"},
+note:"This app is a directory only. Buying is arranged directly with the shop.",netErr:"Cannot reach the server. Please wait a minute and try again.",
+refNote:"Only the shop fee can be refunded, minus a network fee of {x} Pi. Perfume fees are non-refundable.",noRefProd:"Perfume fees are non-refundable.",
+admShops:"Shops",admProds:"Perfumes",admPays:"Payments",remove:"Remove",restore:"Restore",refund:"Refund",reason:"Write the reason shown to the owner...",refunded:"Refund sent",dup:"duplicate",refFail:"Removed, but the refund failed. Retry it from Payments.",removedOk:"Removed",
+admStats:"Statistics",admManage:"Management",stRefresh:"Refresh",stUpdated:"Updated {x}",
+stNet:"Net revenue",stCollected:"Collected",stRefundedL:"Refunded",stLiveShops:"Live shops",stLiveProds:"Live perfumes",stOwners:"Shop owners",stAvg:"Perfumes per shop",stPays:"Payments",stShopFees:"Shop fees",stProdFees:"Perfume fees",stRefundedTo:"Refunded to owners",stKept:"Network fees kept",stOf:"of {x} total",
+stActivity:"Activity",pToday:"Today",p7:"Last 7 days",p30:"Last 30 days",pAll:"All time",stColl:"Collected",stNewShops:"New shops",stNewProds:"New perfumes",
+stRev14:"Collected — last 14 days",stShops14:"New shops — last 14 days",stTotal:"Total",stStatus:"Status overview",stCountries:"By country (shops · perfumes)",stTop:"Top shops by perfumes",stAttn:"Needs attention",stRecent:"Latest payments",
+alFail:"{x} failed refund(s). Retry from Management › Payments.",alStuck:"{x} refund(s) stuck. Retry to complete them.",alProc:"{x} refund(s) in progress.",alDup:"{x} duplicate payment(s) recorded.",alUnpaidS:"{x} shop(s) awaiting payment.",alUnpaidP:"{x} perfume(s) awaiting payment.",alOk:"All good. Nothing needs your attention.",
+tShopFee:"Shop fee",tProdFee:"Perfume fee",nonref:"Non-refundable",rs_none:"Not refunded",rs_processing:"Processing",rs_refunded:"Refunded",rs_failed:"Failed",rs_stuck:"Stuck",
+rmShopT:"Remove this shop?",rmShopP:"The shop and all its perfumes will be permanently deleted.",rmProdT:"Remove this perfume?",rmProdP:"It will be permanently deleted from the shop.",
+rShop:"Shop",rOwner:"Owner",rProds:"Perfumes",rItem:"Item",rPaid:"Amount paid",rShopFee:"Shop fee paid",rNet:"Network fee",rRef:"Refund to owner",
+reasonL:"Reason",reasonReq:"Please write a reason.",optional:"optional",
+rc1:"Violates the rules",rc2:"Inappropriate content",rc3:"False information",rc4:"Duplicate listing",rc5:"Requested by the owner",
+refT:"Refund this payment?",refP:"The refund will be sent to the owner's wallet.",resT:"Restore this item?",resP:"It becomes visible again once its fee is paid.",okRmRef:"Remove & refund",delT:"Delete this perfume?"},
 ar:{ltitle:"مرحباً بك في Parfum",lsub:"سجّل الدخول بحساب Pi لاستكشاف العطور من محلات حول العالم.",login:"المتابعة عبر Pi",loginBusy:"جاري الدخول...",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser وأعد المحاولة.",lhint:"يعمل بأفضل شكل داخل Pi Browser",tagline:"عطور فاخرة · Pi",
 title:"عطور فاخرة من محلات قريبة وبعيدة",sub:"تصفّح العطور ثم تواصل مع المحل مباشرة.",
 logout:"خروج",navHome:"العطور",navShops:"المحلات",my:"محلي",openTab:"افتح محلاً",adm:"الإدارة",
@@ -355,8 +436,20 @@ addProd:"إضافة منتج — {x} باي",prodTitle:"إضافة عطر",editT
 pay:"ادفع {x} باي",edit:"تعديل",del:"حذف",delC:"حذف هذا المنتج؟",saved:"تم الحفظ",paid:"تمت عملية الدفع. تم النشر!",cancelled:"تم إلغاء الدفع",upl:"جاري الرفع...",imgFirst:"ارفع صورة أولاً.",fillAll:"يرجى ملء كل الحقول المطلوبة.",
 st_unpaid:"بانتظار الدفع",st_live:"منشور",st_removed:"محذوف",st_refunded:"تم الاسترجاع",note2:"ملاحظة",
 addr:"العنوان",tel:"الهاتف",hrs:"ساعات العمل",call:"اتصل بالمحل",viewShop:"عرض المحل",prods:"العطور",empty:"لا يوجد شيء بعد.",
-note:"هذا التطبيق دليل فقط. يتم الشراء مباشرة مع المحل.",netErr:"تعذّر الاتصال بالسيرفر. انتظر دقيقة ثم أعد المحاولة.",refNote:"عند استرجاع أي دفعة، يُخصم {x} باي من المبلغ المسترجع لتغطية رسوم الشبكة.",
-admShops:"المحلات",admProds:"العطور",admPays:"المدفوعات",remove:"حذف",restore:"استعادة",refund:"استرجاع",reason:"السبب (يظهر لصاحب المحل)",refC:"استرجاع هذه الدفعة؟",refunded:"تم إرسال الاسترجاع",dup:"مكررة",resC:"استعادة هذا العنصر؟",rmC:"حذف هذا العنصر واسترجاع رسومه لصاحبه؟",refFail:"تم الحذف لكن فشل الاسترجاع. أعد المحاولة من المدفوعات.",removedOk:"تم الحذف"},
+note:"هذا التطبيق دليل فقط. يتم الشراء مباشرة مع المحل.",netErr:"تعذّر الاتصال بالسيرفر. انتظر دقيقة ثم أعد المحاولة.",
+refNote:"يمكن استرجاع رسوم فتح المحل فقط، مع خصم {x} باي رسوم الشبكة. رسوم العطور غير قابلة للاسترجاع.",noRefProd:"رسوم العطور غير قابلة للاسترجاع.",
+admShops:"المحلات",admProds:"العطور",admPays:"المدفوعات",remove:"حذف",restore:"استعادة",refund:"استرجاع",reason:"اكتب السبب الذي سيظهر لصاحب المحل...",refunded:"تم إرسال الاسترجاع",dup:"مكررة",refFail:"تم الحذف لكن فشل الاسترجاع. أعد المحاولة من المدفوعات.",removedOk:"تم الحذف",
+admStats:"الإحصائيات",admManage:"الإدارة",stRefresh:"تحديث",stUpdated:"آخر تحديث {x}",
+stNet:"صافي الإيرادات",stCollected:"المحصّل",stRefundedL:"المسترجع",stLiveShops:"محلات منشورة",stLiveProds:"عطور منشورة",stOwners:"أصحاب المحلات",stAvg:"عطور لكل محل",stPays:"عدد الدفعات",stShopFees:"رسوم المحلات",stProdFees:"رسوم العطور",stRefundedTo:"المسترجع لأصحاب المحلات",stKept:"رسوم الشبكة المخصومة",stOf:"من أصل {x}",
+stActivity:"النشاط",pToday:"اليوم",p7:"آخر 7 أيام",p30:"آخر 30 يوماً",pAll:"الإجمالي",stColl:"المحصّل",stNewShops:"محلات جديدة",stNewProds:"عطور جديدة",
+stRev14:"المحصّل — آخر 14 يوماً",stShops14:"محلات جديدة — آخر 14 يوماً",stTotal:"المجموع",stStatus:"نظرة على الحالات",stCountries:"حسب الدولة (محلات · عطور)",stTop:"أكثر المحلات عطوراً",stAttn:"يحتاج انتباهك",stRecent:"آخر المدفوعات",
+alFail:"{x} عملية استرجاع فاشلة. أعد المحاولة من الإدارة › المدفوعات.",alStuck:"{x} عملية استرجاع عالقة. أعد المحاولة لإكمالها.",alProc:"{x} عملية استرجاع قيد المعالجة.",alDup:"{x} دفعة مكررة مسجّلة.",alUnpaidS:"{x} محل بانتظار الدفع.",alUnpaidP:"{x} عطر بانتظار الدفع.",alOk:"كل شيء سليم. لا شيء يحتاج انتباهك.",
+tShopFee:"رسوم محل",tProdFee:"رسوم عطر",nonref:"غير قابلة للاسترجاع",rs_none:"لم تُسترجع",rs_processing:"قيد المعالجة",rs_refunded:"تم الاسترجاع",rs_failed:"فشلت",rs_stuck:"عالقة",
+rmShopT:"حذف هذا المحل؟",rmShopP:"سيتم حذف المحل وكل عطوره نهائياً.",rmProdT:"حذف هذا العطر؟",rmProdP:"سيتم حذفه نهائياً من المحل.",
+rShop:"المحل",rOwner:"المالك",rProds:"العطور",rItem:"العنصر",rPaid:"المبلغ المدفوع",rShopFee:"رسوم فتح المحل",rNet:"رسوم الشبكة",rRef:"المبلغ المسترجع للمالك",
+reasonL:"السبب",reasonReq:"يرجى كتابة السبب.",optional:"اختياري",
+rc1:"مخالفة للشروط",rc2:"محتوى غير لائق",rc3:"معلومات غير صحيحة",rc4:"إعلان مكرر",rc5:"بطلب من المالك",
+refT:"استرجاع هذه الدفعة؟",refP:"سيتم إرسال المبلغ إلى محفظة المالك.",resT:"استعادة هذا العنصر؟",resP:"سيظهر من جديد بعد دفع رسومه.",okRmRef:"حذف واسترجاع",delT:"حذف هذا العطر؟"},
 zh:{ltitle:"欢迎来到 Parfum",lsub:"使用 Pi 账号登录，探索全球香水店的香水。",login:"使用 Pi 继续",loginBusy:"登录中...",loginErr:"登录失败，请在 Pi Browser 中打开应用后重试。",lhint:"建议在 Pi Browser 中使用",tagline:"精品香水 · Pi",
 title:"来自四面八方的精品香水",sub:"浏览香水，然后直接联系店铺。",
 logout:"退出",navHome:"香水",navShops:"店铺",my:"我的店铺",openTab:"开店",adm:"管理",
@@ -369,14 +462,26 @@ addProd:"添加商品 — {x} Pi",prodTitle:"添加香水",editTitle:"编辑香�
 pay:"支付 {x} Pi",edit:"编辑",del:"删除",delC:"删除此商品？",saved:"已保存",paid:"支付完成，已发布！",cancelled:"支付已取消",upl:"上传中...",imgFirst:"请先上传图片。",fillAll:"请填写所有必填项。",
 st_unpaid:"待支付",st_live:"已上线",st_removed:"已下架",st_refunded:"已退款",note2:"备注",
 addr:"地址",tel:"电话",hrs:"营业时间",call:"致电店铺",viewShop:"查看店铺",prods:"香水",empty:"暂无内容。",
-note:"本应用仅为目录。购买请直接与店铺联系。",netErr:"无法连接服务器，请稍等一分钟后重试。",refNote:"若付款被退款，将从退款金额中扣除 {x} Pi 网络手续费。",
-admShops:"店铺",admProds:"香水",admPays:"付款记录",remove:"下架",restore:"恢复",refund:"退款",reason:"原因（将显示给店主）",refC:"确认退款？",refunded:"退款已发送",dup:"重复",resC:"恢复此项？",rmC:"下架此项并向店主退还费用？",refFail:"已下架，但退款失败。请在付款记录中重试。",removedOk:"已下架"}
+note:"本应用仅为目录。购买请直接与店铺联系。",netErr:"无法连接服务器，请稍等一分钟后重试。",
+refNote:"仅开店费可退款，并扣除 {x} Pi 网络手续费。香水上架费不可退款。",noRefProd:"香水上架费不可退款。",
+admShops:"店铺",admProds:"香水",admPays:"付款记录",remove:"下架",restore:"恢复",refund:"退款",reason:"请填写将显示给店主的原因...",refunded:"退款已发送",dup:"重复",refFail:"已下架，但退款失败。请在付款记录中重试。",removedOk:"已下架",
+admStats:"统计",admManage:"管理",stRefresh:"刷新",stUpdated:"更新于 {x}",
+stNet:"净收入",stCollected:"已收取",stRefundedL:"已退款",stLiveShops:"在线店铺",stLiveProds:"在线香水",stOwners:"店主数",stAvg:"每店香水数",stPays:"付款笔数",stShopFees:"开店费",stProdFees:"香水上架费",stRefundedTo:"已退还店主",stKept:"已扣网络手续费",stOf:"共 {x}",
+stActivity:"动态",pToday:"今天",p7:"近 7 天",p30:"近 30 天",pAll:"全部",stColl:"已收取",stNewShops:"新店铺",stNewProds:"新香水",
+stRev14:"已收取 — 近 14 天",stShops14:"新店铺 — 近 14 天",stTotal:"合计",stStatus:"状态概览",stCountries:"按国家（店铺 · 香水）",stTop:"香水最多的店铺",stAttn:"需要关注",stRecent:"最近付款",
+alFail:"{x} 笔退款失败。请在 管理 › 付款记录 中重试。",alStuck:"{x} 笔退款卡住。请重试以完成。",alProc:"{x} 笔退款处理中。",alDup:"记录了 {x} 笔重复付款。",alUnpaidS:"{x} 家店铺待支付。",alUnpaidP:"{x} 款香水待支付。",alOk:"一切正常，暂无需要关注的事项。",
+tShopFee:"开店费",tProdFee:"上架费",nonref:"不可退款",rs_none:"未退款",rs_processing:"处理中",rs_refunded:"已退款",rs_failed:"失败",rs_stuck:"卡住",
+rmShopT:"删除此店铺？",rmShopP:"店铺及其所有香水将被永久删除。",rmProdT:"删除此香水？",rmProdP:"它将从店铺中永久删除。",
+rShop:"店铺",rOwner:"店主",rProds:"香水数",rItem:"项目",rPaid:"已付金额",rShopFee:"已付开店费",rNet:"网络手续费",rRef:"退还店主",
+reasonL:"原因",reasonReq:"请填写原因。",optional:"可选",
+rc1:"违反规则",rc2:"内容不当",rc3:"信息不实",rc4:"重复信息",rc5:"店主主动要求",
+refT:"确认退款？",refP:"退款将发送到店主的钱包。",resT:"恢复此项？",resP:"支付费用后将重新上线。",okRmRef:"删除并退款",delT:"删除此香水？"}
 };
 
 let L=localStorage.getItem("lang");
 if(!T[L])L=(navigator.language||"en").toLowerCase().startsWith("ar")?"ar":"en";
 let cfg={shopFee:5,productFee:.25,refundDeduct:.01,sandbox:false};
-let shops=[],prods=[],loaded=false,me=null,tok=null,mine=null,isAdmin=false,adm=null;
+let shops=[],prods=[],loaded=false,me=null,tok=null,mine=null,isAdmin=false,adm=null,stats=null,atab="stats";
 let view="home",img={shop:"",prod:""},editId=null,editSt="",paying=false,piReady=null;
 
 const $=id=>document.getElementById(id);
@@ -385,7 +490,10 @@ const f=(k,x)=>t(k).replace("{x}",x);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cn=c=>{try{return new Intl.DisplayNames([L],{type:"region"}).of(c)}catch(e){return c}};
 const place=s=>[s.region,cn(s.country)].join(L==="ar"?"، ":", ");
+const num=n=>Number(n||0).toLocaleString("en",{minimumFractionDigits:2,maximumFractionDigits:2});
+const pf=n=>num(n)+" Pi";
 const PIN='<svg class="ic" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+const INFO='<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
 const skel=n=>Array.from({length:n},()=>'<div class="sk"></div>').join("");
 const liveShop=()=>!!(mine&&mine.shop&&mine.shop.status==="live");
 function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),5000)}
@@ -533,7 +641,7 @@ async function login(auto){
   refreshMe().catch(e=>toast(e.message));
 }
 function logout(){
-  me=null;tok=null;mine=null;isAdmin=false;adm=null;renderMy.filled=false;
+  me=null;tok=null;mine=null;isAdmin=false;adm=null;stats=null;renderMy.filled=false;
   localStorage.removeItem("auto");
   $("admTab").classList.add("hide");
   $("app").classList.add("hide");$("login").classList.remove("hide");
@@ -652,25 +760,58 @@ async function submitProd(){
     if(needPay)pay("product_fee",j.id);else toast(t("saved"));
   }catch(e){toast(e.message)}finally{b.disabled=false}
 }
+
 /* ================= نافذة تأكيد مخصصة (بديل confirm و prompt) =================
+   خيارات: kind (danger | gold | ok) · icon (trash | refund | restore) · title · text
+           rows: [[التسمية, القيمة, مميّز؟], ...] · note · input (نص بديل لخانة السبب)
+           optional (السبب اختياري) · chips (اقتراحات سريعة للسبب) · ok (نص زر التأكيد)
    بدون input: ترجع true/false.  مع input: ترجع النص أو null عند الإلغاء */
 const OKL={en:"Confirm",ar:"تأكيد",zh:"确认"};
+const ICONS={
+  trash:'<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
+  refund:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.5-.8-1.4-1.2-2.5-1.2-1.5 0-2.5.7-2.5 1.8s1 1.5 2.5 1.8 2.5.8 2.5 1.8-1 1.8-2.5 1.8c-1.1 0-2-.4-2.5-1.2M12 6.5V8M12 16v1.5"/></svg>',
+  restore:'<svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>'
+};
 function dlg(o){
   return new Promise(res=>{
-    const ov=$("dlg"),box=$("dlgBox");
-    box.className="dbox"+(o.danger?" dng":"");
-    box.innerHTML=`<div class="dt disp">${esc(o.title||"")}</div>${o.text?`<p class="dp">${esc(o.text)}</p>`:""}${o.input?`<textarea id="dlgIn" rows="3" maxlength="300" placeholder="${esc(o.input)}"></textarea>`:""}<div class="dbtn"><button class="btn alt" id="dlgNo">${esc(t("cancel"))}</button><button class="btn${o.danger?" danger":""}" id="dlgOk">${esc(o.ok||OKL[L]||OKL.en)}</button></div>`;
-    ov.hidden=false;
+    const ov=$("dlg"),box=$("dlgBox"),prev=document.activeElement;
+    const kind=o.kind||(o.danger?"danger":"gold");
+    box.className="dbox"+(kind==="danger"?" dng":"");
+    const rows=(o.rows||[]).map(r=>`<div class="dr${r[2]?" hl":""}"><span>${esc(r[0])}</span><b dir="auto">${esc(r[1])}</b></div>`).join("");
+    const chips=(o.chips||[]).map((c,i)=>`<button type="button" class="dchip" data-ci="${i}">${esc(c)}</button>`).join("");
+    box.innerHTML=
+      `<div class="dic ${kind}">${ICONS[o.icon||"refund"]}</div>`+
+      `<div class="dt disp">${esc(o.title||"")}</div>`+
+      (o.text?`<p class="dp">${esc(o.text)}</p>`:"")+
+      (rows?`<div class="dsum">${rows}</div>`:"")+
+      (o.note?`<div class="dnote">${INFO}<span>${esc(o.note)}</span></div>`:"")+
+      (o.input?`<div class="dl"><span>${esc(t("reasonL"))}${o.optional?` <em>(${esc(t("optional"))})</em>`:""}</span><span class="dcnt" id="dCnt" dir="ltr">0/300</span></div>`+
+        (chips?`<div class="dchips">${chips}</div>`:"")+
+        `<textarea id="dlgIn" rows="3" maxlength="300" placeholder="${esc(o.input)}"></textarea><div class="derr" id="dErr"></div>`:"")+
+      `<div class="dbtn"><button class="btn alt" id="dlgNo">${esc(t("cancel"))}</button><button class="btn${kind==="danger"?" danger":""}" id="dlgOk">${esc(o.ok||OKL[L]||OKL.en)}</button></div>`;
+    ov.hidden=false;document.body.style.overflow="hidden";
     const inp=$("dlgIn"),no=o.input?null:false;
-    if(inp)setTimeout(()=>inp.focus(),60);
-    const fin=v=>{ov.hidden=true;ov.onclick=null;document.removeEventListener("keydown",key,true);res(v)};
+    if(inp){
+      const cnt=$("dCnt"),err=$("dErr");
+      const sync=()=>{
+        cnt.textContent=inp.value.length+"/300";
+        box.querySelectorAll(".dchip").forEach(b=>b.classList.toggle("on",(o.chips||[])[b.dataset.ci]===inp.value));
+      };
+      inp.addEventListener("input",()=>{inp.classList.remove("bad");err.textContent="";sync()});
+      box.querySelectorAll(".dchip").forEach(b=>b.onclick=()=>{inp.value=o.chips[b.dataset.ci];inp.classList.remove("bad");err.textContent="";sync();inp.focus()});
+      setTimeout(()=>inp.focus(),80);
+    }
+    const fin=v=>{ov.hidden=true;ov.onclick=null;document.body.style.overflow="";document.removeEventListener("keydown",key,true);try{prev&&prev.focus&&prev.focus()}catch(e){}res(v)};
     const yes=()=>{
-      if(inp){const v=inp.value.trim();if(!v&&!o.optional){inp.classList.add("bad");inp.focus();return}fin(v)}
-      else fin(true)
+      if(inp){
+        const v=inp.value.trim();
+        if(!v&&!o.optional){inp.classList.add("bad");$("dErr").textContent=t("reasonReq");inp.focus();return}
+        fin(v)
+      }else fin(true)
     };
     const key=e=>{
       if(e.key==="Escape"){e.stopPropagation();fin(no)}
-      else if(e.key==="Enter"&&!inp){e.preventDefault();yes()}
+      else if(e.key==="Enter"&&(!inp||e.ctrlKey||e.metaKey)){e.preventDefault();yes()}
     };
     document.addEventListener("keydown",key,true);
     $("dlgOk").onclick=yes;
@@ -680,7 +821,7 @@ function dlg(o){
 }
 
 async function delProd(id){
-  if(!await dlg({title:t("del"),text:t("delC"),danger:true,ok:t("del")}))return;
+  if(!await dlg({kind:"danger",icon:"trash",title:t("delT"),text:t("delC"),note:t("noRefProd"),ok:t("del")}))return;
   try{await api("/api/product/delete",{id});await refreshMe();loadShops()}catch(e){toast(e.message)}
 }
 
@@ -703,35 +844,138 @@ function pay(type,id){
 }
 
 /* ================= الإدارة ================= */
-async function loadAdmin(){
-  try{adm=await api("/api/admin/list");renderAdmin()}catch(e){toast(e.message)}
+async function loadAdmin(force){
+  const [a,s]=await Promise.allSettled([
+    api("/api/admin/list"),
+    api("/api/admin/stats",{tz:new Date().getTimezoneOffset(),force:!!force})
+  ]);
+  if(a.status==="fulfilled")adm=a.value;else toast(a.reason.message);
+  if(s.status==="fulfilled")stats=s.value;else if(a.status==="fulfilled")toast(s.reason.message);
+  renderAdmin();
 }
+function setATab(k){
+  atab=k;
+  document.querySelectorAll("[data-atab]").forEach(b=>b.classList.toggle("on",b.dataset.atab===k));
+  $("aStats").classList.toggle("hide",k!=="stats");
+  $("aManage").classList.toggle("hide",k!=="manage");
+}
+
+const dFmt=ts=>new Date(ts).toLocaleString(L==="zh"?"zh-CN":L==="ar"?"ar-u-nu-latn":"en-GB",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+const refBadge=x=>x.type==="product_fee"?`<span class="badge">${esc(t("nonref"))}</span>`:`<span class="badge">${esc(t("rs_"+x.refundStatus))}</span>`;
+
+function renderStats(){
+  const box=$("aStats");
+  if(!stats){box.innerHTML=`<div class="kpis">${'<div class="sk" style="aspect-ratio:auto;height:88px"></div>'.repeat(6)}</div>`;return}
+  const s=stats,m=s.money,a=s.alerts;
+  const P=n=>`<span dir="ltr">${esc(pf(n))}</span>`,N=n=>`<span dir="ltr">${esc(n)}</span>`;
+  const kpi=(l,v,sub,cls)=>`<div class="kpi${cls?" "+cls:""}"><span>${esc(l)}</span><b>${v}</b>${sub?`<small>${sub}</small>`:""}</div>`;
+  const avg=s.shops.live?s.products.live/s.shops.live:0;
+
+  const kpis=
+    kpi(t("stNet"),P(m.net),`${esc(t("stCollected"))} ${P(m.collected)} · ${esc(t("stRefundedL"))} ${P(m.refunded)}`,"main")+
+    kpi(t("stLiveShops"),N(s.shops.live),esc(f("stOf",s.shops.total)))+
+    kpi(t("stLiveProds"),N(s.products.live),esc(f("stOf",s.products.total)))+
+    kpi(t("stOwners"),N(s.owners))+
+    kpi(t("stAvg"),N(avg.toFixed(1)))+
+    kpi(t("stShopFees"),P(m.shopFees))+
+    kpi(t("stProdFees"),P(m.productFees),esc(t("nonref")))+
+    kpi(t("stRefundedTo"),P(m.refunded),`${esc(t("stKept"))} ${P(m.kept)}`)+
+    kpi(t("stPays"),N(s.payments.total));
+
+  const per=[["pToday","today"],["p7","d7"],["p30","d30"],["pAll","all"]].map(([lk,k])=>{
+    const x=s.periods[k];
+    return `<tr><td>${esc(t(lk))}</td><td>${P(x.revenue)}</td><td>${N(x.shops)}</td><td>${N(x.products)}</td></tr>`;
+  }).join("");
+  const periods=`<div class="card"><h2 class="disp sttl">${esc(t("stActivity"))}</h2><div class="tw"><table class="tb"><thead><tr><th></th><th>${esc(t("stColl"))}</th><th>${esc(t("stNewShops"))}</th><th>${esc(t("stNewProds"))}</th></tr></thead><tbody>${per}</tbody></table></div></div>`;
+
+  const bars=(vals,money)=>{
+    const mx=Math.max(0,...vals)||1;
+    return `<div class="bars" dir="ltr">${vals.map((v,i)=>`<div class="bc" title="${esc(s.days[i]+" · "+(money?pf(v):v))}"><div class="bt"><i style="height:${v>0?Math.max(5,v/mx*100):0}%"></i></div><em>${esc(s.days[i].slice(8))}</em></div>`).join("")}</div>`;
+  };
+  const sum=a=>a.reduce((x,y)=>x+y,0);
+  const charts=`<div class="two">
+    <div class="card"><h2 class="disp sttl">${esc(t("stRev14"))}</h2><div class="mut">${esc(t("stTotal"))}: ${P(sum(s.revDay))}</div>${bars(s.revDay,true)}</div>
+    <div class="card"><h2 class="disp sttl">${esc(t("stShops14"))}</h2><div class="mut">${esc(t("stTotal"))}: ${N(sum(s.shopsDay))}</div>${bars(s.shopsDay,false)}</div></div>`;
+
+  const bd=o=>["live","unpaid","removed","refunded"].filter(k=>k==="live"||k==="unpaid"||k==="removed"||o[k]>0)
+    .map(k=>`<span class="badge ${k}">${esc(t("st_"+k))} · ${o[k]}</span>`).join("");
+  const status=`<div class="card"><h2 class="disp sttl">${esc(t("stStatus"))}</h2>
+    <div class="mut">${esc(t("admShops"))}</div><div class="badges">${bd(s.shops)}</div>
+    <div class="mut">${esc(t("admProds"))}</div><div class="badges">${bd(s.products)}</div></div>`;
+
+  const cmax=Math.max(1,...s.countries.map(c=>c.shops));
+  const ctry=s.countries.length?s.countries.map(c=>`<div class="hb"><span>${esc(c.code==="--"?"—":cn(c.code))}</span><div class="tr"><i style="width:${Math.max(4,c.shops/cmax*100)}%"></i></div><b dir="ltr">${c.shops} · ${c.products}</b></div>`).join(""):`<p class="mut">${esc(t("empty"))}</p>`;
+  const top=s.topShops.length?s.topShops.map(x=>`<div class="line"><span><b>${esc(x.name)}</b><br><span class="mut">${esc(cn(x.country))}</span></span><span class="badge">${x.products} ${esc(t("perfumes"))}</span></div>`).join(""):`<p class="mut">${esc(t("empty"))}</p>`;
+  const geo=`<div class="two"><div class="card"><h2 class="disp sttl">${esc(t("stCountries"))}</h2>${ctry}</div><div class="card"><h2 class="disp sttl">${esc(t("stTop"))}</h2>${top}</div></div>`;
+
+  const al=[];
+  if(a.failedRefunds)al.push(f("alFail",a.failedRefunds));
+  if(a.stuckRefunds)al.push(f("alStuck",a.stuckRefunds));
+  if(a.processing)al.push(f("alProc",a.processing));
+  if(a.duplicates)al.push(f("alDup",a.duplicates));
+  if(a.unpaidShops)al.push(f("alUnpaidS",a.unpaidShops));
+  if(a.unpaidProducts)al.push(f("alUnpaidP",a.unpaidProducts));
+  const attn=`<div class="card"><h2 class="disp sttl">${esc(t("stAttn"))}</h2>${al.length?al.map(x=>`<div class="al warn">${esc(x)}</div>`).join(""):`<div class="al okk">${esc(t("alOk"))}</div>`}</div>`;
+
+  const rec=s.recent.length?s.recent.map(x=>`<div class="line"><span><b>${esc(x.name)}</b><br><span class="mut">${esc(t(x.type==="shop_fee"?"tShopFee":"tProdFee"))} · ${esc(dFmt(x.paidAt))}</span></span><span style="text-align:end"><b dir="ltr">${esc(pf(x.amount))}</b><br>${refBadge(x)}</span></div>`).join(""):`<p class="mut">${esc(t("empty"))}</p>`;
+  const recent=`<div class="card"><h2 class="disp sttl">${esc(t("stRecent"))}</h2>${rec}</div>`;
+
+  const head=`<div class="sthead"><span class="mut">${esc(f("stUpdated",new Date(s.at).toLocaleTimeString(L==="zh"?"zh-CN":L==="ar"?"ar-u-nu-latn":"en-GB",{hour:"2-digit",minute:"2-digit"})))}</span><button class="btn alt sm" data-act="statsRefresh">${esc(t("stRefresh"))}</button></div>`;
+
+  box.innerHTML=head+`<div class="kpis">${kpis}</div>`+attn+periods+charts+status+geo+recent;
+}
+
 function renderAdmin(){
+  renderStats();
   if(!adm)return;
   const none=`<p class="mut">${esc(t("empty"))}</p>`;
   const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></div>`;
   $("aShops").innerHTML=adm.shops.map(x=>row("shop",x)).join("")||none;
   $("aProds").innerHTML=adm.products.map(x=>row("product",x)).join("")||none;
-  const canRef=x=>x.targetStatus==="removed"&&["none","failed","stuck"].includes(x.refundStatus);
-  $("aPays").innerHTML=adm.payments.map(x=>`<div class="line"><span>${esc(x.targetName)} <span class="mut" dir="ltr">${esc(x.amount)} Pi · ${esc(x.type)}</span> <span class="badge">${esc(x.refundStatus)}</span>${x.duplicate?` <span class="badge unpaid">${esc(t("dup"))}</span>`:""}${x.lastError&&x.refundStatus!=="refunded"?`<br><span class="mut" style="font-size:12px" dir="ltr">${esc(String(x.lastError).slice(0,140))}</span>`:""}</span>${canRef(x)?`<button class="btn alt sm" data-rf="${esc(x.id)}">${esc(t("refund"))}</button>`:""}</div>`).join("")||none;
+  /* الاسترجاع متاح فقط لرسوم فتح المحل بعد حذفه. رسوم المنتجات غير قابلة للاسترجاع */
+  const canRef=x=>x.type==="shop_fee"&&x.targetStatus==="removed"&&["none","failed","stuck"].includes(x.refundStatus);
+  $("aPays").innerHTML=adm.payments.map(x=>`<div class="line"><span>${esc(x.targetName)} <span class="mut" dir="ltr">${esc(x.amount)} Pi · ${esc(x.type)}</span> ${refBadge(x)}${x.duplicate?` <span class="badge unpaid">${esc(t("dup"))}</span>`:""}${x.lastError&&x.refundStatus!=="refunded"?`<br><span class="mut" style="font-size:12px" dir="ltr">${esc(String(x.lastError).slice(0,140))}</span>`:""}</span>${canRef(x)?`<button class="btn alt sm" data-rf="${esc(x.id)}">${esc(t("refund"))}</button>`:""}</div>`).join("")||none;
+}
+
+/* خيارات نافذة الحذف (محل: يسترجع رسوم فتحه فقط · منتج: بدون استرجاع) */
+function removeOpts(type,id){
+  const chips=[t("rc1"),t("rc2"),t("rc3"),t("rc4"),t("rc5")];
+  if(type==="shop"){
+    const x=adm.shops.find(z=>z.id===id)||{};
+    const n=adm.products.filter(p=>p.shopId===id).length;
+    const pay=adm.payments.find(p=>p.type==="shop_fee"&&p.targetId===id&&["none","failed","stuck"].includes(p.refundStatus));
+    const paid=pay?Number(pay.amount):(x.status==="unpaid"?0:cfg.shopFee);
+    const rows=[[t("rShop"),x.name||""],[t("rOwner"),"@"+(x.ownerUsername||"")],[t("rProds"),String(n)]];
+    if(paid>0)rows.push([t("rShopFee"),pf(paid)],[t("rNet"),"− "+pf(cfg.refundDeduct)],[t("rRef"),pf(Math.max(0,paid-cfg.refundDeduct)),true]);
+    return {kind:"danger",icon:"trash",title:t("rmShopT"),text:t("rmShopP"),rows,note:t("noRefProd"),input:t("reason"),chips,ok:paid>0?t("okRmRef"):t("remove")};
+  }
+  const x=adm.products.find(z=>z.id===id)||{};
+  return {kind:"danger",icon:"trash",title:t("rmProdT"),text:t("rmProdP"),rows:[[t("rItem"),x.name||""],[t("rShop"),x.shopName||""]],note:t("noRefProd"),input:t("reason"),chips,ok:t("remove")};
 }
 async function moderate(type,id,action){
   let message="";
   if(action==="remove"){
-    const v=await dlg({title:t("remove"),text:t("rmC"),input:t("reason"),danger:true,ok:t("remove")});
+    const v=await dlg(removeOpts(type,id));
     if(!v)return;message=v;
-  }else if(!await dlg({title:t("restore"),text:t("resC"),ok:t("restore")}))return;
+  }else{
+    const x=(type==="shop"?adm.shops:adm.products).find(z=>z.id===id)||{};
+    if(!await dlg({kind:"ok",icon:"restore",title:t("resT"),text:t("resP"),rows:[[t(type==="shop"?"rShop":"rItem"),x.name||""]],ok:t("restore")}))return;
+  }
   try{
     const j=await api("/api/admin/moderate",{type,id,action,message});
     if(action==="remove")toast(j.failed?(j.error||t("refFail")):(j.refunded?t("refunded")+": "+j.amount+" Pi":t("removedOk")));
-    await loadAdmin();loadShops();
+    await loadAdmin(true);loadShops();
   }catch(e){toast(e.message)}
 }
 async function refund(id){
-  const reason=await dlg({title:t("refund"),text:t("refC"),input:t("reason"),optional:true,ok:t("refund")});
+  const x=adm.payments.find(z=>z.id===id)||{};
+  const paid=Number(x.amount)||0;
+  const reason=await dlg({kind:"gold",icon:"refund",title:t("refT"),text:t("refP"),
+    rows:[[t("rItem"),x.targetName||""],[t("rPaid"),pf(paid)],[t("rNet"),"− "+pf(cfg.refundDeduct)],[t("rRef"),pf(Math.max(0,paid-cfg.refundDeduct)),true]],
+    input:t("reason"),optional:true,ok:t("refund")});
   if(reason===null)return;
-  try{const j=await api("/api/admin/refund",{paymentId:id,reason});toast(t("refunded")+": "+j.amount+" Pi");await loadAdmin();loadShops()}
-  catch(e){toast(e.message);loadAdmin()}
+  try{const j=await api("/api/admin/refund",{paymentId:id,reason});toast(t("refunded")+": "+j.amount+" Pi");await loadAdmin(true);loadShops()}
+  catch(e){toast(e.message);loadAdmin(true)}
 }
 
 /* ================= ربط الأحداث ================= */
@@ -755,8 +999,10 @@ document.addEventListener("click",e=>{
   if(q("[data-close]"))return closeM();
   if(el=q("[data-pid]"))return openProduct(el.dataset.pid);
   if(el=q("[data-sid]"))return openShop(el.dataset.sid);
+  if(el=q("[data-atab]"))return setATab(el.dataset.atab);
   if(el=q("[data-act]")){
     if(el.dataset.act==="logout")return logout();
+    if(el.dataset.act==="statsRefresh")return loadAdmin(true);
     if(el.dataset.act==="editShop"){const fm=$("shopForm");fm.classList.toggle("hide");if(!fm.classList.contains("hide"))fm.scrollIntoView({behavior:"smooth"});return}
   }
   if(el=q("[data-payp]"))return pay("product_fee",el.dataset.payp);
