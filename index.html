@@ -306,6 +306,10 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 /* عنوان السيرفر على Render (لا تغيّره إلا إذا تغيّر رابط السيرفر) */
 const API="https://sahraoui15.onrender.com";
 
+/* الصلاحيات المطلوبة عند الدخول.
+   wallet_address ضرورية لكي يستطيع السيرفر إرجاع الأموال (A2U) إلى المستخدم */
+const SCOPES=["username","payments","wallet_address"];
+
 const CODES="DZ,MA,TN,EG,LY,SA,AE,QA,KW,BH,OM,JO,LB,SY,IQ,PS,YE,SD,TR,IR,PK,IN,ID,MY,SG,PH,VN,TH,CN,JP,KR,FR,ES,IT,DE,GB,NL,BE,CH,SE,US,CA,BR,MX,AU,NG,ZA,RU".split(",");
 
 const T={
@@ -368,7 +372,7 @@ const place=s=>[s.region,cn(s.country)].join(L==="ar"?"، ":", ");
 const PIN='<svg class="ic" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
 const skel=n=>Array.from({length:n},()=>'<div class="sk"></div>').join("");
 const liveShop=()=>!!(mine&&mine.shop&&mine.shop.status==="live");
-function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),3800)}
+function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),5000)}
 
 async function api(p,d={},a=true){
   const body=a&&me?{...d,userUid:me.uid,accessToken:tok}:d;
@@ -499,7 +503,8 @@ async function login(auto){
   try{
     await piReady;
     if(typeof Pi==="undefined")throw new Error("no pi");
-    const a=await Pi.authenticate(["username","payments"],onIncomplete);
+    /* نطلب wallet_address ليتمكن السيرفر من الاسترجاع */
+    const a=await Pi.authenticate(SCOPES,onIncomplete);
     me=a.user;tok=a.accessToken;
   }catch(e){
     btn.disabled=false;$("loginMsg").textContent=auto?"":t("loginErr");return;
@@ -533,7 +538,7 @@ function fillShop(){
   img.shop=s.image||"";if(s.image){$("spv").src=s.image;$("spv").classList.remove("hide")}
 }
 function ownCard(p){
-  const unpaid=p.status==="unpaid",ref=p.status==="refunded",rem=p.status==="removed";
+  const unpaid=p.status==="unpaid",rem=p.status==="removed";
   return `<article class="pc"><div class="pi"><img src="${esc(p.image)}" alt="" loading="lazy"><span class="price" dir="ltr">${esc(p.price)} ${esc(p.currency)}</span></div><div class="pb"><h3 class="disp">${esc(p.name)}</h3><div class="mut">${esc([p.brand,p.size].filter(Boolean).join(" · "))}</div><div style="margin:6px 0">${stBadge(p.status)}</div>${p.reviewMessage?`<div class="mut">${esc(t("note2"))}: ${esc(p.reviewMessage)}</div>`:""}<div class="row" style="margin-top:6px">${unpaid?`<button class="btn sm" data-payp="${esc(p.id)}">${esc(f("pay",cfg.productFee))}</button>`:""}${rem?"":`<button class="btn alt sm" data-edit="${esc(p.id)}">${esc(t("edit"))}</button>`}<button class="btn alt sm" data-del="${esc(p.id)}">${esc(t("del"))}</button></div></div></article>`;
 }
 function renderMy(){
@@ -655,7 +660,8 @@ function renderAdmin(){
   const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></div>`;
   $("aShops").innerHTML=adm.shops.map(x=>row("shop",x)).join("")||none;
   $("aProds").innerHTML=adm.products.map(x=>row("product",x)).join("")||none;
-  $("aPays").innerHTML=adm.payments.map(x=>`<div class="line"><span>${esc(x.targetName)} <span class="mut" dir="ltr">${esc(x.amount)} Pi · ${esc(x.type)}</span> <span class="badge">${esc(x.refundStatus)}</span>${x.duplicate?` <span class="badge unpaid">${esc(t("dup"))}</span>`:""}</span>${x.targetStatus==="removed"&&(x.refundStatus==="none"||x.refundStatus==="failed")?`<button class="btn alt sm" data-rf="${esc(x.id)}">${esc(t("refund"))}</button>`:""}</div>`).join("")||none;
+  const canRef=x=>x.targetStatus==="removed"&&["none","failed","stuck"].includes(x.refundStatus);
+  $("aPays").innerHTML=adm.payments.map(x=>`<div class="line"><span>${esc(x.targetName)} <span class="mut" dir="ltr">${esc(x.amount)} Pi · ${esc(x.type)}</span> <span class="badge">${esc(x.refundStatus)}</span>${x.duplicate?` <span class="badge unpaid">${esc(t("dup"))}</span>`:""}${x.lastError&&x.refundStatus!=="refunded"?`<br><span class="mut" style="font-size:12px" dir="ltr">${esc(String(x.lastError).slice(0,140))}</span>`:""}</span>${canRef(x)?`<button class="btn alt sm" data-rf="${esc(x.id)}">${esc(t("refund"))}</button>`:""}</div>`).join("")||none;
 }
 async function moderate(type,id,action){
   let message="";
@@ -665,14 +671,15 @@ async function moderate(type,id,action){
   }else if(!confirm(t("resC")))return;
   try{
     const j=await api("/api/admin/moderate",{type,id,action,message});
-    if(action==="remove")toast(j.failed?t("refFail"):(j.refunded?t("refunded")+": "+j.amount+" Pi":t("removedOk")));
+    if(action==="remove")toast(j.failed?(j.error||t("refFail")):(j.refunded?t("refunded")+": "+j.amount+" Pi":t("removedOk")));
     await loadAdmin();loadShops();
   }catch(e){toast(e.message)}
 }
 async function refund(id){
   if(!confirm(t("refC")))return;
   const reason=prompt(t("reason"))||"";
-  try{const j=await api("/api/admin/refund",{paymentId:id,reason});toast(t("refunded")+": "+j.amount+" Pi");await loadAdmin();loadShops()}catch(e){toast(e.message)}
+  try{const j=await api("/api/admin/refund",{paymentId:id,reason});toast(t("refunded")+": "+j.amount+" Pi");await loadAdmin();loadShops()}
+  catch(e){toast(e.message);loadAdmin()}
 }
 
 /* ================= ربط الأحداث ================= */
