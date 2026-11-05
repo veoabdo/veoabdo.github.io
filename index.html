@@ -145,6 +145,21 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 .th{width:44px;height:44px;object-fit:cover;border-radius:8px}
 .sbox{background:var(--chip);border-radius:14px;padding:12px 14px;margin:14px 0}
 
+/* ---------- نافذة التأكيد المخصصة ---------- */
+.dov{position:fixed;inset:0;z-index:80;background:#120b1acc;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px}
+.dov[hidden]{display:none}
+.dbox{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px 20px 18px;box-shadow:0 24px 70px #0007;position:relative;overflow:hidden;animation:pop .22s ease-out both}
+.dbox::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--gold)}
+.dbox.dng::before{background:linear-gradient(90deg,#e5646b,#b3262e)}
+.dt{font-size:28px;line-height:1.15;margin:4px 0 6px;font-weight:700}
+.dp{margin:0 0 14px;color:var(--mut);font-size:15px}
+.dbox textarea{resize:none;margin-top:2px}
+.dbox textarea.bad{outline:2px solid #e5484d;outline-offset:1px}
+.dbtn{display:flex;gap:10px;margin-top:16px}
+.dbtn .btn{flex:1}
+.btn.danger{background:linear-gradient(135deg,#ec6a70,#b3262e);color:#fff}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.96)}}
+
 #toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:12px;z-index:60;max-width:90vw;text-align:center}
 .note{text-align:center;margin-top:30px}
 </style>
@@ -300,6 +315,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 </div>
 
 <div class="ov" id="ov" hidden><div class="md" id="md"></div></div>
+<div class="dov" id="dlg" hidden><div class="dbox" id="dlgBox" role="dialog" aria-modal="true"></div></div>
 <div id="toast" class="hide"></div>
 
 <script>
@@ -627,8 +643,35 @@ async function submitProd(){
     if(needPay)pay("product_fee",j.id);else toast(t("saved"));
   }catch(e){toast(e.message)}finally{b.disabled=false}
 }
+/* ================= نافذة تأكيد مخصصة (بديل confirm و prompt) =================
+   بدون input: ترجع true/false.  مع input: ترجع النص أو null عند الإلغاء */
+const OKL={en:"Confirm",ar:"تأكيد",zh:"确认"};
+function dlg(o){
+  return new Promise(res=>{
+    const ov=$("dlg"),box=$("dlgBox");
+    box.className="dbox"+(o.danger?" dng":"");
+    box.innerHTML=`<div class="dt disp">${esc(o.title||"")}</div>${o.text?`<p class="dp">${esc(o.text)}</p>`:""}${o.input?`<textarea id="dlgIn" rows="3" maxlength="300" placeholder="${esc(o.input)}"></textarea>`:""}<div class="dbtn"><button class="btn alt" id="dlgNo">${esc(t("cancel"))}</button><button class="btn${o.danger?" danger":""}" id="dlgOk">${esc(o.ok||OKL[L]||OKL.en)}</button></div>`;
+    ov.hidden=false;
+    const inp=$("dlgIn"),no=o.input?null:false;
+    if(inp)setTimeout(()=>inp.focus(),60);
+    const fin=v=>{ov.hidden=true;ov.onclick=null;document.removeEventListener("keydown",key,true);res(v)};
+    const yes=()=>{
+      if(inp){const v=inp.value.trim();if(!v&&!o.optional){inp.classList.add("bad");inp.focus();return}fin(v)}
+      else fin(true)
+    };
+    const key=e=>{
+      if(e.key==="Escape"){e.stopPropagation();fin(no)}
+      else if(e.key==="Enter"&&!inp){e.preventDefault();yes()}
+    };
+    document.addEventListener("keydown",key,true);
+    $("dlgOk").onclick=yes;
+    $("dlgNo").onclick=()=>fin(no);
+    ov.onclick=e=>{if(e.target===ov)fin(no)};
+  });
+}
+
 async function delProd(id){
-  if(!confirm(t("delC")))return;
+  if(!await dlg({title:t("del"),text:t("delC"),danger:true,ok:t("del")}))return;
   try{await api("/api/product/delete",{id});await refreshMe();loadShops()}catch(e){toast(e.message)}
 }
 
@@ -666,9 +709,9 @@ function renderAdmin(){
 async function moderate(type,id,action){
   let message="";
   if(action==="remove"){
-    if(!confirm(t("rmC")))return;
-    message=prompt(t("reason"))||"";if(!message)return;
-  }else if(!confirm(t("resC")))return;
+    const v=await dlg({title:t("remove"),text:t("rmC"),input:t("reason"),danger:true,ok:t("remove")});
+    if(!v)return;message=v;
+  }else if(!await dlg({title:t("restore"),text:t("resC"),ok:t("restore")}))return;
   try{
     const j=await api("/api/admin/moderate",{type,id,action,message});
     if(action==="remove")toast(j.failed?(j.error||t("refFail")):(j.refunded?t("refunded")+": "+j.amount+" Pi":t("removedOk")));
@@ -676,8 +719,8 @@ async function moderate(type,id,action){
   }catch(e){toast(e.message)}
 }
 async function refund(id){
-  if(!confirm(t("refC")))return;
-  const reason=prompt(t("reason"))||"";
+  const reason=await dlg({title:t("refund"),text:t("refC"),input:t("reason"),optional:true,ok:t("refund")});
+  if(reason===null)return;
   try{const j=await api("/api/admin/refund",{paymentId:id,reason});toast(t("refunded")+": "+j.amount+" Pi");await loadAdmin();loadShops()}
   catch(e){toast(e.message);loadAdmin()}
 }
