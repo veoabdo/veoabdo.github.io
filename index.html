@@ -502,6 +502,7 @@ function go(v){
   document.querySelectorAll("[data-go]").forEach(b=>{if(b.closest(".bn"))b.classList.toggle("on",b.dataset.go===v)});
   $("filters").classList.toggle("hide",!(v==="home"||v==="shops"));
   renderCta();
+  if(v==="my"&&me)refreshMe().catch(()=>{});
   if(v==="adm")loadAdmin();
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -553,6 +554,12 @@ function fillShop(){
   $("sp").value=s.phone||"";$("sh").value=s.hours||"";$("sd").value=s.description||"";
   img.shop=s.image||"";if(s.image){$("spv").src=s.image;$("spv").classList.remove("hide")}
 }
+function resetShopForm(){
+  ["sn","sr","sa","sp","sh","sd"].forEach(i=>{$(i).value=""});
+  $("sc").value="DZ";$("sf").value="";
+  img.shop="";$("spv").removeAttribute("src");$("spv").classList.add("hide");
+  hideProd();
+}
 function ownCard(p){
   const unpaid=p.status==="unpaid",rem=p.status==="removed";
   return `<article class="pc"><div class="pi"><img src="${esc(p.image)}" alt="" loading="lazy"><span class="price" dir="ltr">${esc(p.price)} ${esc(p.currency)}</span></div><div class="pb"><h3 class="disp">${esc(p.name)}</h3><div class="mut">${esc([p.brand,p.size].filter(Boolean).join(" · "))}</div><div style="margin:6px 0">${stBadge(p.status)}</div>${p.reviewMessage?`<div class="mut">${esc(t("note2"))}: ${esc(p.reviewMessage)}</div>`:""}<div class="row" style="margin-top:6px">${unpaid?`<button class="btn sm" data-payp="${esc(p.id)}">${esc(f("pay",cfg.productFee))}</button>`:""}${rem?"":`<button class="btn alt sm" data-edit="${esc(p.id)}">${esc(t("edit"))}</button>`}<button class="btn alt sm" data-del="${esc(p.id)}">${esc(t("del"))}</button></div></div></article>`;
@@ -562,6 +569,8 @@ function renderMy(){
   const s=mine.shop,live=liveShop();
   $("openView").classList.toggle("hide",live);$("dashView").classList.toggle("hide",!live);
   if(s&&!renderMy.filled){fillShop();renderMy.filled=true}
+  /* إذا حُذف المحل نهائياً: يبدأ النموذج فارغاً من جديد */
+  if(!s&&renderMy.filled){resetShopForm();renderMy.filled=false}
   /* نقل نموذج المحل بين صفحة الفتح ولوحة المحل */
   const slot=live?$("editSlot"):$("openSlot"),form=$("shopForm");
   if(form.parentElement!==slot){slot.appendChild(form);form.classList.toggle("hide",live)}
