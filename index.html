@@ -339,7 +339,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
           <label data-i="pbrand"></label><input id="pb" maxlength="60">
           <label data-i="psize"></label><input id="ps" maxlength="30" dir="ltr">
           <label data-i="pprice"></label><input id="pp" type="number" min="0" step="any" dir="ltr" inputmode="decimal">
-          <label data-i="pcur"></label><input id="pc" maxlength="6" dir="ltr">
+         <label data-i="pcur"></label><select id="pc" dir="ltr"><option value="Pi">Pi</option><option value="OUSD">OUSD</option></select>
           <label data-i="pdesc"></label><textarea id="pd" rows="2" maxlength="400"></textarea>
           <label data-i="pimg"></label><input type="file" id="pf" accept="image/jpeg,image/png,image/webp">
           <img id="ppv" class="pv hide" alt="">
@@ -404,7 +404,7 @@ const API="https://sahraoui15.onrender.com";
    wallet_address ضرورية لكي يستطيع السيرفر إرجاع الأموال (A2U) إلى المستخدم */
 const SCOPES=["username","payments","wallet_address"];
 
-const CODES="DZ,MA,TN,EG,LY,SA,AE,QA,KW,BH,OM,JO,LB,SY,IQ,PS,YE,SD,TR,IR,PK,IN,ID,MY,SG,PH,VN,TH,CN,JP,KR,FR,ES,IT,DE,GB,NL,BE,CH,SE,US,CA,BR,MX,AU,NG,ZA,RU".split(",");
+const CODES="AD,AE,AF,AG,AI,AL,AM,AO,AR,AS,AT,AU,AW,AX,AZ,BA,BB,BD,BE,BF,BG,BH,BI,BJ,BL,BM,BN,BO,BQ,BR,BS,BT,BW,BY,BZ,CA,CC,CD,CF,CG,CH,CI,CK,CL,CM,CN,CO,CR,CU,CV,CW,CX,CY,CZ,DE,DJ,DK,DM,DO,DZ,EC,EE,EG,EH,ER,ES,ET,FI,FJ,FK,FM,FO,FR,GA,GB,GD,GE,GF,GG,GH,GI,GL,GM,GN,GP,GQ,GR,GS,GT,GU,GW,GY,HK,HN,HR,HT,HU,ID,IE,IL,IM,IN,IO,IQ,IR,IS,IT,JE,JM,JO,JP,KE,KG,KH,KI,KM,KN,KP,KR,KW,KY,KZ,LA,LB,LC,LI,LK,LR,LS,LT,LU,LV,LY,MA,MC,MD,ME,MF,MG,MH,MK,ML,MM,MN,MO,MP,MQ,MR,MS,MT,MU,MV,MW,MX,MY,MZ,NA,NC,NE,NF,NG,NI,NL,NO,NP,NR,NU,NZ,OM,PA,PE,PF,PG,PH,PK,PL,PM,PN,PR,PS,PT,PW,PY,QA,RE,RO,RS,RU,RW,SA,SB,SC,SD,SE,SG,SH,SI,SJ,SK,SL,SM,SN,SO,SR,SS,ST,SV,SX,SY,SZ,TC,TD,TG,TH,TJ,TK,TL,TM,TN,TO,TR,TT,TV,TW,TZ,UA,UG,US,UY,UZ,VA,VC,VE,VG,VI,VN,VU,WF,WS,XK,YE,YT,ZA,ZM,ZW".split(",");
 
 const T={
 en:{ltitle:"Welcome to Parfum",lsub:"Sign in with your Pi account to explore perfumes from shops around the world.",login:"Continue with Pi",loginBusy:"Signing in...",loginErr:"Login failed. Please open the app in Pi Browser and try again.",lhint:"Best experienced inside Pi Browser",tagline:"Fine perfumes · Pi",
@@ -543,7 +543,7 @@ function setLang(l){
   document.querySelectorAll("[data-p]").forEach(e=>e.placeholder=t(e.dataset.p));
   document.querySelectorAll("[data-l]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l));
   const sc=$("sc"),v=sc.value;
-  sc.innerHTML=CODES.map(c=>`<option value="${c}">${esc(cn(c))}</option>`).join("");sc.value=v||"DZ";
+  sc.innerHTML=[...CODES].sort((a,b)=>cn(a).localeCompare(cn(b),L)).map(c=>`<option value="${c}">${esc(cn(c))}</option>`).join("");sc.value=v||"DZ";
   renderTexts();buildFilters();renderAll();
 }
 function renderAll(){renderProducts();renderShops();renderMy();renderNav();renderAdmin();renderCta()}
@@ -761,7 +761,7 @@ function showProd(id){
   const p=id?mine.products.find(x=>x.id===id):null;
   editId=p?p.id:null;editSt=p?p.status:"";
   $("pn").value=p?p.name:"";$("pb").value=p?p.brand||"":"";$("ps").value=p?p.size||"":"";
-  $("pp").value=p?p.price:"";$("pc").value=p?p.currency:"USD";$("pd").value=p?p.description||"":"";
+  $("pp").value=p?p.price:"";$("pc").value=(p&&["Pi","OUSD"].includes(p.currency))?p.currency:"Pi";$("pd").value=p?p.description||"":"";
   $("pf").value="";img.prod=p?p.image:"";
   if(p&&p.image){$("ppv").src=p.image;$("ppv").classList.remove("hide")}else $("ppv").classList.add("hide");
   $("prodTitle").textContent=t(p?"editTitle":"prodTitle");
@@ -956,7 +956,7 @@ function renderAdmin(){
   renderStats();
   if(!adm)return;
   const none=`<p class="mut">${esc(t("empty"))}</p>`;
-  const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></div>`;
+  const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><span class="row">${type==="shop"&&x.status==="pending"?`<button class="btn sm" data-rev="approve" data-id="${esc(x.id)}">${esc(t("approve"))}</button>`:""}<button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></span></div>`;
   /* المحلات التي دفعت وتنتظر قرار الأدمن (قبول / رفض مع استرجاع) */
   const rv=x=>`<div class="rv"><img class="rvi" src="${esc(x.image)}" alt=""><div class="rvb"><b class="disp" style="font-size:22px">${esc(x.name)}</b> ${stBadge(x.status)}<div class="loc">${PIN}${esc(place(x))}</div><div class="mut">@${esc(x.ownerUsername)}</div><div class="mut">${esc(x.address||"")}</div><div class="mut" dir="ltr">${esc([x.phone,x.hours].filter(Boolean).join(" · "))}</div>${x.description?`<div class="desc mut">${esc(x.description)}</div>`:""}<div class="row"><button class="btn sm" data-rev="approve" data-id="${esc(x.id)}">${esc(t("approve"))}</button><button class="btn alt sm" data-rev="reject" data-id="${esc(x.id)}">${esc(t("reject"))}</button></div></div></div>`;
   $("aReview").innerHTML=adm.shops.filter(x=>x.status==="pending").map(rv).join("")||`<p class="mut">${esc(t("noPending"))}</p>`;
