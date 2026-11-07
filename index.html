@@ -339,7 +339,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
           <label data-i="pbrand"></label><input id="pb" maxlength="60">
           <label data-i="psize"></label><input id="ps" maxlength="30" dir="ltr">
           <label data-i="pprice"></label><input id="pp" type="number" min="0" step="any" dir="ltr" inputmode="decimal">
-          <label data-i="pcur"></label><input id="pc" maxlength="6" dir="ltr">
+          <label data-i="pcur"></label><select id="pc" dir="ltr"><option value="Pi">Pi</option><option value="OUSD">OUSD</option></select>
           <label data-i="pdesc"></label><textarea id="pd" rows="2" maxlength="400"></textarea>
           <label data-i="pimg"></label><input type="file" id="pf" accept="image/jpeg,image/png,image/webp">
           <img id="ppv" class="pv hide" alt="">
@@ -404,7 +404,7 @@ const API="https://sahraoui15.onrender.com";
    wallet_address ضرورية لكي يستطيع السيرفر إرجاع الأموال (A2U) إلى المستخدم */
 const SCOPES=["username","payments","wallet_address"];
 
-const CODES="DZ,MA,TN,EG,LY,SA,AE,QA,KW,BH,OM,JO,LB,SY,IQ,PS,YE,SD,TR,IR,PK,IN,ID,MY,SG,PH,VN,TH,CN,JP,KR,FR,ES,IT,DE,GB,NL,BE,CH,SE,US,CA,BR,MX,AU,NG,ZA,RU".split(",");
+const CODES="AD,AE,AF,AG,AI,AL,AM,AO,AR,AS,AT,AU,AW,AX,AZ,BA,BB,BD,BE,BF,BG,BH,BI,BJ,BL,BM,BN,BO,BQ,BR,BS,BT,BW,BY,BZ,CA,CC,CD,CF,CG,CH,CI,CK,CL,CM,CN,CO,CR,CU,CV,CW,CX,CY,CZ,DE,DJ,DK,DM,DO,DZ,EC,EE,EG,EH,ER,ES,ET,FI,FJ,FK,FM,FO,FR,GA,GB,GD,GE,GF,GG,GH,GI,GL,GM,GN,GP,GQ,GR,GS,GT,GU,GW,GY,HK,HN,HR,HT,HU,ID,IE,IL,IM,IN,IO,IQ,IR,IS,IT,JE,JM,JO,JP,KE,KG,KH,KI,KM,KN,KP,KR,KW,KY,KZ,LA,LB,LC,LI,LK,LR,LS,LT,LU,LV,LY,MA,MC,MD,ME,MF,MG,MH,MK,ML,MM,MN,MO,MP,MQ,MR,MS,MT,MU,MV,MW,MX,MY,MZ,NA,NC,NE,NF,NG,NI,NL,NO,NP,NR,NU,NZ,OM,PA,PE,PF,PG,PH,PK,PL,PM,PN,PR,PS,PT,PW,PY,QA,RE,RO,RS,RU,RW,SA,SB,SC,SD,SE,SG,SH,SI,SJ,SK,SL,SM,SN,SO,SR,SS,ST,SV,SX,SY,SZ,TC,TD,TG,TH,TJ,TK,TL,TM,TN,TO,TR,TT,TV,TW,TZ,UA,UG,US,UY,UZ,VA,VC,VE,VG,VI,VN,VU,WF,WS,XK,YE,YT,ZA,ZM,ZW".split(",");
 
 const T={
 en:{ltitle:"Welcome to Parfum",lsub:"Sign in with your Pi account to explore perfumes from shops around the world.",login:"Continue with Pi",loginBusy:"Signing in...",loginErr:"Login failed. Please open the app in Pi Browser and try again.",lhint:"Best experienced inside Pi Browser",tagline:"Fine perfumes · Pi",
@@ -416,7 +416,7 @@ openTitle:"Open your shop",openText:"Fill in your shop details, then pay a one-t
 openBtn:"Open shop — {x} Pi",payBtn:"Complete payment — {x} Pi",unpaidNote:"Your details are saved. Complete the payment to submit your shop for review.",refundedNote:"Your shop was not approved and your payment was refunded. Update your details and pay again to resubmit.",removedNote:"This shop was removed by the administrator.",
 pendingNote:"Your payment was received. Your shop is under review and will be published once the administrator approves it. You can still edit your details below.",paidReview:"Payment completed. Your shop is now under review.",
 shopTitle:"Shop details",fname:"Shop name",fcountry:"Country",fregion:"City / region",faddr:"Address",fphone:"Phone",fhours:"Opening hours",fdesc:"Description",fimg:"Shop photo",saveShop:"Save changes",editShop:"Edit shop",
-addProd:"Add product — {x} Pi",prodTitle:"Add a perfume",editTitle:"Edit perfume",myProducts:"My perfumes",pname:"Perfume name",pbrand:"Brand",psize:"Size (e.g. 50 ml)",pprice:"Price",pcur:"Currency (e.g. USD)",pdesc:"Description",pimg:"Product photo",cancel:"Cancel",
+addProd:"Add product — {x} Pi",prodTitle:"Add a perfume",editTitle:"Edit perfume",myProducts:"My perfumes",pname:"Perfume name",pbrand:"Brand",psize:"Size (e.g. 50 ml)",pprice:"Price",pcur:"Currency",pdesc:"Description",pimg:"Product photo",cancel:"Cancel",
 pay:"Pay {x} Pi",edit:"Edit",del:"Delete",delC:"Delete this product?",saved:"Saved",paid:"Payment completed. Published!",cancelled:"Payment cancelled",upl:"Uploading...",imgFirst:"Please upload a photo first.",fillAll:"Please fill in all required fields.",
 st_unpaid:"Awaiting payment",st_pending:"Under review",st_live:"Live",st_removed:"Removed",st_refunded:"Refunded",note2:"Note",
 addr:"Address",tel:"Phone",hrs:"Hours",call:"Call shop",viewShop:"View shop",prods:"Perfumes",empty:"Nothing here yet.",
@@ -445,7 +445,7 @@ openTitle:"افتح محلك",openText:"املأ بيانات محلك ثم اد
 openBtn:"افتح المحل — {x} باي",payBtn:"إتمام الدفع — {x} باي",unpaidNote:"تم حفظ بياناتك. أكمل الدفع لإرسال محلك للمراجعة.",refundedNote:"لم تتم الموافقة على محلك وتم استرجاع دفعتك. عدّل بياناتك وادفع مجدداً لإعادة الإرسال.",removedNote:"تم حذف هذا المحل من طرف الإدارة.",
 pendingNote:"تم استلام دفعتك. محلك قيد المراجعة وسيُنشر بعد موافقة الإدارة. يمكنك تعديل بياناتك أدناه.",paidReview:"تمت عملية الدفع. محلك الآن قيد المراجعة.",
 shopTitle:"بيانات المحل",fname:"اسم المحل",fcountry:"الدولة",fregion:"المدينة / المنطقة",faddr:"العنوان",fphone:"الهاتف",fhours:"ساعات العمل",fdesc:"وصف المحل",fimg:"صورة المحل",saveShop:"حفظ التعديلات",editShop:"تعديل المحل",
-addProd:"إضافة منتج — {x} باي",prodTitle:"إضافة عطر",editTitle:"تعديل العطر",myProducts:"عطوري",pname:"اسم العطر",pbrand:"الماركة",psize:"الحجم (مثال: 50 مل)",pprice:"السعر",pcur:"العملة (مثال: USD)",pdesc:"الوصف",pimg:"صورة المنتج",cancel:"إلغاء",
+addProd:"إضافة منتج — {x} باي",prodTitle:"إضافة عطر",editTitle:"تعديل العطر",myProducts:"عطوري",pname:"اسم العطر",pbrand:"الماركة",psize:"الحجم (مثال: 50 مل)",pprice:"السعر",pcur:"العملة",pdesc:"الوصف",pimg:"صورة المنتج",cancel:"إلغاء",
 pay:"ادفع {x} باي",edit:"تعديل",del:"حذف",delC:"حذف هذا المنتج؟",saved:"تم الحفظ",paid:"تمت عملية الدفع. تم النشر!",cancelled:"تم إلغاء الدفع",upl:"جاري الرفع...",imgFirst:"ارفع صورة أولاً.",fillAll:"يرجى ملء كل الحقول المطلوبة.",
 st_unpaid:"بانتظار الدفع",st_pending:"قيد المراجعة",st_live:"منشور",st_removed:"محذوف",st_refunded:"تم الاسترجاع",note2:"ملاحظة",
 addr:"العنوان",tel:"الهاتف",hrs:"ساعات العمل",call:"اتصل بالمحل",viewShop:"عرض المحل",prods:"العطور",empty:"لا يوجد شيء بعد.",
@@ -474,7 +474,7 @@ openTitle:"开设您的店铺",openText:"填写店铺信息，支付一次性 {x
 openBtn:"开店 — {x} Pi",payBtn:"完成支付 — {x} Pi",unpaidNote:"信息已保存，完成支付即可提交审核。",refundedNote:"您的店铺未通过审核，付款已退还。请修改信息后重新支付以再次提交。",removedNote:"此店铺已被管理员下架。",
 pendingNote:"已收到您的付款。店铺正在审核中，管理员通过后将上线。您仍可在下方修改信息。",paidReview:"支付完成，店铺已进入审核。",
 shopTitle:"店铺信息",fname:"店铺名称",fcountry:"国家",fregion:"城市 / 地区",faddr:"地址",fphone:"电话",fhours:"营业时间",fdesc:"店铺简介",fimg:"店铺照片",saveShop:"保存修改",editShop:"编辑店铺",
-addProd:"添加商品 — {x} Pi",prodTitle:"添加香水",editTitle:"编辑香水",myProducts:"我的香水",pname:"香水名称",pbrand:"品牌",psize:"规格（如 50 ml）",pprice:"价格",pcur:"货币（如 USD）",pdesc:"描述",pimg:"商品图片",cancel:"取消",
+addProd:"添加商品 — {x} Pi",prodTitle:"添加香水",editTitle:"编辑香水",myProducts:"我的香水",pname:"香水名称",pbrand:"品牌",psize:"规格（如 50 ml）",pprice:"价格",pcur:"货币",pdesc:"描述",pimg:"商品图片",cancel:"取消",
 pay:"支付 {x} Pi",edit:"编辑",del:"删除",delC:"删除此商品？",saved:"已保存",paid:"支付完成，已发布！",cancelled:"支付已取消",upl:"上传中...",imgFirst:"请先上传图片。",fillAll:"请填写所有必填项。",
 st_unpaid:"待支付",st_pending:"审核中",st_live:"已上线",st_removed:"已下架",st_refunded:"已退款",note2:"备注",
 addr:"地址",tel:"电话",hrs:"营业时间",call:"致电店铺",viewShop:"查看店铺",prods:"香水",empty:"暂无内容。",
@@ -543,7 +543,7 @@ function setLang(l){
   document.querySelectorAll("[data-p]").forEach(e=>e.placeholder=t(e.dataset.p));
   document.querySelectorAll("[data-l]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l));
   const sc=$("sc"),v=sc.value;
-  sc.innerHTML=CODES.map(c=>`<option value="${c}">${esc(cn(c))}</option>`).join("");sc.value=v||"DZ";
+  sc.innerHTML=[...CODES].sort((a,b)=>cn(a).localeCompare(cn(b),L)).map(c=>`<option value="${c}">${esc(cn(c))}</option>`).join("");sc.value=v||"DZ";
   renderTexts();buildFilters();renderAll();
 }
 function renderAll(){renderProducts();renderShops();renderMy();renderNav();renderAdmin();renderCta()}
@@ -761,7 +761,7 @@ function showProd(id){
   const p=id?mine.products.find(x=>x.id===id):null;
   editId=p?p.id:null;editSt=p?p.status:"";
   $("pn").value=p?p.name:"";$("pb").value=p?p.brand||"":"";$("ps").value=p?p.size||"":"";
-  $("pp").value=p?p.price:"";$("pc").value=p?p.currency:"USD";$("pd").value=p?p.description||"":"";
+  $("pp").value=p?p.price:"";$("pc").value=(p&&["Pi","OUSD"].includes(p.currency))?p.currency:"Pi";$("pd").value=p?p.description||"":"";
   $("pf").value="";img.prod=p?p.image:"";
   if(p&&p.image){$("ppv").src=p.image;$("ppv").classList.remove("hide")}else $("ppv").classList.add("hide");
   $("prodTitle").textContent=t(p?"editTitle":"prodTitle");
@@ -956,7 +956,7 @@ function renderAdmin(){
   renderStats();
   if(!adm)return;
   const none=`<p class="mut">${esc(t("empty"))}</p>`;
-  const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></div>`;
+  const row=(type,x)=>`<div class="line"><span class="ls">${x.image?`<img class="th" src="${esc(x.image)}" alt="">`:""}<span><b>${esc(x.name)}</b> ${stBadge(x.status)}<br><span class="mut">${type==="shop"?esc(x.region+", "+x.country)+" · @"+esc(x.ownerUsername):esc(x.shopName)+" · "+esc(x.price)+" "+esc(x.currency)}</span></span></span><span class="row">${type==="shop"&&x.status==="pending"?`<button class="btn sm" data-rev="approve" data-id="${esc(x.id)}">${esc(t("approve"))}</button>`:""}<button class="btn alt sm" data-mod="${x.status==="removed"?"restore":"remove"}" data-type="${type}" data-id="${esc(x.id)}">${esc(t(x.status==="removed"?"restore":"remove"))}</button></span></div>`;
   /* المحلات التي دفعت وتنتظر قرار الأدمن (قبول / رفض مع استرجاع) */
   const rv=x=>`<div class="rv"><img class="rvi" src="${esc(x.image)}" alt=""><div class="rvb"><b class="disp" style="font-size:22px">${esc(x.name)}</b> ${stBadge(x.status)}<div class="loc">${PIN}${esc(place(x))}</div><div class="mut">@${esc(x.ownerUsername)}</div><div class="mut">${esc(x.address||"")}</div><div class="mut" dir="ltr">${esc([x.phone,x.hours].filter(Boolean).join(" · "))}</div>${x.description?`<div class="desc mut">${esc(x.description)}</div>`:""}<div class="row"><button class="btn sm" data-rev="approve" data-id="${esc(x.id)}">${esc(t("approve"))}</button><button class="btn alt sm" data-rev="reject" data-id="${esc(x.id)}">${esc(t("reject"))}</button></div></div></div>`;
   $("aReview").innerHTML=adm.shops.filter(x=>x.status==="pending").map(rv).join("")||`<p class="mut">${esc(t("noPending"))}</p>`;
