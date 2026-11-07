@@ -528,10 +528,21 @@ let dayStats = {};         // day -> {orders, unreviewed}
 let onlyNew = false;
 const isNewO = o => !o.reviewed && o.status !== 'cancelled';
 const carsOf = i => i.universal ? t('univ') : (i.compat || []).map(c => c.brand + (c.model ? ' ' + c.model : '')).join(', ');
-const itemH = i => `<div class="oi">${i.image ? `<img src="${esc(cdn(i.image, 120))}" alt="">` : ''}<div><b>${esc(i.name)}</b> × ${i.qty}${i.price ? ` — ${money(i.price)}` : ''}
+const itemH = i0 => {
+  const lv = prods.find(p => p.id === i0.id) || {};
+  const i = {...i0,
+    universal: i0.universal || lv.universal,
+    compat: (i0.compat && i0.compat.length) ? i0.compat : (lv.compat || []),
+    category: i0.category || lv.category,
+    description: i0.description || lv.description,
+    image: i0.image || lv.image};
+  const cars = carsOf(i);
+  return `<div class="oi">${i.image ? `<a href="/p/${esc(i.id)}" target="_blank" rel="noopener"><img src="${esc(cdn(i.image, 160))}" alt=""></a>` : ''}<div><b>${esc(i.name)}</b> × ${i.qty}${i.price ? ` — ${money(i.price)}` : ''}
         ${i.category ? `<span class="tag">${esc(i.category)}</span>` : ''}
-        ${carsOf(i) ? `<small>🚗 ${t('compat')}: ${esc(carsOf(i))}</small>` : ''}
-        ${i.description ? `<small>${esc(i.description)}</small>` : ''}</div></div>`;
+        <small class="carline">🚗 ${t('compat')}: ${cars ? esc(cars) : '—'}</small>
+        ${i.description ? `<small>${esc(i.description)}</small>` : ''}
+        ${i.id ? `<small><a href="/p/${esc(i.id)}" target="_blank" rel="noopener">🔗 #${esc(String(i.id).slice(0, 6).toUpperCase())}</a></small>` : ''}</div></div>`;
+};
 const orderCard = o => `
     <div class="order ${o.reviewed ? 'done' : 'new'}" data-oid="${esc(o.id)}">
       <div class="row"><span class="badge">${o.reviewed ? t('reviewed') : t('newo')}</span>
@@ -579,6 +590,7 @@ async function changeOrder(id, patch) {
   refreshMeta();
 }
 async function tabOrders() {
+  await loadProds();
   const r = await api('/orders/days');
   dayStats = {}; r.days.forEach(d => { dayStats[d.day] = d; });
   Object.keys(dayData).forEach(k => delete dayData[k]);
