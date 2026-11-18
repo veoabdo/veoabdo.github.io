@@ -537,7 +537,7 @@ function renderTexts(){
   $("addProdBtn").textContent=f("addProd",cfg.productFee);
 }
 function setLang(l){
-  L=l;localStorage.setItem("lang",l);
+  L=l;LS.set("lang",l);
   document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";
   document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));
   document.querySelectorAll("[data-p]").forEach(e=>e.placeholder=t(e.dataset.p));
@@ -653,7 +653,7 @@ async function login(auto){
   }catch(e){
     btn.disabled=false;$("loginMsg").textContent=auto?"":t("loginErr");return;
   }
-  localStorage.setItem("auto","1");
+  LS.set("auto","1");
   $("login").classList.add("hide");$("app").classList.remove("hide");
   $("who").textContent="@"+me.username;
   go("home");
@@ -661,7 +661,7 @@ async function login(auto){
 }
 function logout(){
   me=null;tok=null;mine=null;isAdmin=false;adm=null;stats=null;renderMy.filled=false;
-  localStorage.removeItem("auto");
+  LS.del("auto");
   $("admTab").classList.add("hide");
   $("app").classList.add("hide");$("login").classList.remove("hide");
   $("loginBtn").disabled=false;$("loginMsg").textContent="";
@@ -1082,7 +1082,7 @@ document.addEventListener("click",e=>{
     renderTexts();renderMy();
   })();
   loadShops();
-  if(localStorage.getItem("auto")==="1")login(true);
+  if(LS.get("auto")==="1")login(true);
 })();
 </script>
 </body>
