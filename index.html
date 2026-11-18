@@ -403,7 +403,7 @@ const API="https://sahraoui15.onrender.com";
 /* الصلاحيات المطلوبة عند الدخول.
    wallet_address ضرورية لكي يستطيع السيرفر إرجاع الأموال (A2U) إلى المستخدم */
 const SCOPES=["username","payments","wallet_address"];
-
+const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
 const CODES="AD,AE,AF,AG,AI,AL,AM,AO,AR,AS,AT,AU,AW,AX,AZ,BA,BB,BD,BE,BF,BG,BH,BI,BJ,BL,BM,BN,BO,BQ,BR,BS,BT,BW,BY,BZ,CA,CC,CD,CF,CG,CH,CI,CK,CL,CM,CN,CO,CR,CU,CV,CW,CX,CY,CZ,DE,DJ,DK,DM,DO,DZ,EC,EE,EG,EH,ER,ES,ET,FI,FJ,FK,FM,FO,FR,GA,GB,GD,GE,GF,GG,GH,GI,GL,GM,GN,GP,GQ,GR,GS,GT,GU,GW,GY,HK,HN,HR,HT,HU,ID,IE,IL,IM,IN,IO,IQ,IR,IS,IT,JE,JM,JO,JP,KE,KG,KH,KI,KM,KN,KP,KR,KW,KY,KZ,LA,LB,LC,LI,LK,LR,LS,LT,LU,LV,LY,MA,MC,MD,ME,MF,MG,MH,MK,ML,MM,MN,MO,MP,MQ,MR,MS,MT,MU,MV,MW,MX,MY,MZ,NA,NC,NE,NF,NG,NI,NL,NO,NP,NR,NU,NZ,OM,PA,PE,PF,PG,PH,PK,PL,PM,PN,PR,PS,PT,PW,PY,QA,RE,RO,RS,RU,RW,SA,SB,SC,SD,SE,SG,SH,SI,SJ,SK,SL,SM,SN,SO,SR,SS,ST,SV,SX,SY,SZ,TC,TD,TG,TH,TJ,TK,TL,TM,TN,TO,TR,TT,TV,TW,TZ,UA,UG,US,UY,UZ,VA,VC,VE,VG,VI,VN,VU,WF,WS,XK,YE,YT,ZA,ZM,ZW".split(",");
 
 const T={
@@ -496,7 +496,7 @@ rc1:"违反规则",rc2:"内容不当",rc3:"信息不实",rc4:"重复信息",rc5:
 refT:"确认退款？",refP:"退款将发送到店主的钱包。",resT:"恢复此项？",resP:"支付费用后将重新上线。",okRmRef:"删除并退款",delT:"删除此香水？"}
 };
 
-let L=localStorage.getItem("lang");
+let L=LS.get("lang");
 if(!T[L])L=(navigator.language||"en").toLowerCase().startsWith("ar")?"ar":"en";
 let cfg={shopFee:5,productFee:.25,refundDeduct:.01,sandbox:false};
 let shops=[],prods=[],loaded=false,me=null,tok=null,mine=null,isAdmin=false,adm=null,stats=null,atab="stats";
