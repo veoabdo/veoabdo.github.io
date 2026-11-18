@@ -231,6 +231,9 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
 .rvi{width:110px;height:110px;object-fit:cover;border-radius:12px;flex:none;background:var(--chip)}
 .rvb{flex:1;min-width:200px}
 .rvb .row{margin-top:8px}
+.legal{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.lbtn{display:inline-flex;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--fg);font-size:13px;font-weight:600;text-decoration:none}
+#login .lbtn{background:#ffffff1f;border-color:#ffffff55;color:#fbf3e4}
 </style>
 </head>
 <body>
@@ -258,6 +261,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
       <button class="btn" id="loginBtn" data-i="login"></button>
       <p id="loginMsg"></p>
       <p class="lh" data-i="lhint"></p>
+      <div class="legal"><a class="lbtn" href="privacy.html" data-i="privacy"></a><a class="lbtn" href="terms.html" data-i="terms"></a></div>
     </div>
   </div>
 </div>
@@ -370,6 +374,7 @@ label{display:block;margin:12px 0 3px;font-size:14px;color:var(--mut)}
     </section>
 
     <p class="mut note" data-i="note"></p>
+    <div class="legal"><a class="lbtn" href="privacy.html" data-i="privacy"></a><a class="lbtn" href="terms.html" data-i="terms"></a></div>
   </div></main>
 
   <nav class="bn">
@@ -407,7 +412,7 @@ const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:
 const CODES="AD,AE,AF,AG,AI,AL,AM,AO,AR,AS,AT,AU,AW,AX,AZ,BA,BB,BD,BE,BF,BG,BH,BI,BJ,BL,BM,BN,BO,BQ,BR,BS,BT,BW,BY,BZ,CA,CC,CD,CF,CG,CH,CI,CK,CL,CM,CN,CO,CR,CU,CV,CW,CX,CY,CZ,DE,DJ,DK,DM,DO,DZ,EC,EE,EG,EH,ER,ES,ET,FI,FJ,FK,FM,FO,FR,GA,GB,GD,GE,GF,GG,GH,GI,GL,GM,GN,GP,GQ,GR,GS,GT,GU,GW,GY,HK,HN,HR,HT,HU,ID,IE,IL,IM,IN,IO,IQ,IR,IS,IT,JE,JM,JO,JP,KE,KG,KH,KI,KM,KN,KP,KR,KW,KY,KZ,LA,LB,LC,LI,LK,LR,LS,LT,LU,LV,LY,MA,MC,MD,ME,MF,MG,MH,MK,ML,MM,MN,MO,MP,MQ,MR,MS,MT,MU,MV,MW,MX,MY,MZ,NA,NC,NE,NF,NG,NI,NL,NO,NP,NR,NU,NZ,OM,PA,PE,PF,PG,PH,PK,PL,PM,PN,PR,PS,PT,PW,PY,QA,RE,RO,RS,RU,RW,SA,SB,SC,SD,SE,SG,SH,SI,SJ,SK,SL,SM,SN,SO,SR,SS,ST,SV,SX,SY,SZ,TC,TD,TG,TH,TJ,TK,TL,TM,TN,TO,TR,TT,TV,TW,TZ,UA,UG,US,UY,UZ,VA,VC,VE,VG,VI,VN,VU,WF,WS,XK,YE,YT,ZA,ZM,ZW".split(",");
 
 const T={
-en:{ltitle:"Welcome to Parfum",lsub:"Sign in with your Pi account to explore perfumes from shops around the world.",login:"Continue with Pi",loginBusy:"Signing in...",loginErr:"Login failed. Please open the app in Pi Browser and try again.",lhint:"Best experienced inside Pi Browser",tagline:"Fine perfumes · Pi",
+en:{privacy:"Privacy Policy",terms:"Terms of Use",ltitle:"Welcome to Parfum",lsub:"Sign in with your Pi account to explore perfumes from shops around the world.",login:"Continue with Pi",loginBusy:"Signing in...",loginErr:"Login failed. Please open the app in Pi Browser and try again.",lhint:"Best experienced inside Pi Browser",tagline:"Fine perfumes · Pi",
 title:"Fine perfumes from shops near and far",sub:"Browse perfumes, then contact the shop directly.",
 logout:"Logout",navHome:"Perfumes",navShops:"Shops",my:"My shop",openTab:"Open shop",adm:"Admin",
 search:"Search perfume, brand or shop",allC:"All countries",allR:"All regions",perfumes:"perfumes",shops:"shops",noneP:"No perfumes match your search.",noneS:"No shops match your search.",
@@ -436,7 +441,7 @@ rShop:"Shop",rOwner:"Owner",rProds:"Perfumes",rItem:"Item",rPaid:"Amount paid",r
 reasonL:"Reason",reasonReq:"Please write a reason.",optional:"optional",
 rc1:"Violates the rules",rc2:"Inappropriate content",rc3:"False information",rc4:"Duplicate listing",rc5:"Requested by the owner",
 refT:"Refund this payment?",refP:"The refund will be sent to the owner's wallet.",resT:"Restore this item?",resP:"It becomes visible again once its fee is paid.",okRmRef:"Remove & refund",delT:"Delete this perfume?"},
-ar:{ltitle:"مرحباً بك في Parfum",lsub:"سجّل الدخول بحساب Pi لاستكشاف العطور من محلات حول العالم.",login:"المتابعة عبر Pi",loginBusy:"جاري الدخول...",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser وأعد المحاولة.",lhint:"يعمل بأفضل شكل داخل Pi Browser",tagline:"عطور فاخرة · Pi",
+ar:{privacy:"سياسة الخصوصية",terms:"شروط الاستخدام",ltitle:"مرحباً بك في Parfum",lsub:"سجّل الدخول بحساب Pi لاستكشاف العطور من محلات حول العالم.",login:"المتابعة عبر Pi",loginBusy:"جاري الدخول...",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser وأعد المحاولة.",lhint:"يعمل بأفضل شكل داخل Pi Browser",tagline:"عطور فاخرة · Pi",
 title:"عطور فاخرة من محلات قريبة وبعيدة",sub:"تصفّح العطور ثم تواصل مع المحل مباشرة.",
 logout:"خروج",navHome:"العطور",navShops:"المحلات",my:"محلي",openTab:"افتح محلاً",adm:"الإدارة",
 search:"ابحث عن عطر أو ماركة أو محل",allC:"كل الدول",allR:"كل المناطق",perfumes:"عطر",shops:"محل",noneP:"لا توجد عطور مطابقة.",noneS:"لا توجد محلات مطابقة.",
@@ -465,7 +470,7 @@ rShop:"المحل",rOwner:"المالك",rProds:"العطور",rItem:"العنص
 reasonL:"السبب",reasonReq:"يرجى كتابة السبب.",optional:"اختياري",
 rc1:"مخالفة للشروط",rc2:"محتوى غير لائق",rc3:"معلومات غير صحيحة",rc4:"إعلان مكرر",rc5:"بطلب من المالك",
 refT:"استرجاع هذه الدفعة؟",refP:"سيتم إرسال المبلغ إلى محفظة المالك.",resT:"استعادة هذا العنصر؟",resP:"سيظهر من جديد بعد دفع رسومه.",okRmRef:"حذف واسترجاع",delT:"حذف هذا العطر؟"},
-zh:{ltitle:"欢迎来到 Parfum",lsub:"使用 Pi 账号登录，探索全球香水店的香水。",login:"使用 Pi 继续",loginBusy:"登录中...",loginErr:"登录失败，请在 Pi Browser 中打开应用后重试。",lhint:"建议在 Pi Browser 中使用",tagline:"精品香水 · Pi",
+zh:{privacy:"隐私政策",terms:"使用条款",ltitle:"欢迎来到 Parfum",lsub:"使用 Pi 账号登录，探索全球香水店的香水。",login:"使用 Pi 继续",loginBusy:"登录中...",loginErr:"登录失败，请在 Pi Browser 中打开应用后重试。",lhint:"建议在 Pi Browser 中使用",tagline:"精品香水 · Pi",
 title:"来自四面八方的精品香水",sub:"浏览香水，然后直接联系店铺。",
 logout:"退出",navHome:"香水",navShops:"店铺",my:"我的店铺",openTab:"开店",adm:"管理",
 search:"搜索香水、品牌或店铺",allC:"所有国家",allR:"所有地区",perfumes:"款香水",shops:"家店铺",noneP:"没有匹配的香水。",noneS:"没有匹配的店铺。",
