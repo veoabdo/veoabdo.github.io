@@ -247,6 +247,23 @@ label{display:block;margin:14px 0 4px;font-size:14px;font-weight:600;color:var(-
 .legal{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
 .lbtn{display:inline-flex;padding:7px 16px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--fg);font-size:13px;font-weight:600;text-decoration:none}
 #login .lbtn{background:#ffffff1f;border-color:#ffffff55;color:#fbf3e4}
+/* معرض الصور */
+.gw{position:relative;background:var(--chip)}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.gal::-webkit-scrollbar,.lbs::-webkit-scrollbar{display:none}
+.gal img{flex:0 0 100%;width:100%;aspect-ratio:4/3;object-fit:cover;scroll-snap-align:center;cursor:zoom-in;display:block}
+.gct{position:absolute;bottom:10px;inset-inline-start:12px;background:#0009;color:#fff;font-size:12px;padding:2px 10px;border-radius:999px;pointer-events:none}
+.lb{position:fixed;inset:0;z-index:70;background:#05010af2;display:flex;align-items:center;justify-content:center}
+.lb[hidden]{display:none}
+.lbs{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.lbi{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;padding:56px 8px 44px}
+.lbi img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+.lb .gct{inset-inline-start:auto;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+/* صور مصغّرة في نماذج الرفع */
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.th2{position:relative;width:84px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.th2 img{width:100%;height:100%;object-fit:cover;display:block}
+.th2 button{position:absolute;top:4px;inset-inline-end:4px;width:22px;height:22px;border-radius:50%;border:0;background:#000b;color:#fff;font-size:11px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -332,8 +349,8 @@ label{display:block;margin:14px 0 4px;font-size:14px;font-weight:600;color:var(-
             <label data-i="fphone"></label><input id="sp" maxlength="30" dir="ltr" inputmode="tel">
             <label data-i="fhours"></label><input id="sh" maxlength="60" dir="ltr">
             <label data-i="fdesc"></label><textarea id="sd" rows="3" maxlength="500"></textarea>
-            <label data-i="fimg"></label><input type="file" id="sf" accept="image/jpeg,image/png,image/webp">
-            <img id="spv" class="pv hide" alt="">
+            <label data-i="fimg"></label><input type="file" id="sf" accept="image/jpeg,image/png,image/webp" multiple>
+            <div id="spv" class="thumbs"></div>
             <p class="mut" id="refNote"></p>
             <button class="btn big" id="saveShop"></button>
           </div>
@@ -352,8 +369,8 @@ label{display:block;margin:14px 0 4px;font-size:14px;font-weight:600;color:var(-
           <label data-i="pprice"></label><input id="pp" type="number" min="0" step="any" dir="ltr" inputmode="decimal">
           <label data-i="pcur"></label><select id="pc" dir="ltr"><option value="Pi">Pi</option><option value="OUSD">OUSD</option></select>
           <label data-i="pdesc"></label><textarea id="pd" rows="2" maxlength="400"></textarea>
-          <label data-i="pimg"></label><input type="file" id="pf" accept="image/jpeg,image/png,image/webp">
-          <img id="ppv" class="pv hide" alt="">
+          <label data-i="pimg"></label><input type="file" id="pf" accept="image/jpeg,image/png,image/webp" multiple>
+          <div id="ppv" class="thumbs"></div>
           <p class="mut" data-i="noRefProd" style="margin:12px 0 0"></p>
           <div class="row" style="margin-top:14px">
             <button class="btn" id="saveProd" style="flex:1"></button>
@@ -407,6 +424,7 @@ label{display:block;margin:14px 0 4px;font-size:14px;font-weight:600;color:var(-
 <div class="ov" id="ov" hidden><div class="md" id="md"></div></div>
 <div class="dov" id="dlg" hidden><div class="dbox" id="dlgBox" role="dialog" aria-modal="true"></div></div>
 <div id="toast" class="hide"></div>
+  <div class="lb" id="lb" hidden></div>
 
 <script>
 /* عنوان السيرفر على Render (لا تغيّره إلا إذا تغيّر رابط السيرفر) */
@@ -447,7 +465,7 @@ rmShopT:"Remove this shop?",rmShopP:"The shop and all its perfumes will be perma
 rShop:"Shop",rOwner:"Owner",rProds:"Perfumes",rItem:"Item",rPaid:"Amount paid",rShopFee:"Shop fee paid",rNet:"Network fee",rRef:"Refund to owner",
 reasonL:"Reason",reasonReq:"Please write a reason.",optional:"optional",
 rc1:"Violates the rules",rc2:"Inappropriate content",rc3:"False information",rc4:"Duplicate listing",rc5:"Requested by the owner",
-refT:"Refund this payment?",refP:"The refund will be sent to the owner's wallet.",resT:"Restore this item?",resP:"It becomes visible again once its fee is paid.",okRmRef:"Remove & refund",delT:"Delete this perfume?"},
+refT:"Refund this payment?",refP:"The refund will be sent to the owner's wallet.",resT:"Restore this item?",resP:"It becomes visible again once its fee is paid.",okRmRef:"Remove & refund",delT:"Delete this perfume?",max3:"Maximum 3 photos.",fimg:"Shop photos (up to 3)",pimg:"Product photos (up to 3)"},
 ar:{privacy:"سياسة الخصوصية",terms:"شروط الاستخدام",noRefShop:"لا تُسترجع رسوم فتح المحل عند حذف محل تمت الموافقة عليه.",ltitle:"مرحباً بك في Parfum",lsub:"سجّل الدخول بحساب Pi لاستكشاف العطور من محلات حول العالم.",login:"المتابعة عبر Pi",loginBusy:"جاري الدخول...",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser وأعد المحاولة.",lhint:"يعمل بأفضل شكل داخل Pi Browser",tagline:"عطور فاخرة · Pi",
 title:"عطور فاخرة من محلات قريبة وبعيدة",sub:"تصفّح العطور ثم تواصل مع المحل مباشرة.",
 logout:"خروج",navHome:"العطور",navShops:"المحلات",my:"محلي",openTab:"افتح محلاً",adm:"الإدارة",
@@ -476,7 +494,7 @@ rmShopT:"حذف هذا المحل؟",rmShopP:"سيتم حذف المحل وكل 
 rShop:"المحل",rOwner:"المالك",rProds:"العطور",rItem:"العنصر",rPaid:"المبلغ المدفوع",rShopFee:"رسوم فتح المحل",rNet:"رسوم الشبكة",rRef:"المبلغ المسترجع للمالك",
 reasonL:"السبب",reasonReq:"يرجى كتابة السبب.",optional:"اختياري",
 rc1:"مخالفة للشروط",rc2:"محتوى غير لائق",rc3:"معلومات غير صحيحة",rc4:"إعلان مكرر",rc5:"بطلب من المالك",
-refT:"استرجاع هذه الدفعة؟",refP:"سيتم إرسال المبلغ إلى محفظة المالك.",resT:"استعادة هذا العنصر؟",resP:"سيظهر من جديد بعد دفع رسومه.",okRmRef:"حذف واسترجاع",delT:"حذف هذا العطر؟"},
+refT:"استرجاع هذه الدفعة؟",refP:"سيتم إرسال المبلغ إلى محفظة المالك.",resT:"استعادة هذا العنصر؟",resP:"سيظهر من جديد بعد دفع رسومه.",okRmRef:"حذف واسترجاع",delT:"حذف هذا العطر؟",max3:"الحد الأقصى 3 صور.",fimg:"صور المحل (حتى 3)",pimg:"صور المنتج (حتى 3)"},
 zh:{privacy:"隐私政策",terms:"使用条款",noRefShop:"已通过审核的店铺被下架时，开店费不予退还。",ltitle:"欢迎来到 Parfum",lsub:"使用 Pi 账号登录，探索全球香水店的香水。",login:"使用 Pi 继续",loginBusy:"登录中...",loginErr:"登录失败，请在 Pi Browser 中打开应用后重试。",lhint:"建议在 Pi Browser 中使用",tagline:"精品香水 · Pi",
 title:"来自四面八方的精品香水",sub:"浏览香水，然后直接联系店铺。",
 logout:"退出",navHome:"香水",navShops:"店铺",my:"我的店铺",openTab:"开店",adm:"管理",
@@ -505,14 +523,14 @@ rmShopT:"删除此店铺？",rmShopP:"店铺及其所有香水将被永久删除
 rShop:"店铺",rOwner:"店主",rProds:"香水数",rItem:"项目",rPaid:"已付金额",rShopFee:"已付开店费",rNet:"网络手续费",rRef:"退还店主",
 reasonL:"原因",reasonReq:"请填写原因。",optional:"可选",
 rc1:"违反规则",rc2:"内容不当",rc3:"信息不实",rc4:"重复信息",rc5:"店主主动要求",
-refT:"确认退款？",refP:"退款将发送到店主的钱包。",resT:"恢复此项？",resP:"支付费用后将重新上线。",okRmRef:"删除并退款",delT:"删除此香水？"}
+refT:"确认退款？",refP:"退款将发送到店主的钱包。",resT:"恢复此项？",resP:"支付费用后将重新上线。",okRmRef:"删除并退款",delT:"删除此香水？",max3:"最多 3 张图片。",fimg:"店铺照片（最多 3 张）",pimg:"商品图片（最多 3 张）"}
 };
 
 let L=LS.get("lang");
 if(!T[L])L=(navigator.language||"en").toLowerCase().startsWith("ar")?"ar":"en";
 let cfg={shopFee:5,productFee:.25,refundDeduct:.01,sandbox:false};
 let shops=[],prods=[],loaded=false,me=null,tok=null,mine=null,isAdmin=false,adm=null,stats=null,atab="stats";
-let view="home",img={shop:"",prod:""},editId=null,editSt="",paying=false,piReady=null;
+let view="home",img={shop:[],prod:[]},editId=null,editSt="",paying=false,piReady=null;
 
 const $=id=>document.getElementById(id);
 const t=k=>(T[L]&&T[L][k])||T.en[k]||k;
@@ -524,7 +542,20 @@ const num=n=>Number(n||0).toLocaleString("en",{minimumFractionDigits:2,maximumFr
 const pf=n=>num(n)+" Pi";
 const PIN='<svg class="ic" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>';
 const INFO='<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
-const skel=n=>Array.from({length:n},()=>'<div class="sk"></div>').join("");
+const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const imgsOf=o=>(o.images&&o.images.length?o.images:(o.image?[o.image]:[]));
+const gal=a=>`<div class="gw"><div class="gal">${a.map((u,i)=>`<img src="${esc(u)}" alt="" data-lb="${i}">`).join("")}</div>${a.length>1?`<span class="gct">1 / ${a.length}</span>`:""}</div>`;
+function openLb(list,i){
+  const lb=$("lb");
+  lb.innerHTML=`<button class="x" data-lbx aria-label="close">✕</button><div class="lbs">${list.map(u=>`<div class="lbi"><img src="${esc(u)}" alt=""></div>`).join("")}</div>${list.length>1?`<span class="gct">${i+1} / ${list.length}</span>`:""}`;
+  lb.hidden=false;
+  const s=lb.querySelector(".lbs");
+  s.scrollLeft=(document.documentElement.dir==="rtl"?-1:1)*i*s.clientWidth;
+}
+function renderThumbs(k){
+  $(k==="shop"?"spv":"ppv").innerHTML=img[k].map((u,i)=>`<div class="th2"><img src="${esc(u)}" alt=""><button type="button" data-rmimg="${k}:${i}" aria-label="remove">✕</button></div>`).join("");
+}
+  const skel=n=>Array.from({length:n},()=>'<div class="sk"></div>').join("");
 const liveShop=()=>!!(mine&&mine.shop&&mine.shop.status==="live");
 const pendingShop=()=>!!(mine&&mine.shop&&mine.shop.status==="pending");
 function toast(m){const e=$("toast");e.textContent=m;e.classList.remove("hide");clearTimeout(toast.x);toast.x=setTimeout(()=>e.classList.add("hide"),5000)}
@@ -567,7 +598,8 @@ async function loadShops(){
     shops=(await r.json()).shops||[];
     loaded=true;
   }catch(e){toast(t("netErr"))}
-  prods=shops.flatMap(s=>s.products.map(p=>({...p,shop:s}))).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+   shops=shuf(shops);
+  prods=shuf(shops.flatMap(s=>s.products.map(p=>({...p,shop:s}))));
   buildFilters();renderProducts();renderShops();
 }
 function buildFilters(){
@@ -600,7 +632,7 @@ function renderShops(){
   if(!loaded){g.innerHTML=skel(4);$("scnt").textContent="";return}
   const {q,c,r}=filt();
   const list=shops.filter(s=>(!c||s.country===c)&&(!r||s.region===r)&&(!q||(s.name+" "+s.products.map(p=>p.name+" "+p.brand).join(" ")).toLowerCase().includes(q)))
-    .sort((a,b)=>cn(a.country).localeCompare(cn(b.country),L)||a.region.localeCompare(b.region,L)||a.name.localeCompare(b.name,L));
+        .slice();
   $("scnt").textContent=list.length+" "+t("shops");
   g.innerHTML=list.length?list.map(scard).join(""):`<p class="mut empty">${esc(t("noneS"))}</p>`;
 }
@@ -612,7 +644,7 @@ const telOf=s=>String(s).replace(/[^\d+]/g,"");
 const mapUrl=s=>s.mapUrl||"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent([s.name,s.address,s.region,cn(s.country)].filter(Boolean).join(", "));
 function openProduct(id){
   const p=prods.find(x=>x.id===id);if(!p)return;const s=p.shop;
-  openM(`<button class="x" data-close aria-label="close">✕</button><img class="mi" src="${esc(p.image)}" alt="">
+  openM(`<button class="x" data-close aria-label="close">✕</button>${gal(imgsOf(p))}
   <div class="mb"><h2 class="disp h2">${esc(p.name)}</h2><div class="mut">${esc([p.brand,p.size].filter(Boolean).join(" · "))}</div>
   <div class="pr" dir="ltr">${esc(p.price)} ${esc(p.currency)}</div>
   ${p.description?`<p class="desc">${esc(p.description)}</p>`:""}
@@ -621,7 +653,7 @@ function openProduct(id){
 }
 function openShop(id){
   const s=shops.find(x=>x.id===id);if(!s)return;
-  openM(`<button class="x" data-close aria-label="close">✕</button><img class="mi" src="${esc(s.image)}" alt="">
+  openM(`<button class="x" data-close aria-label="close">✕</button>${gal(imgsOf(s))}
   <div class="mb"><h2 class="disp h2">${esc(s.name)}</h2><div class="loc">${PIN}${esc(place(s))}</div>
   ${s.description?`<p class="desc">${esc(s.description)}</p>`:""}
   <div class="line"><span>${esc(t("addr"))}</span><span>${esc(s.address)}</span></div>
@@ -692,12 +724,12 @@ function fillShop(){
   const s=mine&&mine.shop;if(!s)return;
   $("sn").value=s.name||"";$("sc").value=s.country||"DZ";$("sr").value=s.region||"";$("sa").value=s.address||"";
   $("sm").value=s.mapUrl||"";$("sp").value=s.phone||"";$("sh").value=s.hours||"";$("sd").value=s.description||"";
-  img.shop=s.image||"";if(s.image){$("spv").src=s.image;$("spv").classList.remove("hide")}
+   img.shop=imgsOf(s).slice(0,3);renderThumbs("shop");
 }
 function resetShopForm(){
  ["sn","sr","sa","sm","sp","sh","sd"].forEach(i=>{$(i).value=""});
   $("sc").value="DZ";$("sf").value="";
-  img.shop="";$("spv").removeAttribute("src");$("spv").classList.add("hide");
+    img.shop=[];renderThumbs("shop");
   hideProd();
 }
 function ownCard(p){
@@ -737,25 +769,31 @@ async function shrink(file){
   const url=URL.createObjectURL(file);
   try{
     const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});
-    const k=Math.min(1,1280/Math.max(im.width,im.height));
+    const k=Math.min(1,1000/Math.max(im.width,im.height));
     const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
     const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);
-    return c.toDataURL("image/jpeg",.85);
+    return c.toDataURL("image/jpeg",.8);
   }finally{URL.revokeObjectURL(url)}
 }
-async function upload(inp,key,pv){
-  const file=inp.files[0];if(!file)return;
+async function upload(inp,key){
+  const files=[...inp.files];if(!files.length)return;
+  const room=3-img[key].length;
+  if(room<=0){inp.value="";return toast(t("max3"))}
   toast(t("upl"));
   try{
-    const d=await shrink(file);
-    const j=await api("/api/upload",{file:d});
-    img[key]=j.url;pv.src=j.url;pv.classList.remove("hide");toast("✓");
+    for(const file of files.slice(0,room)){
+      const d=await shrink(file);
+      const j=await api("/api/upload",{file:d});
+      img[key].push(j.url);renderThumbs(key);
+    }
+    toast("✓");
   }catch(e){toast(e.message||"Error")}
+  inp.value="";
 }
 
 /* ---------- المحل: حفظ ثم دفع 5 Pi (بعدها يذهب للمراجعة) ---------- */
 async function submitShop(){
-  const d={name:$("sn").value,country:$("sc").value,region:$("sr").value,address:$("sa").value,phone:$("sp").value,mapUrl:$("sm").value,hours:$("sh").value,description:$("sd").value,image:img.shop};
+  const d={name:$("sn").value,country:$("sc").value,region:$("sr").value,address:$("sa").value,phone:$("sp").value,mapUrl:$("sm").value,hours:$("sh").value,description:$("sd").value,images:img.shop,image:img.shop[0]||""};
   if(!d.name.trim()||!d.region.trim()||!d.address.trim()||!d.phone.trim())return toast(t("fillAll"));
   if(!d.image)return toast(t("imgFirst"));
   const live=liveShop(),pend=pendingShop(),b=$("saveShop");b.disabled=true;
@@ -775,8 +813,7 @@ function showProd(id){
   editId=p?p.id:null;editSt=p?p.status:"";
   $("pn").value=p?p.name:"";$("pb").value=p?p.brand||"":"";$("ps").value=p?p.size||"":"";
   $("pp").value=p?p.price:"";$("pc").value=(p&&["Pi","OUSD"].includes(p.currency))?p.currency:"Pi";$("pd").value=p?p.description||"":"";
-  $("pf").value="";img.prod=p?p.image:"";
-  if(p&&p.image){$("ppv").src=p.image;$("ppv").classList.remove("hide")}else $("ppv").classList.add("hide");
+    $("pf").value="";img.prod=p?imgsOf(p).slice(0,3):[];renderThumbs("prod");
   $("prodTitle").textContent=t(p?"editTitle":"prodTitle");
   const needPay=!p||p.status==="unpaid"||p.status==="refunded";
   $("saveProd").textContent=!p?f("addProd",cfg.productFee):(needPay?f("payBtn",cfg.productFee):t("saveShop"));
@@ -785,13 +822,13 @@ function showProd(id){
 }
 function hideProd(){editId=null;editSt="";$("prodFormCard").classList.add("hide")}
 async function submitProd(){
-  const d={id:editId,name:$("pn").value,brand:$("pb").value,size:$("ps").value,price:$("pp").value,currency:$("pc").value,description:$("pd").value,image:img.prod};
+  const d={id:editId,name:$("pn").value,brand:$("pb").value,size:$("ps").value,price:$("pp").value,currency:$("pc").value,description:$("pd").value,images:img.prod,image:img.prod[0]||""};
   if(!d.name.trim()||!(Number(d.price)>0)||!d.currency.trim())return toast(t("fillAll"));
   if(!d.image)return toast(t("imgFirst"));
   const needPay=!editId||editSt==="unpaid"||editSt==="refunded",b=$("saveProd");b.disabled=true;
   try{
     const j=await api("/api/product/save",d);
-    hideProd();img.prod="";
+   hideProd();img.prod=[];
     await refreshMe();
     if(needPay)pay("product_fee",j.id);else toast(t("saved"));
   }catch(e){toast(e.message)}finally{b.disabled=false}
@@ -1056,9 +1093,10 @@ $("q").oninput=()=>{renderProducts();renderShops()};
 $("fc").onchange=()=>{buildRegions("");renderProducts();renderShops()};
 $("fr").onchange=()=>{renderProducts();renderShops()};
 $("ov").onclick=e=>{if(e.target===$("ov"))closeM()};
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeM()});
-$("sf").onchange=e=>upload(e.target,"shop",$("spv"));
-$("pf").onchange=e=>upload(e.target,"prod",$("ppv"));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("lb").hidden)$("lb").hidden=true;else closeM()}});
+document.addEventListener("scroll",e=>{const g=e.target;if(!g.classList||!(g.classList.contains("gal")||g.classList.contains("lbs")))return;const n=Math.round(Math.abs(g.scrollLeft)/g.clientWidth)+1;const c=g.parentElement.querySelector(".gct");if(c)c.textContent=n+" / "+g.querySelectorAll("img").length},true);
+$("sf").onchange=e=>upload(e.target,"shop");
+$("pf").onchange=e=>upload(e.target,"prod");
 $("saveShop").onclick=submitShop;
 $("saveProd").onclick=submitProd;
 $("cancelProd").onclick=hideProd;
@@ -1066,6 +1104,9 @@ $("addProdBtn").onclick=()=>showProd(null);
 
 document.addEventListener("click",e=>{
   const q=s=>e.target.closest(s);let el;
+    if(q("[data-lbx]")||e.target.id==="lb"||e.target.classList.contains("lbi")){$("lb").hidden=true;return}
+  if(el=q("[data-lb]")){const g=el.closest(".gal");return openLb([...g.querySelectorAll("img")].map(x=>x.getAttribute("src")),+el.dataset.lb)}
+  if(el=q("[data-rmimg]")){const [k,i]=el.dataset.rmimg.split(":");img[k].splice(+i,1);renderThumbs(k);return}
   if(el=q("[data-go]"))return go(el.dataset.go);
   if(q("[data-close]"))return closeM();
   if(el=q("[data-pid]"))return openProduct(el.dataset.pid);
