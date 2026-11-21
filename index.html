@@ -386,6 +386,7 @@ label{display:block;margin:14px 0 4px;font-size:14px;font-weight:600;color:var(-
           <label data-i="psize"></label><input id="ps" maxlength="30" dir="ltr">
           <label data-i="pprice"></label><input id="pp" type="number" min="0" step="any" dir="ltr" inputmode="decimal">
           <label data-i="pcur"></label><select id="pc" dir="ltr"><option value="Pi">Pi</option><option value="OUSD">OUSD</option></select>
+          <label data-i="pgender"></label><select id="pg"><option value="men" data-i="g_men"></option><option value="women" data-i="g_women"></option><option value="unisex" data-i="g_unisex"></option></select>
           <label data-i="pdesc"></label><textarea id="pd" rows="2" maxlength="400"></textarea>
           <label data-i="pimg"></label><input type="file" id="pf" accept="image/jpeg,image/png,image/webp" multiple>
           <div id="ppv" class="thumbs"></div>
@@ -483,7 +484,7 @@ rmShopT:"Remove this shop?",rmShopP:"The shop and all its perfumes will be perma
 rShop:"Shop",rOwner:"Owner",rProds:"Perfumes",rItem:"Item",rPaid:"Amount paid",rShopFee:"Shop fee paid",rNet:"Network fee",rRef:"Refund to owner",
 reasonL:"Reason",reasonReq:"Please write a reason.",optional:"optional",
 rc1:"Violates the rules",rc2:"Inappropriate content",rc3:"False information",rc4:"Duplicate listing",rc5:"Requested by the owner",
-refT:"Refund this payment?",refP:"The refund will be sent to the owner's wallet.",resT:"Restore this item?",resP:"It becomes visible again once its fee is paid.",okRmRef:"Remove & refund",delT:"Delete this perfume?",max3:"Maximum 3 photos.",fimg:"Shop photos (up to 3)",pimg:"Product photos (up to 3)",freeChip:"Free",openFree:"Open shop — Free",openTextFree:"Fill in your shop details and submit it for review. Opening is free for a limited time. It goes live once approved.",ctaTextFree:"Open your shop free for a limited time and show your perfumes worldwide.",addProdFree:"Add product — Free",freeShopOk:"Your shop was submitted for free and is now under review.",freeProdOk:"Your first perfume is free. Published!",rejPFree:"The owner will be notified with your reason. This shop was free, so there is nothing to refund.",rvTitle:"Ratings & reviews",rvCount:"{x} review(s)",rvNone:"No reviews yet",rvLogin:"Sign in to leave a review.",rvSelf:"You can't review your own shop or perfume.",rvPh:"Share your experience (optional)...",rvSend:"Submit review",rvUpdate:"Update my review",rvDelete:"Delete",rvPickStar:"Please choose a star rating.",rvSaved:"Thank you! Your review was saved.",rvDeleted:"Review deleted",rvDelT:"Delete this review?"},
+refT:"Refund this payment?",refP:"The refund will be sent to the owner's wallet.",resT:"Restore this item?",resP:"It becomes visible again once its fee is paid.",okRmRef:"Remove & refund",delT:"Delete this perfume?",max3:"Maximum 3 photos.",fimg:"Shop photos (up to 3)",pimg:"Product photos (up to 3)",freeChip:"Free",openFree:"Open shop — Free",openTextFree:"Fill in your shop details and submit it for review. Opening is free for a limited time. It goes live once approved.",ctaTextFree:"Open your shop free for a limited time and show your perfumes worldwide.",addProdFree:"Add product — Free",freeShopOk:"Your shop was submitted for free and is now under review.",freeProdOk:"Your first perfume is free. Published!",rejPFree:"The owner will be notified with your reason. This shop was free, so there is nothing to refund.",rvTitle:"Ratings & reviews",rvCount:"{x} review(s)",rvNone:"No reviews yet",rvLogin:"Sign in to leave a review.",rvSelf:"You can't review your own shop or perfume.",rvPh:"Share your experience (optional)...",rvSend:"Submit review",rvUpdate:"Update my review",rvDelete:"Delete",rvPickStar:"Please choose a star rating.",rvSaved:"Thank you! Your review was saved.",rvDeleted:"Review deleted",pgender:"Perfume for",g_men:"Men",g_women:"Women",g_unisex:"Men & Women",rvDelT:"Delete this review?"},
 ar:{privacy:"سياسة الخصوصية",terms:"شروط الاستخدام",noRefShop:"لا تُسترجع رسوم فتح المحل عند حذف محل تمت الموافقة عليه.",ltitle:"مرحباً بك في Parfum",lsub:"سجّل الدخول بحساب Pi لاستكشاف العطور من محلات حول العالم.",login:"المتابعة عبر Pi",loginBusy:"جاري الدخول...",loginErr:"فشل الدخول. افتح التطبيق من Pi Browser وأعد المحاولة.",lhint:"يعمل بأفضل شكل داخل Pi Browser",tagline:"عطور فاخرة · Pi",
 title:"عطور فاخرة من محلات قريبة وبعيدة",sub:"تصفّح العطور ثم تواصل مع المحل مباشرة.",
 logout:"خروج",navHome:"العطور",navShops:"المحلات",my:"محلي",openTab:"افتح محلاً",adm:"الإدارة",
@@ -512,7 +513,7 @@ rmShopT:"حذف هذا المحل؟",rmShopP:"سيتم حذف المحل وكل 
 rShop:"المحل",rOwner:"المالك",rProds:"العطور",rItem:"العنصر",rPaid:"المبلغ المدفوع",rShopFee:"رسوم فتح المحل",rNet:"رسوم الشبكة",rRef:"المبلغ المسترجع للمالك",
 reasonL:"السبب",reasonReq:"يرجى كتابة السبب.",optional:"اختياري",
 rc1:"مخالفة للشروط",rc2:"محتوى غير لائق",rc3:"معلومات غير صحيحة",rc4:"إعلان مكرر",rc5:"بطلب من المالك",
-refT:"استرجاع هذه الدفعة؟",refP:"سيتم إرسال المبلغ إلى محفظة المالك.",resT:"استعادة هذا العنصر؟",resP:"سيظهر من جديد بعد دفع رسومه.",okRmRef:"حذف واسترجاع",delT:"حذف هذا العطر؟",max3:"الحد الأقصى 3 صور.",fimg:"صور المحل (حتى 3)",pimg:"صور المنتج (حتى 3)",freeChip:"مجاني",openFree:"افتح المحل — مجاناً",openTextFree:"املأ بيانات محلك وأرسله للمراجعة. الفتح مجاني لفترة محدودة. يُنشر المحل بعد موافقة الإدارة.",ctaTextFree:"افتح محلك مجاناً لفترة محدودة واعرض عطورك لعملاء من كل العالم.",addProdFree:"إضافة منتج — مجاناً",freeShopOk:"تم إرسال محلك مجاناً وهو الآن قيد المراجعة.",freeProdOk:"عطرك الأول مجاني. تم النشر!",rejPFree:"سيصل صاحب المحل السبب الذي تكتبه. كان المحل مجانياً فلا يوجد مبلغ للاسترجاع.",rvTitle:"التقييمات والتعليقات",rvCount:"{x} تقييم",rvNone:"لا توجد تقييمات بعد",rvLogin:"سجّل الدخول لتترك تقييماً.",rvSelf:"لا يمكنك تقييم محلك أو عطرك.",rvPh:"شارك تجربتك (اختياري)...",rvSend:"إرسال التقييم",rvUpdate:"تحديث تقييمي",rvDelete:"حذف",rvPickStar:"اختر عدد النجوم أولاً.",rvSaved:"شكراً! تم حفظ تقييمك.",rvDeleted:"تم حذف التقييم",rvDelT:"حذف هذا التقييم؟"},
+refT:"استرجاع هذه الدفعة؟",refP:"سيتم إرسال المبلغ إلى محفظة المالك.",resT:"استعادة هذا العنصر؟",resP:"سيظهر من جديد بعد دفع رسومه.",okRmRef:"حذف واسترجاع",delT:"حذف هذا العطر؟",max3:"الحد الأقصى 3 صور.",fimg:"صور المحل (حتى 3)",pimg:"صور المنتج (حتى 3)",freeChip:"مجاني",openFree:"افتح المحل — مجاناً",openTextFree:"املأ بيانات محلك وأرسله للمراجعة. الفتح مجاني لفترة محدودة. يُنشر المحل بعد موافقة الإدارة.",ctaTextFree:"افتح محلك مجاناً لفترة محدودة واعرض عطورك لعملاء من كل العالم.",addProdFree:"إضافة منتج — مجاناً",freeShopOk:"تم إرسال محلك مجاناً وهو الآن قيد المراجعة.",freeProdOk:"عطرك الأول مجاني. تم النشر!",rejPFree:"سيصل صاحب المحل السبب الذي تكتبه. كان المحل مجانياً فلا يوجد مبلغ للاسترجاع.",rvTitle:"التقييمات والتعليقات",rvCount:"{x} تقييم",rvNone:"لا توجد تقييمات بعد",rvLogin:"سجّل الدخول لتترك تقييماً.",rvSelf:"لا يمكنك تقييم محلك أو عطرك.",rvPh:"شارك تجربتك (اختياري)...",rvSend:"إرسال التقييم",rvUpdate:"تحديث تقييمي",rvDelete:"حذف",rvPickStar:"اختر عدد النجوم أولاً.",rvSaved:"شكراً! تم حفظ تقييمك.",rvDeleted:"تم حذف التقييم",pgender:"العطر مخصص لـ",g_men:"رجال",g_women:"نساء",g_unisex:"رجال ونساء",rvDelT:"حذف هذا التقييم؟"},
 
 
 zh:{privacy:"隐私政策",terms:"使用条款",noRefShop:"已通过审核的店铺被下架时，开店费不予退还。",ltitle:"欢迎来到 Parfum",lsub:"使用 Pi 账号登录，探索全球香水店的香水。",login:"使用 Pi 继续",loginBusy:"登录中...",loginErr:"登录失败，请在 Pi Browser 中打开应用后重试。",lhint:"建议在 Pi Browser 中使用",tagline:"精品香水 · Pi",
@@ -543,7 +544,7 @@ rmShopT:"删除此店铺？",rmShopP:"店铺及其所有香水将被永久删除
 rShop:"店铺",rOwner:"店主",rProds:"香水数",rItem:"项目",rPaid:"已付金额",rShopFee:"已付开店费",rNet:"网络手续费",rRef:"退还店主",
 reasonL:"原因",reasonReq:"请填写原因。",optional:"可选",
 rc1:"违反规则",rc2:"内容不当",rc3:"信息不实",rc4:"重复信息",rc5:"店主主动要求",
-refT:"确认退款？",refP:"退款将发送到店主的钱包。",resT:"恢复此项？",resP:"支付费用后将重新上线。",okRmRef:"删除并退款",delT:"删除此香水？",max3:"最多 3 张图片。",fimg:"店铺照片（最多 3 张）",pimg:"商品图片（最多 3 张）",freeChip:"免费",openFree:"开店 — 免费",openTextFree:"填写店铺信息并提交审核。限时免费开店，审核通过后即可上线。",ctaTextFree:"限时免费开店，向全球顾客展示您的香水。",addProdFree:"添加商品 — 免费",freeShopOk:"店铺已免费提交，正在审核中。",freeProdOk:"您的第一款香水免费，已发布！",rejPFree:"店主将看到您填写的原因。该店铺为免费开设，无需退款。",rvTitle:"评分与评论",rvCount:"{x} 条评价",rvNone:"暂无评价",rvLogin:"登录后即可评价。",rvSelf:"您不能评价自己的店铺或香水。",rvPh:"分享您的体验（可选）...",rvSend:"提交评价",rvUpdate:"更新我的评价",rvDelete:"删除",rvPickStar:"请先选择星级。",rvSaved:"谢谢！评价已保存。",rvDeleted:"评价已删除",rvDelT:"删除此评价？"}
+refT:"确认退款？",refP:"退款将发送到店主的钱包。",resT:"恢复此项？",resP:"支付费用后将重新上线。",okRmRef:"删除并退款",delT:"删除此香水？",max3:"最多 3 张图片。",fimg:"店铺照片（最多 3 张）",pimg:"商品图片（最多 3 张）",freeChip:"免费",openFree:"开店 — 免费",openTextFree:"填写店铺信息并提交审核。限时免费开店，审核通过后即可上线。",ctaTextFree:"限时免费开店，向全球顾客展示您的香水。",addProdFree:"添加商品 — 免费",freeShopOk:"店铺已免费提交，正在审核中。",freeProdOk:"您的第一款香水免费，已发布！",rejPFree:"店主将看到您填写的原因。该店铺为免费开设，无需退款。",rvTitle:"评分与评论",rvCount:"{x} 条评价",rvNone:"暂无评价",rvLogin:"登录后即可评价。",rvSelf:"您不能评价自己的店铺或香水。",rvPh:"分享您的体验（可选）...",rvSend:"提交评价",rvUpdate:"更新我的评价",rvDelete:"删除",rvPickStar:"请先选择星级。",rvSaved:"谢谢！评价已保存。",rvDeleted:"评价已删除",pgender:"适用人群",g_men:"男士",g_women:"女士",g_unisex:"男女通用",rvDelT:"删除此评价？"}
 };
 
 let L=LS.get("lang");
@@ -680,7 +681,7 @@ function buildRegions(keep){
 }
 const filt=()=>({q:$("q").value.trim().toLowerCase(),c:$("fc").value,r:$("fr").value});
 
-const pcard=p=>`<article class="pc" data-pid="${esc(p.id)}"><div class="pi"><img src="${esc(p.image)}" alt="" loading="lazy"><span class="price" dir="ltr">${esc(p.price)} ${esc(p.currency)}</span></div><div class="pb"><h3 class="disp">${esc(p.name)}</h3><div class="mut">${esc([p.brand,p.size].filter(Boolean).join(" · "))}</div>${rtLine(p.rAvg,p.rCount)}<div class="ps">${PIN}${esc(p.shop.name)} · ${esc(p.shop.region)}</div></div></article>`;
+const pcard=p=>`<article class="pc" data-pid="${esc(p.id)}"><div class="pi"><img src="${esc(p.image)}" alt="" loading="lazy"><span class="price" dir="ltr">${esc(p.price)} ${esc(p.currency)}</span></div><div class="pb"><h3 class="disp">${esc(p.name)}</h3><div class="mut">${esc([p.brand,p.size,t("g_"+(p.gender||"unisex"))].filter(Boolean).join(" · "))}</div>${rtLine(p.rAvg,p.rCount)}<div class="ps">${PIN}${esc(p.shop.name)} · ${esc(p.shop.region)}</div></div></article>`;
 const scard=s=>`<article class="sc" data-sid="${esc(s.id)}"><img src="${esc(s.image)}" alt="" loading="lazy"><div class="sb"><h3 class="disp">${esc(s.name)}</h3><div class="loc">${PIN}${esc(place(s))}</div>${rtLine(s.rAvg,s.rCount)}<div class="mut">${s.products.length} ${esc(t("perfumes"))}</div></div></article>`;
 
 function renderProducts(){
@@ -709,7 +710,7 @@ const mapUrl=s=>s.mapUrl||"https://www.google.com/maps/search/?api=1&query="+enc
 function openProduct(id){
   const p=prods.find(x=>x.id===id);if(!p)return;const s=p.shop;setTimeout(()=>loadReviews("product",p.id),0);
   openM(`<button class="x" data-close aria-label="close">✕</button>${gal(imgsOf(p))}
-  <div class="mb"><h2 class="disp h2">${esc(p.name)}</h2><div class="mut">${esc([p.brand,p.size].filter(Boolean).join(" · "))}</div>
+  <div class="mb"><h2 class="disp h2">${esc(p.name)}</h2><div class="mut">${esc([p.brand,p.size,t("g_"+(p.gender||"unisex"))].filter(Boolean).join(" · "))}</div>
   <div class="pr" dir="ltr">${esc(p.price)} ${esc(p.currency)}</div>
   ${p.description?`<p class="desc">${esc(p.description)}</p>`:""}
   <div class="sbox"><b class="disp" style="font-size:22px">${esc(s.name)}</b><div class="loc">${PIN}${esc(place(s))}</div><div class="mut">${esc(s.address)}</div></div>
@@ -882,6 +883,7 @@ function showProd(id){
   editId=p?p.id:null;editSt=p?p.status:"";
   $("pn").value=p?p.name:"";$("pb").value=p?p.brand||"":"";$("ps").value=p?p.size||"":"";
   $("pp").value=p?p.price:"";$("pc").value=(p&&["Pi","OUSD"].includes(p.currency))?p.currency:"Pi";$("pd").value=p?p.description||"":"";
+    $("pg").value=(p&&p.gender)||"unisex";
     $("pf").value="";img.prod=p?imgsOf(p).slice(0,3):[];renderThumbs("prod");
   $("prodTitle").textContent=t(p?"editTitle":"prodTitle");
   const needPay=!p||p.status==="unpaid"||p.status==="refunded";
@@ -891,7 +893,7 @@ function showProd(id){
 }
 function hideProd(){editId=null;editSt="";$("prodFormCard").classList.add("hide")}
 async function submitProd(){
-  const d={id:editId,name:$("pn").value,brand:$("pb").value,size:$("ps").value,price:$("pp").value,currency:$("pc").value,description:$("pd").value,images:img.prod,image:img.prod[0]||""};
+  const d={id:editId,name:$("pn").value,brand:$("pb").value,size:$("ps").value,gender:$("pg").value,price:$("pp").value,currency:$("pc").value,description:$("pd").value,images:img.prod,image:img.prod[0]||""};
   if(!d.name.trim()||!(Number(d.price)>0)||!d.currency.trim())return toast(t("fillAll"));
   if(!d.image)return toast(t("imgFirst"));
   const needPay=!editId||editSt==="unpaid"||editSt==="refunded",b=$("saveProd");b.disabled=true;
